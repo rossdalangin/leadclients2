@@ -13,6 +13,30 @@ class GrowthPress_Content_Studio {
         add_action( 'admin_menu', array( $this, 'add_studio_menu' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_studio_assets' ) );
         add_action( 'wp_ajax_gp_generate_content', array( $this, 'handle_generation' ) );
+        add_action( 'wp_ajax_gp_sync_to_kb', array( $this, 'handle_kb_sync' ) );
+    }
+
+    public function handle_kb_sync() {
+        if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error();
+        check_ajax_referer( 'gp_admin_nonce', 'gp_nonce' );
+
+        $title = sanitize_text_field( $_POST['title'] );
+        $content = wp_kses_post( $_POST['content'] );
+        $type = sanitize_text_field( $_POST['type'] ?? 'gp_kb' );
+
+        $post_id = wp_insert_post( array(
+            'post_title'   => $title,
+            'post_content' => $content,
+            'post_type'    => $type,
+            'post_status'  => 'publish'
+        ) );
+
+        if ( $post_id ) {
+            $type_label = str_replace('gp_', '', $type);
+            GrowthPress_Activity::log( "Intelligence Asset synced to " . strtoupper($type_label) . ": $title" );
+            wp_send_json_success( "Synced to " . ucfirst($type_label) . "! ID: $post_id" );
+        }
+        wp_send_json_error( "Failed to sync." );
     }
 
     public function add_studio_menu() {
@@ -131,6 +155,12 @@ class GrowthPress_Content_Studio {
                     <div id="gp-studio-output" style="padding:40px; font-family:'JetBrains Mono', monospace; font-size:13px; line-height:1.7; height:500px; overflow-y:auto; color:rgba(255,255,255,0.8);">
                         <span style="opacity:0.3;">// Waiting for strategic command...</span>
                     </div>
+                    <div id="gp-studio-actions" style="display:none; padding:20px; background:rgba(255,255,255,0.05); border-top:1px solid rgba(255,255,255,0.1); gap:10px; flex-wrap:wrap;">
+                        <button class="button" onclick="syncAsset('gp_kb')" style="background:var(--primary); color:white; border:none; flex:1; height:40px;">SYNC TO KB</button>
+                        <button class="button" onclick="syncAsset('gp_service')" style="background:var(--secondary); color:white; border:none; flex:1; height:40px;">SYNC TO SERVICES</button>
+                        <button class="button" onclick="syncAsset('gp_project')" style="background:#10B981; color:white; border:none; flex:1; height:40px;">SYNC TO PROJECTS</button>
+                        <button class="button" onclick="syncAsset('gp_property')" style="background:#F59E0B; color:white; border:none; flex:1; height:40px;">SYNC TO INVENTORY</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -139,6 +169,20 @@ class GrowthPress_Content_Studio {
             var content = jQuery('#gp-studio-output').text();
             navigator.clipboard.writeText(content);
             alert("Strategic asset copied to clipboard!");
+        }
+
+        function syncAsset(type) {
+            const title = jQuery('#gp-content-topic').val();
+            const content = jQuery('#gp-studio-output').text();
+            jQuery.post(ajaxurl, {
+                action: 'gp_sync_to_kb',
+                title: title,
+                content: content,
+                type: type,
+                gp_nonce: gp_admin.nonce
+            }, function(res) {
+                if (res.success) alert(res.data);
+            });
         }
         </script>
         <style>

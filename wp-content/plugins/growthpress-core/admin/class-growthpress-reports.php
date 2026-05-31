@@ -18,9 +18,9 @@ class GrowthPress_Reports {
     }
 
     private function get_live_stats() {
-        $leads = get_posts(array('post_type' => 'gp_lead', 'posts_per_page' => -1));
-        $appts = get_posts(array('post_type' => 'gp_appointment', 'posts_per_page' => -1));
-        $proposals = get_posts(array('post_type' => 'gp_proposal', 'posts_per_page' => -1));
+        $leads = get_posts(array('post_type' => 'gp_lead', 'posts_per_page' => -1, 'post_status' => 'publish'));
+        $appts = get_posts(array('post_type' => 'gp_appointment', 'posts_per_page' => -1, 'post_status' => 'publish'));
+        $proposals = get_posts(array('post_type' => 'gp_proposal', 'posts_per_page' => -1, 'post_status' => 'publish'));
 
         $total_value = 0;
         foreach($proposals as $p) {
@@ -110,6 +110,37 @@ class GrowthPress_Reports {
                         </div>
                     <?php endforeach; else: echo "<p style='opacity:0.5;'>Mapping sector distribution...</p>"; endif; ?>
                 </div>
+            </div>
+
+            <div class="glass-card" style="margin-top:40px; padding:40px;">
+                <h3 style="margin-top:0;">Recent Ecosystem Transactions</h3>
+                <table class="wp-list-table widefat fixed striped" style="border:none; background:transparent;">
+                    <thead>
+                        <tr>
+                            <th style="font-weight:900; font-size:10px; opacity:0.5; letter-spacing:1px;">TRANSACTION</th>
+                            <th style="font-weight:900; font-size:10px; opacity:0.5; letter-spacing:1px;">VALUE</th>
+                            <th style="font-weight:900; font-size:10px; opacity:0.5; letter-spacing:1px;">STATUS</th>
+                            <th style="font-weight:900; font-size:10px; opacity:0.5; letter-spacing:1px;">TIMESTAMP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $transactions = get_posts(array('post_type' => 'gp_transaction', 'posts_per_page' => 10));
+                        if($transactions): foreach($transactions as $t):
+                            $amount = get_post_meta($t->ID, '_amount', true);
+                            $status = get_post_meta($t->ID, '_status', true);
+                            ?>
+                            <tr>
+                                <td style="font-weight:700;"><?php echo esc_html($t->post_title); ?></td>
+                                <td style="font-weight:900; color:var(--primary);">$<?php echo number_format($amount); ?></td>
+                                <td><span style="background:<?php echo $status === 'Paid' ? '#D1FAE5' : '#FEF3C7'; ?>; color:<?php echo $status === 'Paid' ? '#065F46' : '#92400E'; ?>; padding:5px 12px; border-radius:30px; font-size:10px; font-weight:900;"><?php echo strtoupper($status); ?></span></td>
+                                <td style="opacity:0.5; font-size:11px; font-weight:700;"><?php echo get_the_date('M j, Y', $t->ID); ?></td>
+                            </tr>
+                        <?php endforeach; else: ?>
+                            <tr><td colspan="4" style="text-align:center; padding:40px; opacity:0.5;">No active financial nodes detected.</td></tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
             </div>
 
             <div class="glass-card" style="margin-top:40px; padding:60px; border-radius:44px; background:var(--secondary); color:white; border:none; position:relative; overflow:hidden;">

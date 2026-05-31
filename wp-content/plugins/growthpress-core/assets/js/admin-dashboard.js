@@ -76,7 +76,9 @@ jQuery(document).ready(function($) {
     // Lead Generation for Content Studio
     window.generateContent = function() {
         var $out = $('#gp-studio-output');
+        var $actions = $('#gp-studio-actions');
         $out.html('AI Strategist is calculating...');
+        $actions.hide();
 
         $.post(ajaxurl, {
             action: 'gp_generate_content',
@@ -86,6 +88,7 @@ jQuery(document).ready(function($) {
         }, function(res) {
             if (res.success) {
                 $out.html('<div class="ai-response">' + res.data.replace(/\n/g, '<br>') + '</div>');
+                $actions.css('display', 'flex');
             } else {
                 $out.html('Error generating content.');
             }

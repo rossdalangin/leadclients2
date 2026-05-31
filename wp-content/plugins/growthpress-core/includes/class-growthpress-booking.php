@@ -168,6 +168,10 @@ class GrowthPress_Booking {
             $invoice_id = $payments->create_invoice(150, $id, 'booking');
             update_post_meta($id, '_deposit_invoice_id', $invoice_id);
 
+            // Generate Secure Meeting Link
+            $meeting_link = "https://growthpress.zoom.us/j/" . rand(100000000, 999999999);
+            update_post_meta($id, '_meeting_link', $meeting_link);
+
             do_action( 'gp_appointment_created', $id );
             wp_send_json_success(array('appointment_id' => $id, 'invoice_id' => $invoice_id));
         }

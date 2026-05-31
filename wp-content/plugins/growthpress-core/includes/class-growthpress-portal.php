@@ -72,6 +72,21 @@ class GrowthPress_Portal {
                         </div>
                     </div>
 
+                    <div id="gp-portal-projects" style="margin-bottom:60px;">
+                        <h2 style="font-size:32px; margin-bottom:40px; letter-spacing:-0.05em; font-weight:950;">Active Growth Projects</h2>
+                        <?php
+                        $projects = get_posts(array('post_type' => 'gp_project', 'posts_per_page' => 5, 's' => $user->display_name));
+                        if($projects): foreach($projects as $p): ?>
+                            <div class="glass-card" style="margin-bottom:20px; padding:30px; border-radius:25px; display:flex; justify-content:space-between; align-items:center;">
+                                <div>
+                                    <h4 style="margin:0; font-size:18px;"><?php echo esc_html($p->post_title); ?></h4>
+                                    <p style="font-size:12px; opacity:0.5; margin-top:5px;"><?php echo wp_trim_words($p->post_content, 15); ?></p>
+                                </div>
+                                <a href="<?php echo get_permalink($p->ID); ?>" class="gp-btn" style="padding:10px 25px; font-size:11px; border-radius:10px;">TRACK VELOCITY</a>
+                            </div>
+                        <?php endforeach; else: echo "<p style='opacity:0.5;'>No active growth projects assigned to this node.</p>"; endif; ?>
+                    </div>
+
                     <div id="proposals">
                         <h2 style="font-size:32px; margin-bottom:40px; letter-spacing:-0.05em; font-weight:950;">Strategic Terminal: Agreements</h2>
                         <?php if($proposals): foreach($proposals as $prop):
@@ -110,6 +125,47 @@ class GrowthPress_Portal {
                         </div>
                     </div>
 
+                    <div class="glass-card" style="padding:50px; border-radius:44px; margin-bottom:40px;">
+                        <h3 style="font-size:22px; margin-bottom:30px; letter-spacing:-0.03em;">Strategic Documents</h3>
+                        <div id="gp-portal-docs" style="display:grid; gap:15px;">
+                            <div style="background:#F8FAFC; padding:15px 20px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #F1F5F9;">
+                                <div style="display:flex; align-items:center; gap:12px;">
+                                    <span class="dashicons dashicons-pdf" style="opacity:0.3;"></span>
+                                    <span style="font-size:12px; font-weight:700;">Financial_Audit_Report.pdf</span>
+                                </div>
+                                <span style="font-size:10px; font-weight:900; color:var(--primary); cursor:pointer;">VIEW</span>
+                            </div>
+                            <div style="background:#F8FAFC; padding:15px 20px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #F1F5F9;">
+                                <div style="display:flex; align-items:center; gap:12px;">
+                                    <span class="dashicons dashicons-media-text" style="opacity:0.3;"></span>
+                                    <span style="font-size:12px; font-weight:700;">Operational_Blueprint.docx</span>
+                                </div>
+                                <span style="font-size:10px; font-weight:900; color:var(--primary); cursor:pointer;">VIEW</span>
+                            </div>
+                        </div>
+                        <button class="gp-btn" style="width:100%; margin-top:25px; height:50px; font-size:12px; border-radius:12px; background:transparent; border:2px dashed #E2E8F0; color:var(--text) !important;" onclick="alert('Secure node upload initialized. Please select strategic assets.')">+ UPLOAD STRATEGIC ASSET</button>
+                    </div>
+
+                    <div class="glass-card" style="padding:50px; border-radius:44px; margin-bottom:40px;">
+                        <h3 style="font-size:22px; margin-bottom:30px; letter-spacing:-0.03em;">Financial Ledger</h3>
+                        <?php
+                        $transactions = get_posts(array('post_type' => 'gp_transaction', 'posts_per_page' => 5));
+                        if($transactions): foreach($transactions as $t):
+                            $status = get_post_meta($t->ID, '_status', true);
+                            ?>
+                            <div style="padding:15px 0; border-bottom:1px solid #F1F5F9; display:flex; justify-content:space-between; align-items:center;">
+                                <div>
+                                    <div style="font-size:13px; font-weight:700;"><?php echo esc_html($t->post_title); ?></div>
+                                    <div style="font-size:10px; opacity:0.4;"><?php echo get_the_date('M j, Y', $t->ID); ?></div>
+                                </div>
+                                <div style="text-align:right;">
+                                    <div style="font-size:13px; font-weight:900; color:<?php echo $status === 'Paid' ? '#10B981' : 'var(--primary)'; ?>;">$<?php echo number_format(get_post_meta($t->ID, '_amount', true)); ?></div>
+                                    <div style="font-size:8px; font-weight:950; opacity:0.5;"><?php echo strtoupper($status); ?></div>
+                                </div>
+                            </div>
+                        <?php endforeach; else: echo "<p style='opacity:0.5;'>No financial ledger entries detected.</p>"; endif; ?>
+                    </div>
+
                     <div class="glass-card" style="padding:50px; border-radius:44px;">
                         <h3 style="font-size:22px; margin-bottom:30px; letter-spacing:-0.03em;">Intelligence Logs</h3>
                         <?php $appts = get_posts( array( 'post_type' => 'gp_appointment', 'meta_key' => '_lead_email', 'meta_value' => $email ) );
@@ -118,6 +174,9 @@ class GrowthPress_Portal {
                             <div style="padding:25px 0; border-bottom:1px solid #F1F5F9;">
                                 <div style="font-size:16px; font-weight:900; color:var(--secondary);"><?php echo esc_html($a->post_title); ?></div>
                                 <div style="font-size:11px; font-weight:800; opacity:0.5; margin-top:10px; text-transform:uppercase; letter-spacing:1px;">TIMESTAMP: <?php echo $date; ?></div>
+                                <?php $link = get_post_meta($a->ID, '_meeting_link', true); if($link): ?>
+                                    <a href="<?php echo esc_url($link); ?>" target="_blank" class="gp-btn" style="display:inline-block; margin-top:15px; padding:8px 20px; font-size:10px; border-radius:10px;">JOIN MEETING</a>
+                                <?php endif; ?>
                             </div>
                         <?php endforeach; else: echo "<p style='font-size:14px; opacity:0.5;'>No previous session data synchronized.</p>"; endif; ?>
                     </div>

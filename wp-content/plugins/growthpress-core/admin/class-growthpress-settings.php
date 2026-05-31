@@ -320,6 +320,43 @@ class GrowthPress_Settings {
             </div>
 
             <div id="tab-docs" class="tab-content" style="display:none;">
+                <div class="glass-card" style="max-width:1100px; margin-bottom:40px;">
+                    <h2 class="text-gradient">Integrated System Lifecycle</h2>
+                    <p>GrowthPress Ultra Elite automates the entire lead-to-revenue lifecycle. Below is the operational protocol:</p>
+                    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:30px; margin-top:40px;">
+                        <div style="background:#F8FAFC; padding:30px; border-radius:25px; border:1px solid #E2E8F0;">
+                            <div style="font-size:24px; margin-bottom:15px;">📥</div>
+                            <h4 style="margin:0;">INTAKE</h4>
+                            <p style="font-size:12px; opacity:0.6;">Visitors captured via Quiz or Exit-Intent. AI Spam filtering and Sentiment analysis trigger immediately.</p>
+                        </div>
+                        <div style="background:#F8FAFC; padding:30px; border-radius:25px; border:1px solid #E2E8F0;">
+                            <div style="font-size:24px; margin-bottom:15px;">🧠</div>
+                            <h4 style="margin:0;">TRIAGE</h4>
+                            <p style="font-size:12px; opacity:0.6;">Leads assigned scores and round-robin staff. Psychological nudges generated for sales efficiency.</p>
+                        </div>
+                        <div style="background:#F8FAFC; padding:30px; border-radius:25px; border:1px solid #E2E8F0;">
+                            <div style="font-size:24px; margin-bottom:15px;">🗓️</div>
+                            <h4 style="margin:0;">BOOKING</h4>
+                            <p style="font-size:12px; opacity:0.6;">Leads schedule strategy sessions. System generates Zoom links and links appointments to lead records.</p>
+                        </div>
+                        <div style="background:#F8FAFC; padding:30px; border-radius:25px; border:1px solid #E2E8F0;">
+                            <div style="font-size:24px; margin-bottom:15px;">📜</div>
+                            <h4 style="margin:0;">PROPOSAL</h4>
+                            <p style="font-size:12px; opacity:0.6;">Admin generates AI Proposal. Client accepts in portal. Lead advances to 'Closed' stage automatically.</p>
+                        </div>
+                        <div style="background:#F8FAFC; padding:30px; border-radius:25px; border:1px solid #E2E8F0;">
+                            <div style="font-size:24px; margin-bottom:15px;">🚀</div>
+                            <h4 style="margin:0;">KICKOFF</h4>
+                            <p style="font-size:12px; opacity:0.6;">Kickoff tasks created. Draft Case Study generated. Project velocity tracking begins in Client Portal.</p>
+                        </div>
+                        <div style="background:#F8FAFC; padding:30px; border-radius:25px; border:1px solid #E2E8F0;">
+                            <div style="font-size:24px; margin-bottom:15px;">⭐</div>
+                            <h4 style="margin:0;">REPUTATION</h4>
+                            <p style="font-size:12px; opacity:0.6;">Appointment completion triggers automated review request. AI suggests replies to new testimonials.</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="glass-card" style="max-width:1100px;">
                     <h2 class="text-gradient">Master Operations Manual v4.5</h2>
                     <p>GrowthPress v4.5 now supports **Multi-Intelligence Nodes**. You can toggle between providers instantly based on specialized niche requirements.</p>

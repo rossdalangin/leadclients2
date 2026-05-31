@@ -16,6 +16,7 @@ class GrowthPress_Conversion {
         add_shortcode( 'gp_location_switcher', array( $this, 'render_location_switcher' ) );
         add_shortcode( 'gp_trust_badges', array( $this, 'render_trust_badges' ) );
         add_shortcode( 'gp_stats_bar', array( $this, 'render_stats_bar' ) );
+        add_action( 'wp_footer', array( $this, 'render_exit_intent_js' ) );
     }
 
     public function render_urgency_banner() {
@@ -94,6 +95,33 @@ class GrowthPress_Conversion {
             <div class="trust-badge" style="font-weight: 950; font-size: 24px; letter-spacing: -1px; opacity: 0.3;">WIRED</div>
             <div class="trust-badge" style="font-weight: 950; font-size: 24px; letter-spacing: -1px; opacity: 0.3;">INC.</div>
         </div>';
+    }
+
+    public function render_exit_intent_js() {
+        if ( is_admin() ) return;
+        ?>
+        <div id="gp-exit-intent" class="gp-modal-overlay" style="display:none; z-index: 10002;">
+            <div class="glass-card" style="max-width:600px; margin: 100px auto; padding:80px; text-align:center; position:relative;">
+                <div style="font-size:10px; font-weight:950; color:var(--primary); letter-spacing:4px; margin-bottom:20px;">WAIT! DON'T LEAVE YET</div>
+                <h3 class="text-gradient" style="font-size:3rem; line-height:1;">Get the Authority Blueprint</h3>
+                <p style="font-size:1.1rem; opacity:0.7; margin:30px 0 50px;">Our AI just analyzed your session and prepared a specialized <?php echo get_option('growthpress_niche', 'business'); ?> growth roadmap for you.</p>
+                <?php echo do_shortcode('[gp_lead_form]'); ?>
+                <div style="cursor:pointer; position:absolute; top:30px; right:30px; opacity:0.3; font-weight:900;" onclick="jQuery('#gp-exit-intent').fadeOut()">CLOSE</div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener("mouseleave", function(e) {
+                if (e.clientY < 0 && !sessionStorage.getItem('gp_exit_triggered')) {
+                    jQuery('#gp-exit-intent').fadeIn();
+                    sessionStorage.setItem('gp_exit_triggered', '1');
+                    GrowthPress_Activity_JS_Log('Exit intent detected and lead magnet triggered.');
+                }
+            }, false);
+            function GrowthPress_Activity_JS_Log(msg) {
+                jQuery.post(gp_ajax.ajaxurl, { action: 'gp_log_behavior', page: msg, email: 'anonymous@visitor.com' });
+            }
+        </script>
+        <?php
     }
 
     public function render_stats_bar() {

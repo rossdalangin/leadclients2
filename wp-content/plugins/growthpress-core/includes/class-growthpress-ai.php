@@ -153,5 +153,10 @@ class GrowthPress_AI {
     public function generate_missed_call_reply( $caller_number ) {
         return $this->call_ai( "Generate a polite, professional SMS response for a missed business call from {$caller_number}.", "Customer Support AI" );
     }
+
+    public function generate_behavioral_nudge( $lead_id ) {
+        $lead = get_post($lead_id);
+        return $this->call_ai( "Based on this inquiry: \"{$lead->post_content}\", provide a 1-sentence psychological nudge for the sales rep to use during the first 30 seconds of the call. Focus on loss aversion or reciprocity.", "Psychology Expert" );
+    }
 }
 GrowthPress_AI::get_instance();

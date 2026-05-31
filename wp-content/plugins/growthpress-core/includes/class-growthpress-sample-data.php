@@ -23,6 +23,8 @@ class GrowthPress_Sample_Data {
         self::generate_kb();
         self::generate_services();
         self::generate_projects();
+        self::generate_inventory();
+        self::generate_reviews();
 
         // 2. Call niche-specific sample data
         $class_name = 'GrowthPress_' . str_replace(' ', '', ucwords(str_replace('-', ' ', $niche)));
@@ -166,6 +168,7 @@ class GrowthPress_Sample_Data {
             update_post_meta($id, '_gp_is_sample', '1');
             update_post_meta($id, '_amount', 150);
             update_post_meta($id, '_status', 'Paid');
+            update_post_meta($id, '_related_id', 1); // Mock related ID
         }
     }
 
@@ -244,13 +247,48 @@ class GrowthPress_Sample_Data {
         $projects = array('Global Enterprise Migration', 'Sustainable Infrastructure Deployment');
         foreach ($projects as $p) {
             $id = wp_insert_post(array(
-                'post_title'   => $p,
+                'post_title'   => $p . ' (Demo User)',
                 'post_content' => 'High-stakes ' . strtolower($p) . ' successfully executed.',
                 'post_type'    => 'gp_project',
                 'post_status'  => 'publish'
             ));
             if ($id) {
                 update_post_meta($id, '_gp_is_sample', '1');
+            }
+        }
+    }
+
+    private static function generate_inventory() {
+        $items = array('Elite Strategic Asset #1', 'High-Yield Node #2');
+        foreach ($items as $item) {
+            $id = wp_insert_post(array(
+                'post_title'   => $item,
+                'post_content' => 'Premium ' . strtolower($item) . ' for ecosystem expansion.',
+                'post_type'    => 'gp_property',
+                'post_status'  => 'publish'
+            ));
+            if ($id) {
+                update_post_meta($id, '_gp_is_sample', '1');
+                update_post_meta($id, '_gp_price', rand(100000, 5000000));
+            }
+        }
+    }
+
+    private static function generate_reviews() {
+        $reviews = array(
+            'The autonomous triage is 10x more efficient than our old manual process.' => 'Director of Growth',
+            'Seamless client portal experience. Our enterprise partners love the transparency.' => 'Managing Partner'
+        );
+        foreach ($reviews as $content => $author) {
+            $id = wp_insert_post(array(
+                'post_title'   => $author,
+                'post_content' => $content,
+                'post_type'    => 'gp_review',
+                'post_status'  => 'publish'
+            ));
+            if ($id) {
+                update_post_meta($id, '_gp_is_sample', '1');
+                update_post_meta($id, '_gp_rating', 5);
             }
         }
     }

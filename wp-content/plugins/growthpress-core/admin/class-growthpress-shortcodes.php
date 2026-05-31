@@ -81,6 +81,48 @@ class GrowthPress_Shortcode_Ref {
                 'desc'  => 'Displays a niche-specific alert banner (e.g. Emergency Dental available).',
                 'usage' => 'Place at the very top of your site or hero sections.',
                 'example' => '[gp_urgency_banner]'
+            ),
+            array(
+                'tag'   => '[gp_kb_grid]',
+                'title' => 'Knowledge Base Grid',
+                'desc'  => 'Displays a high-fidelity grid of technical KB articles.',
+                'usage' => 'Place on documentation or support pages.',
+                'example' => '[gp_kb_grid]'
+            ),
+            array(
+                'tag'   => '[gp_case_study_grid]',
+                'title' => 'Success Story Grid',
+                'desc'  => 'Displays a grid of high-ticket Case Studies and Projects.',
+                'usage' => 'Place on Portfolio or Results pages.',
+                'example' => '[gp_case_study_grid]'
+            ),
+            array(
+                'tag'   => '[gp_service_grid]',
+                'title' => 'Service Lines Grid',
+                'desc'  => 'Displays a grid of your elite service offerings.',
+                'usage' => 'Place on the Services overview page.',
+                'example' => '[gp_service_grid]'
+            ),
+            array(
+                'tag'   => '[gp_inventory_grid]',
+                'title' => 'Portfolio Inventory Grid',
+                'desc'  => 'Displays a luxury grid of inventory items (e.g. Properties).',
+                'usage' => 'Specific to Real Estate or Asset-heavy niches.',
+                'example' => '[gp_inventory_grid]'
+            ),
+            array(
+                'tag'   => '[gp_location_grid]',
+                'title' => 'Location Network Grid',
+                'desc'  => 'Displays a grid of all physical service locations.',
+                'usage' => 'Place on the Locations or About page.',
+                'example' => '[gp_location_grid]'
+            ),
+            array(
+                'tag'   => '[gp_funnel_grid]',
+                'title' => 'Active Funnels Overview',
+                'desc'  => 'Displays a grid of active conversion funnels.',
+                'usage' => 'Mainly for internal landing page management.',
+                'example' => '[gp_funnel_grid]'
             )
         );
         ?>

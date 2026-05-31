@@ -27,6 +27,7 @@ class GrowthPress_CRM {
         add_action( 'wp_ajax_nopriv_gp_log_behavior', array( $this, 'handle_behavior_logging' ) );
         add_action( 'wp_ajax_gp_export_leads', array( $this, 'handle_lead_export' ) );
         add_action( 'wp_ajax_gp_add_lead_note', array( $this, 'handle_add_note' ) );
+        add_action( 'wp_ajax_gp_complete_task', array( $this, 'handle_complete_task' ) );
         if ( ! wp_next_scheduled( 'gp_cron_followup' ) ) {
             wp_schedule_event( time(), 'hourly', 'gp_cron_followup' );
         }
@@ -190,6 +191,13 @@ class GrowthPress_CRM {
         $suggested = $ai->call_ai("Personalized reply for: \"{$lead->post_content}\"", "Assistant");
         if ( ! is_wp_error($suggested) ) update_post_meta($lead_id, '_gp_ai_suggested_reply', $suggested);
 
+        $nudge = $ai->generate_behavioral_nudge($lead_id);
+        if ( ! is_wp_error($nudge) ) update_post_meta($lead_id, '_gp_behavioral_nudge', $nudge);
+
+        $niche = get_option('growthpress_niche', 'business');
+        $nurture = $ai->generate_email_campaign($lead->post_content, $niche);
+        if ( ! is_wp_error($nurture) ) update_post_meta($lead_id, '_gp_nurture_sequence', $nurture);
+
         do_action('gp_niche_lead_analysis', $lead_id);
     }
 
@@ -285,6 +293,15 @@ class GrowthPress_CRM {
             'text' => sanitize_textarea_field( $_POST['note'] )
         );
         update_post_meta( $lead_id, '_gp_internal_notes', $notes );
+        wp_send_json_success();
+    }
+
+    public function handle_complete_task() {
+        if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error();
+        check_ajax_referer( 'gp_admin_nonce', 'gp_nonce' );
+        $task_id = intval( $_POST['task_id'] );
+        update_post_meta( $task_id, '_task_status', 'Completed' );
+        GrowthPress_Activity::log( "Strategic Task #$task_id marked as completed." );
         wp_send_json_success();
     }
 

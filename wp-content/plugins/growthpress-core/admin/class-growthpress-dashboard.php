@@ -22,6 +22,53 @@ class GrowthPress_Dashboard {
     public function add_dashboard_menu() {
         $brand = get_option('growthpress_brand_name', 'GrowthPress');
         add_menu_page( $brand, $brand, 'manage_options', 'growthpress-dashboard', array( $this, 'render_dashboard' ), 'dashicons-chart-line', 2 );
+        add_submenu_page( 'growthpress-dashboard', 'Strategic Tasks', 'Global Tasks', 'manage_options', 'growthpress-tasks', array( $this, 'render_global_tasks' ) );
+    }
+
+    public function render_global_tasks() {
+        $tasks = get_posts(array('post_type' => 'gp_task', 'posts_per_page' => -1));
+        ?>
+        <div class="wrap growthpress-tasks">
+            <h1>Global Strategic Command: Tasks</h1>
+            <div class="glass-card" style="margin-top:30px; padding:0; overflow:hidden;">
+                <table class="wp-list-table widefat fixed striped">
+                    <thead>
+                        <tr>
+                            <th style="padding:20px; font-weight:900;">STRATEGIC TASK</th>
+                            <th style="padding:20px; font-weight:900;">RELATED LEAD</th>
+                            <th style="padding:20px; font-weight:900;">STATUS</th>
+                            <th style="padding:20px; font-weight:900;">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($tasks as $t):
+                            $lead_id = get_post_meta($t->ID, '_related_lead', true);
+                            $status = get_post_meta($t->ID, '_task_status', true) ?: 'Pending';
+                            ?>
+                            <tr style="<?php echo $status === 'Completed' ? 'opacity:0.5;' : ''; ?>">
+                                <td style="padding:20px; font-weight:700;"><?php echo esc_html($t->post_title); ?></td>
+                                <td style="padding:20px;"><?php echo $lead_id ? '<a href="'.get_edit_post_link($lead_id).'">'.get_the_title($lead_id).'</a>' : 'General Ecosystem'; ?></td>
+                                <td style="padding:20px;"><span style="background:<?php echo $status === 'Completed' ? '#D1FAE5' : '#FEF2F2'; ?>; color:<?php echo $status === 'Completed' ? '#065F46' : '#991B1B'; ?>; padding:6px 15px; border-radius:30px; font-size:10px; font-weight:900;"><?php echo strtoupper($status); ?></span></td>
+                                <td style="padding:20px;">
+                                    <?php if($status !== 'Completed'): ?>
+                                        <button class="button button-primary" onclick="completeGlobalTask(<?php echo $t->ID; ?>, this)">MARK COMPLETE</button>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <script>
+        function completeGlobalTask(id, btn) {
+            jQuery(btn).text('...').prop('disabled', true);
+            jQuery.post(ajaxurl, { action: 'gp_complete_task', task_id: id, gp_nonce: '<?php echo wp_create_nonce("gp_admin_nonce"); ?>' }, function() {
+                location.reload();
+            });
+        }
+        </script>
+        <?php
     }
 
     public function enqueue_dashboard_assets( $hook ) {
@@ -84,6 +131,8 @@ class GrowthPress_Dashboard {
         $closing = get_post_meta($lead_id, '_gp_ai_closing_tips', true) ?: 'Analyzing closing vectors...';
         $discovery = get_post_meta($lead_id, '_gp_ai_discovery_questions', true) ?: 'Calibrating discovery questions...';
         $suggested = get_post_meta($lead_id, '_gp_ai_suggested_reply', true) ?: 'Drafting personalized response...';
+        $nudge = get_post_meta($lead_id, '_gp_behavioral_nudge', true);
+        $nurture = get_post_meta($lead_id, '_gp_nurture_sequence', true);
 
         $tasks = get_posts(array(
             'post_type' => 'gp_task',
@@ -108,10 +157,16 @@ class GrowthPress_Dashboard {
                         <div style="font-size:38px; font-weight:950; color:var(--primary);"><?php echo $prob; ?>%</div>
                         <div style="font-size:10px; font-weight:900; opacity:0.5; letter-spacing:1px;">DEAL PROBABILITY</div>
                     </div>
-                    <div style="background:#F8FAFC; padding:25px; border-radius:20px;">
+                    <div style="background:#F8FAFC; padding:25px; border-radius:20px; margin-bottom:20px;">
                         <h4 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:1px;">Closing Tactics</h4>
                         <div style="font-size:12px; line-height:1.6; opacity:0.7;"><?php echo nl2br(esc_html($closing)); ?></div>
                     </div>
+                    <?php if($nudge): ?>
+                        <div style="background:var(--secondary); color:white; padding:25px; border-radius:20px;">
+                            <h4 style="margin-top:0; font-size:10px; text-transform:uppercase; letter-spacing:2px; opacity:0.6;">Behavioral Nudge</h4>
+                            <div style="font-size:12px; line-height:1.5; font-weight:600;"><?php echo esc_html($nudge); ?></div>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="brief-main">
                     <h3 style="margin-top:0;"><?php echo esc_html($lead->post_title); ?></h3>
@@ -121,7 +176,13 @@ class GrowthPress_Dashboard {
                     </div>
                     <h4 style="margin-bottom:10px;">Neural Draft Response</h4>
                     <textarea style="width:100%; height:120px; border-radius:12px; padding:15px; font-size:13px; background:#F0FDF4; border:1px solid #DCFCE7;"><?php echo esc_textarea($suggested); ?></textarea>
-                    <div style="margin-top:20px; display:flex; gap:10px;">
+
+                    <?php if($nurture): ?>
+                        <h4 style="margin-top:30px; margin-bottom:10px;">5-Day Strategic Nurture</h4>
+                        <div style="background:#F8FAFC; padding:20px; border-radius:15px; border:1px solid #E2E8F0; font-size:12px; line-height:1.7; max-height:200px; overflow-y:auto;"><?php echo nl2br(esc_html($nurture)); ?></div>
+                    <?php endif; ?>
+
+                    <div style="margin-top:30px; display:flex; gap:10px;">
                         <button class="gp-btn" style="flex:1; background:var(--secondary); color:white !important; padding:12px; border-radius:12px;">Sync to CRM</button>
                         <a href="<?php echo get_edit_post_link($lead_id); ?>" class="gp-btn" style="flex:1; text-align:center; background:transparent; border:1px solid #E2E8F0; padding:12px; border-radius:12px;">Full Dossier</a>
                     </div>
@@ -131,12 +192,27 @@ class GrowthPress_Dashboard {
                 <div style="margin-top:40px; padding-top:30px; border-top:1px solid #EEE;">
                     <h4 style="margin-top:0; font-size:11px; font-weight:950; opacity:0.4; letter-spacing:2px; text-transform:uppercase;">Linked Strategic Tasks</h4>
                     <div style="display:grid; gap:12px; margin-top:20px;">
-                        <?php foreach($tasks as $t): ?>
-                            <div style="background:#F8FAFC; padding:15px 20px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #F1F5F9;">
-                                <span style="font-size:12px; font-weight:700; color:var(--secondary);"><?php echo esc_html($t->post_title); ?></span>
-                                <span style="font-size:9px; background:white; border:1px solid #E2E8F0; padding:4px 10px; border-radius:30px; font-weight:900;">PENDING</span>
+                        <?php foreach($tasks as $t):
+                            $t_status = get_post_meta($t->ID, '_task_status', true) ?: 'Pending';
+                            ?>
+                            <div style="background:#F8FAFC; padding:15px 20px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #F1F5F9; <?php echo $t_status === 'Completed' ? 'opacity:0.5;' : ''; ?>">
+                                <span style="font-size:12px; font-weight:700; color:var(--secondary); <?php echo $t_status === 'Completed' ? 'text-decoration:line-through;' : ''; ?>"><?php echo esc_html($t->post_title); ?></span>
+                                <?php if($t_status !== 'Completed'): ?>
+                                    <button class="gp-btn" style="padding:6px 15px; font-size:9px; border-radius:8px;" onclick="completeGPTask(<?php echo $t->ID; ?>, this)">COMPLETE</button>
+                                <?php else: ?>
+                                    <span style="font-size:9px; color:#10B981; font-weight:900;">DONE</span>
+                                <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
+                        <script>
+                        function completeGPTask(id, btn) {
+                            jQuery(btn).text('...').prop('disabled', true);
+                            jQuery.post(ajaxurl, { action: 'gp_complete_task', task_id: id, gp_nonce: '<?php echo wp_create_nonce("gp_admin_nonce"); ?>' }, function() {
+                                jQuery(btn).parent().css('opacity', '0.5').find('span').css('text-decoration', 'line-through');
+                                jQuery(btn).replaceWith('<span style="font-size:9px; color:#10B981; font-weight:900;">DONE</span>');
+                            });
+                        }
+                        </script>
                     </div>
                 </div>
             <?php endif; ?>
