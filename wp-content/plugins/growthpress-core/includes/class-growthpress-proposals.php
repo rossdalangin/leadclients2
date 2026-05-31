@@ -72,6 +72,18 @@ class GrowthPress_Proposals {
         $proposal_id = intval($_POST['proposal_id']);
         update_post_meta($proposal_id, '_proposal_status', 'Accepted');
 
+        // Move Lead to Closed
+        $lead_id = get_post_meta($proposal_id, '_related_lead', true);
+        if ($lead_id) {
+            wp_set_object_terms($lead_id, 'closed', 'gp_lead_stage');
+
+            // Create Kickoff Task
+            $crm = GrowthPress_CRM::get_instance();
+            $crm->create_task("Project Kickoff: " . get_the_title($lead_id), "Proposal accepted. Initialize onboarding sequence.", $lead_id);
+
+            GrowthPress_Activity::log( "Lead #$lead_id transitioned to 'Closed' following proposal acceptance." );
+        }
+
         $value = get_post_meta($proposal_id, '_proposal_value', true);
         $payments = new GrowthPress_Payments();
         $invoice_id = $payments->create_invoice($value, $proposal_id, 'proposal');

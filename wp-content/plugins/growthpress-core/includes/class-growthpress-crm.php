@@ -160,6 +160,12 @@ class GrowthPress_CRM {
         update_post_meta($lead_id, '_gp_ai_probability', $prob);
         update_post_meta($lead_id, '_gp_ai_sentiment_json', $analysis_raw);
 
+        // Priority Lead Routing
+        if ( $prob >= 80 ) {
+            $this->create_task( "Priority Triage: " . $lead->post_title, "High-probability lead detected ($prob%). Immediate outreach required.", $lead_id );
+            GrowthPress_Activity::log( "Priority Lead Detected: #$lead_id scored $prob% probability." );
+        }
+
         $tag_prompt = "Categorize lead: \"{$lead->post_content}\" as 'Residential', 'Commercial', or 'Enterprise'. Return ONE word.";
         $tag = $ai->call_ai($tag_prompt, "Classifier");
         if ( ! is_wp_error($tag) ) wp_set_object_terms($lead_id, trim($tag), 'gp_lead_tag');
@@ -317,6 +323,7 @@ class GrowthPress_CRM {
         foreach ( $new_leads as $lead ) {
             if ( get_post_meta( $lead->ID, '_followup_sent', true ) ) continue;
             update_post_meta( $lead->ID, '_followup_sent', 'true' );
+            GrowthPress_Activity::log( "AI Reactivation: Nurture sequence triggered for dormant lead #{$lead->ID}." );
         }
     }
 }

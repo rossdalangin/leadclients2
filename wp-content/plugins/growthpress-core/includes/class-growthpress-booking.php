@@ -26,6 +26,19 @@ class GrowthPress_Booking {
         add_action( 'wp_ajax_nopriv_gp_submit_booking', array( $this, 'handle_booking_submission' ) );
         add_action( 'wp_ajax_gp_join_waiting_list', array( $this, 'handle_waiting_list' ) );
         add_action( 'wp_ajax_nopriv_gp_join_waiting_list', array( $this, 'handle_waiting_list' ) );
+        add_action( 'wp_ajax_gp_complete_appointment', array( $this, 'handle_appointment_completion' ) );
+    }
+
+    public function handle_appointment_completion() {
+        if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error();
+        check_ajax_referer( 'gp_admin_nonce', 'gp_nonce' );
+
+        $id = intval($_POST['appointment_id']);
+        update_post_meta( $id, '_status', 'Completed' );
+        do_action( 'gp_appointment_completed', $id );
+
+        GrowthPress_Activity::log( "Appointment #$id marked as completed." );
+        wp_send_json_success( 'Appointment finalized.' );
     }
 
     public function register_booking_cpt() {
@@ -81,9 +94,15 @@ class GrowthPress_Booking {
                     </div>
                 </div>
 
-                <div style="margin-bottom:40px;">
-                    <label style="font-weight:950; font-size:11px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">APPLICANT NAME</label>
-                    <input type="text" name="client_name" placeholder="Full Legal Name" required style="height:60px; border-radius:15px; font-weight:700;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:40px;">
+                    <div>
+                        <label style="font-weight:950; font-size:11px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">APPLICANT NAME</label>
+                        <input type="text" name="client_name" placeholder="Full Legal Name" required style="height:60px; border-radius:15px; font-weight:700;">
+                    </div>
+                    <div>
+                        <label style="font-weight:950; font-size:11px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">EMAIL ADDRESS</label>
+                        <input type="email" name="client_email" placeholder="direct@example.com" required style="height:60px; border-radius:15px; font-weight:700;">
+                    </div>
                 </div>
 
                 <div style="display:flex; gap:20px;">
@@ -132,6 +151,17 @@ class GrowthPress_Booking {
         if ( $id ) {
             update_post_meta( $id, '_appointment_date', $data['date'] . ' ' . $data['time'] );
             update_post_meta( $id, '_staff_id', intval($data['staff_id']) );
+            $email = sanitize_email($data['client_email']);
+            update_post_meta( $id, '_client_email', $email );
+
+            // Link to Lead if exists
+            $leads = get_posts( array( 'post_type' => 'gp_lead', 'meta_key' => '_lead_email', 'meta_value' => $email, 'number' => 1 ) );
+            if ( ! empty($leads) ) {
+                $lead_id = $leads[0]->ID;
+                update_post_meta( $id, '_related_lead', $lead_id );
+                wp_set_object_terms( $lead_id, 'booked', 'gp_lead_stage' );
+                GrowthPress_Activity::log( "Lead #$lead_id moved to 'Booked' via session scheduling." );
+            }
 
             // Create Invoice for Deposit
             $payments = new GrowthPress_Payments();
