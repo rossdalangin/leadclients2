@@ -13,15 +13,16 @@ class GrowthPress_Sample_Data {
         $niche = get_option('growthpress_niche', 'business');
 
         // 1. Generate core CPT sample data
-        self::generate_leads();
-        self::generate_appointments();
-        self::generate_proposals();
+        $lead_ids = self::generate_leads();
+        self::generate_appointments($lead_ids);
+        self::generate_proposals($lead_ids);
         self::generate_transactions();
         self::generate_locations();
         self::generate_funnels();
-        self::generate_tasks();
+        self::generate_tasks($lead_ids);
         self::generate_kb();
         self::generate_services();
+        self::generate_projects();
 
         // 2. Call niche-specific sample data
         $class_name = 'GrowthPress_' . str_replace(' ', '', ucwords(str_replace('-', ' ', $niche)));
@@ -35,6 +36,9 @@ class GrowthPress_Sample_Data {
         // 3. Call Reputation sample data
         $reputation = new GrowthPress_Reputation();
         $reputation->generate_sample_data();
+
+        // 4. Log the activity
+        GrowthPress_Activity::log("Sample Ecosystem Instantiation Completed.");
     }
 
     public static function remove_all_sample_data() {
@@ -54,6 +58,7 @@ class GrowthPress_Sample_Data {
         foreach ($sample_posts as $post) {
             wp_delete_post($post->ID, true);
         }
+        GrowthPress_Activity::log("Sample Intelligence Purge Completed.");
     }
 
     private static function generate_leads() {
@@ -62,18 +67,25 @@ class GrowthPress_Sample_Data {
                 'title' => 'John Doe',
                 'content' => 'Interested in high-ticket scaling solutions for our corporate legal department.',
                 'email' => 'john.doe@enterprise-legal.com',
+                'zip' => '90210',
                 'prob' => 85,
+                'stage' => 'qualified',
+                'tag' => 'Enterprise',
                 'sentiment' => '{"urgency": 8, "sentiment": "positive", "intent": "high"}'
             ),
             array(
                 'title' => 'Jane Smith',
                 'content' => 'Looking for AI automation for my dental practice group. We have 5 locations.',
                 'email' => 'jane@smithdental.com',
+                'zip' => '10001',
                 'prob' => 45,
+                'stage' => 'new',
+                'tag' => 'Commercial',
                 'sentiment' => '{"urgency": 4, "sentiment": "neutral", "intent": "medium"}'
             ),
         );
 
+        $ids = array();
         foreach ($leads as $l) {
             $id = wp_insert_post(array(
                 'post_title'   => $l['title'],
@@ -82,8 +94,10 @@ class GrowthPress_Sample_Data {
                 'post_status'  => 'publish'
             ));
             if ($id) {
+                $ids[] = $id;
                 update_post_meta($id, '_gp_is_sample', '1');
                 update_post_meta($id, '_lead_email', $l['email']);
+                update_post_meta($id, '_lead_zip', $l['zip']);
                 update_post_meta($id, '_gp_ai_probability', $l['prob']);
                 update_post_meta($id, '_gp_ai_sentiment_json', $l['sentiment']);
                 update_post_meta($id, '_gp_ai_closing_tips', "Focus on the multi-location efficiency gains.\nHighlight secure AI triage protocols.");
@@ -94,11 +108,21 @@ class GrowthPress_Sample_Data {
                     array('user' => 'System AI', 'time' => current_time('mysql'), 'text' => 'Lead automatically triaged and scored.')
                 );
                 update_post_meta($id, '_gp_internal_notes', $notes);
+
+                $behavior = array(
+                    array('page' => 'Home', 'time' => current_time('mysql', 1)),
+                    array('page' => 'Services', 'time' => current_time('mysql'))
+                );
+                update_post_meta($id, '_behavior_log', $behavior);
+
+                wp_set_object_terms($id, $l['stage'], 'gp_lead_stage');
+                wp_set_object_terms($id, $l['tag'], 'gp_lead_tag');
             }
         }
+        return $ids;
     }
 
-    private static function generate_appointments() {
+    private static function generate_appointments($lead_ids = array()) {
         $id = wp_insert_post(array(
             'post_title'  => 'Sample Strategy Session',
             'post_type'   => 'gp_appointment',
@@ -107,10 +131,15 @@ class GrowthPress_Sample_Data {
         if ($id) {
             update_post_meta($id, '_gp_is_sample', '1');
             update_post_meta($id, '_appointment_date', date('Y-m-d H:i:s', strtotime('+1 day')));
+            update_post_meta($id, '_staff_id', get_current_user_id());
+            if (!empty($lead_ids)) {
+                update_post_meta($id, '_client_email', get_post_meta($lead_ids[0], '_lead_email', true));
+                wp_set_object_terms($lead_ids[0], 'booked', 'gp_lead_stage');
+            }
         }
     }
 
-    private static function generate_proposals() {
+    private static function generate_proposals($lead_ids = array()) {
         $id = wp_insert_post(array(
             'post_title'   => 'Sample Growth Proposal',
             'post_content' => 'Full architectural blueprint for ecosystem dominance.',
@@ -121,6 +150,9 @@ class GrowthPress_Sample_Data {
             update_post_meta($id, '_gp_is_sample', '1');
             update_post_meta($id, '_proposal_status', 'Sent');
             update_post_meta($id, '_proposal_value', 5000);
+            if (!empty($lead_ids)) {
+                update_post_meta($id, '_related_lead', end($lead_ids));
+            }
         }
     }
 
@@ -134,7 +166,6 @@ class GrowthPress_Sample_Data {
             update_post_meta($id, '_gp_is_sample', '1');
             update_post_meta($id, '_amount', 150);
             update_post_meta($id, '_status', 'Paid');
-            update_post_meta($id, '_related_id', 1); // Mock related ID
         }
     }
 
@@ -149,7 +180,7 @@ class GrowthPress_Sample_Data {
             ));
             if ($id) {
                 update_post_meta($id, '_gp_is_sample', '1');
-                update_post_meta($id, '_serviced_zips', '90210, 90211, 90212');
+                update_post_meta($id, '_serviced_zips', '90210, 90211, 90212, 10001');
             }
         }
     }
@@ -167,7 +198,7 @@ class GrowthPress_Sample_Data {
         }
     }
 
-    private static function generate_tasks() {
+    private static function generate_tasks($lead_ids = array()) {
         $id = wp_insert_post(array(
             'post_title'   => 'Follow up with priority leads',
             'post_content' => 'Execute high-authority closing protocol.',
@@ -176,6 +207,9 @@ class GrowthPress_Sample_Data {
         ));
         if ($id) {
             update_post_meta($id, '_gp_is_sample', '1');
+            if (!empty($lead_ids)) {
+                update_post_meta($id, '_related_lead', $lead_ids[0]);
+            }
         }
     }
 
@@ -198,6 +232,21 @@ class GrowthPress_Sample_Data {
                 'post_title'   => $s,
                 'post_content' => 'Elite ' . strtolower($s) . ' for high-ticket service firms.',
                 'post_type'    => 'gp_service',
+                'post_status'  => 'publish'
+            ));
+            if ($id) {
+                update_post_meta($id, '_gp_is_sample', '1');
+            }
+        }
+    }
+
+    private static function generate_projects() {
+        $projects = array('Global Enterprise Migration', 'Sustainable Infrastructure Deployment');
+        foreach ($projects as $p) {
+            $id = wp_insert_post(array(
+                'post_title'   => $p,
+                'post_content' => 'High-stakes ' . strtolower($p) . ' successfully executed.',
+                'post_type'    => 'gp_project',
                 'post_status'  => 'publish'
             ));
             if ($id) {

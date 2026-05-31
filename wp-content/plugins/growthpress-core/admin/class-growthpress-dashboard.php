@@ -157,13 +157,9 @@ class GrowthPress_Dashboard {
     }
 
     private function run_niche_sample_data($niche) {
-        $class_name = 'GrowthPress_' . str_replace(' ', '', ucwords(str_replace('-', ' ', $niche)));
-        if ( class_exists($class_name) ) {
-            $instance = new $class_name();
-            if ( method_exists($instance, 'generate_sample_data') ) $instance->generate_sample_data();
+        if ( class_exists('GrowthPress_Sample_Data') ) {
+            GrowthPress_Sample_Data::generate_all_sample_data();
         }
-        $reputation = new GrowthPress_Reputation();
-        $reputation->generate_sample_data();
     }
 
     private function get_industry_copy($n) {
