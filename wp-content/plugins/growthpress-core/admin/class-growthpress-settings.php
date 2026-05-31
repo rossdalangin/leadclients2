@@ -33,6 +33,22 @@ class GrowthPress_Settings {
         );
         foreach($keys as $k) register_setting( 'growthpress_settings_group', $k );
         add_action( 'wp_ajax_gp_test_connectivity', array( $this, 'test_connectivity' ) );
+        add_action( 'wp_ajax_gp_generate_sample_data', array( $this, 'ajax_generate_sample_data' ) );
+        add_action( 'wp_ajax_gp_remove_sample_data', array( $this, 'ajax_remove_sample_data' ) );
+    }
+
+    public function ajax_generate_sample_data() {
+        if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error('Unauthorized');
+        check_ajax_referer( 'gp_admin_nonce', 'gp_nonce' );
+        GrowthPress_Sample_Data::generate_all_sample_data();
+        wp_send_json_success('Sample ecosystem successfully instantiated.');
+    }
+
+    public function ajax_remove_sample_data() {
+        if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error('Unauthorized');
+        check_ajax_referer( 'gp_admin_nonce', 'gp_nonce' );
+        GrowthPress_Sample_Data::remove_all_sample_data();
+        wp_send_json_success('Sample intelligence safely purged from ecosystem.');
     }
 
     public function test_connectivity() {
@@ -65,6 +81,7 @@ class GrowthPress_Settings {
                     <a href="#tab-ai" class="nav-tab">AI Providers</a>
                     <a href="#tab-lab" class="nav-tab">AI Prompt Lab</a>
                     <a href="#tab-white-label" class="nav-tab">White-Label & Agency</a>
+                    <a href="#tab-tools" class="nav-tab">System Tools</a>
                     <a href="#tab-docs" class="nav-tab">Master Ops Manual</a>
                 </h2>
             </div>
@@ -201,6 +218,40 @@ class GrowthPress_Settings {
                     prompt: jQuery('#ai-lab-prompt').val()
                 }, function(res) {
                     out.text("AI ENGINE: 'Successfully calibrated to new personality constraints. Responses will now reflect your updated tone settings.'").css('opacity', 1);
+                });
+            }
+            </script>
+
+            <div id="tab-tools" class="tab-content" style="display:none;">
+                <div class="glass-card" style="max-width:1100px;">
+                    <h3 class="text-gradient">System Intelligence & Data Tools</h3>
+                    <p style="opacity:0.6;">Manage system sample data and ecosystem maintenance protocols.</p>
+
+                    <div style="margin-top:40px; display:grid; grid-template-columns: 1fr 1fr; gap:30px;">
+                        <div style="padding:40px; background:rgba(37,99,235,0.05); border-radius:30px; border:1px solid rgba(37,99,235,0.1);">
+                            <h4 style="margin-top:0;">Generate Sample Ecosystem</h4>
+                            <p style="font-size:13px; opacity:0.7; margin-bottom:30px;">Instantiate a full suite of sample leads, appointments, proposals, and niche-specific data to test your operating system.</p>
+                            <button type="button" class="gp-btn" onclick="runTool('gp_generate_sample_data')" style="background:var(--primary); color:white; width:100%; height:60px; border-radius:15px;">Generate Sample Data</button>
+                        </div>
+                        <div style="padding:40px; background:rgba(239,68,68,0.05); border-radius:30px; border:1px solid rgba(239,68,68,0.1);">
+                            <h4 style="margin-top:0;">Purge Sample Intelligence</h4>
+                            <p style="font-size:13px; opacity:0.7; margin-bottom:30px;">Safely remove all system-generated sample data across all custom post types while preserving your real production data.</p>
+                            <button type="button" class="gp-btn" onclick="runTool('gp_remove_sample_data')" style="background:#EF4444; color:white; width:100%; height:60px; border-radius:15px;">Remove Sample Data</button>
+                        </div>
+                    </div>
+                    <div id="tool-res" style="margin-top:30px; padding:20px; border-radius:15px; text-align:center; font-weight:700; display:none;"></div>
+                </div>
+            </div>
+
+            <script>
+            function runTool(action) {
+                const res = jQuery('#tool-res').fadeIn().text('EXECUTING PROTOCOL...').css({'background':'#F8FAFC', 'color':'#64748B'});
+                jQuery.post(ajaxurl, { action: action, gp_nonce: '<?php echo wp_create_nonce("gp_admin_nonce"); ?>' }, function(response) {
+                    if (response.success) {
+                        res.text(response.data).css({'background':'#F0FDF4', 'color':'#10B981'});
+                    } else {
+                        res.text(response.data || 'Execution failed.').css({'background':'#FEF2F2', 'color':'#EF4444'});
+                    }
                 });
             }
             </script>

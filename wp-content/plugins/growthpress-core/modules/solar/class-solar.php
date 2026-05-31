@@ -55,7 +55,8 @@ class GrowthPress_Solar {
     }
 
     public function generate_sample_data() {
-        wp_insert_post(array('post_title' => 'Elite Residential Array', 'post_content' => 'Full-scale neural-optimized solar deployment for a premium estate.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
+        $id = wp_insert_post(array('post_title' => 'Elite Residential Array', 'post_content' => 'Full-scale neural-optimized solar deployment for a premium estate.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
+        if ($id) update_post_meta($id, '_gp_is_sample', '1');
     }
 }
 new GrowthPress_Solar();

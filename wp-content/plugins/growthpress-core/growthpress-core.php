@@ -35,6 +35,7 @@ function growthpress_core_load_modules() {
         'includes/class-growthpress-funnels.php',
         'includes/class-growthpress-woocommerce.php',
         'includes/class-growthpress-conversion.php',
+        'includes/class-growthpress-sample-data.php',
         'admin/class-growthpress-dashboard.php',
         'admin/class-growthpress-content-studio.php',
         'admin/class-growthpress-settings.php',

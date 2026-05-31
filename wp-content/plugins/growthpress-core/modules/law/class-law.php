@@ -60,7 +60,8 @@ class GrowthPress_Law {
     }
 
     public function generate_sample_data() {
-        wp_insert_post(array('post_title' => 'Sterling IP Matter', 'post_content' => 'High-stakes litigation inquiry regarding multi-national patent infringement.', 'post_type' => 'gp_lead', 'post_status' => 'publish'));
+        $id = wp_insert_post(array('post_title' => 'Sterling IP Matter', 'post_content' => 'High-stakes litigation inquiry regarding multi-national patent infringement.', 'post_type' => 'gp_lead', 'post_status' => 'publish'));
+        if ($id) update_post_meta($id, '_gp_is_sample', '1');
     }
 }
 new GrowthPress_Law();

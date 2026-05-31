@@ -48,7 +48,8 @@ class GrowthPress_Contractor {
     }
 
     public function generate_sample_data() {
-        wp_insert_post(array('post_title' => 'Elite Transformation', 'post_content' => 'Complete structural overhaul of a luxury residential asset.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
+        $id = wp_insert_post(array('post_title' => 'The Modern Build', 'post_content' => 'High-end residential construction project.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
+        if ($id) update_post_meta($id, '_gp_is_sample', '1');
     }
 }
 new GrowthPress_Contractor();

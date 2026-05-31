@@ -26,7 +26,8 @@ class GrowthPress_Coaches {
     }
 
     public function generate_sample_data() {
-        wp_insert_post(array('post_title' => 'Strategic Scaling Blueprint', 'post_content' => 'Comprehensive operational audit for a high-performance mentorship program.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
+        $id = wp_insert_post(array('post_title' => 'Strategic Scaling Blueprint', 'post_content' => 'Comprehensive operational audit for a high-performance mentorship program.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
+        if ($id) update_post_meta($id, '_gp_is_sample', '1');
     }
 }
 new GrowthPress_Coaches();

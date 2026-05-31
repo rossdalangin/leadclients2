@@ -42,6 +42,7 @@ class GrowthPress_Reputation {
             if ( ! get_page_by_path( sanitize_title($author), OBJECT, 'gp_review' ) ) {
                 $id = wp_insert_post(array('post_title' => $author, 'post_content' => $content, 'post_type' => 'gp_review', 'post_status' => 'publish'));
                 update_post_meta($id, '_gp_rating', 5);
+                update_post_meta($id, '_gp_is_sample', '1');
             }
         }
     }

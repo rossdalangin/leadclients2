@@ -39,7 +39,8 @@ class GrowthPress_Medical {
     }
 
     public function generate_sample_data() {
-        wp_insert_post(array('post_title' => 'David R. (Orthopedic)', 'post_content' => 'High-priority intake inquiry for specialist orthopedic intervention.', 'post_type' => 'gp_lead', 'post_status' => 'publish'));
+        $id = wp_insert_post(array('post_title' => 'Dr. Smith\'s Surgical Center', 'post_content' => 'Full digital transformation for a high-volume outpatient facility.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
+        if ($id) update_post_meta($id, '_gp_is_sample', '1');
     }
 }
 new GrowthPress_Medical();

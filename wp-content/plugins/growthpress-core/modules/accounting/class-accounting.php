@@ -41,7 +41,8 @@ class GrowthPress_Accounting {
     }
 
     public function generate_sample_data() {
-        wp_insert_post(array('post_title' => 'Nexus Financial Restructuring', 'post_content' => 'Full capital optimization for a high-growth SaaS entity moving into Series C.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
+        $id = wp_insert_post(array('post_title' => 'The Tax Strategy Firm', 'post_content' => 'High-end tax optimization for corporate clients.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
+        if ($id) update_post_meta($id, '_gp_is_sample', '1');
     }
 }
 new GrowthPress_Accounting();
