@@ -81,7 +81,15 @@ class GrowthPress_Proposals {
             $crm = GrowthPress_CRM::get_instance();
             $crm->create_task("Project Kickoff: " . get_the_title($lead_id), "Proposal accepted. Initialize onboarding sequence.", $lead_id);
 
-            GrowthPress_Activity::log( "Lead #$lead_id transitioned to 'Closed' following proposal acceptance." );
+            // Create Draft Case Study
+            wp_insert_post(array(
+                'post_title'   => 'Case Study: ' . get_the_title($lead_id),
+                'post_content' => 'Proposal accepted on ' . date('Y-m-d') . ". Summary: " . get_the_excerpt($lead_id),
+                'post_type'    => 'gp_project',
+                'post_status'  => 'draft'
+            ));
+
+            GrowthPress_Activity::log( "Lead #$lead_id transitioned to 'Closed' following proposal acceptance. Draft Case Study generated." );
         }
 
         $value = get_post_meta($proposal_id, '_proposal_value', true);

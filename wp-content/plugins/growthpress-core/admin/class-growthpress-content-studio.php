@@ -45,6 +45,10 @@ class GrowthPress_Content_Studio {
             case 'sales': $result = $ai->call_ai("Generate high-ticket discovery call talk tracks and objection handling for a $niche firm regarding \"$topic\".", "AI Sales Coach"); break;
             case 'ad': $result = $ai->generate_ad_copy($topic, $niche); break;
             case 'headlines': $result = $ai->call_ai("Generate 5 elite headlines for \"$topic\" in the $niche industry.", "CRO Expert"); break;
+            case 'service': $result = $ai->call_ai("Generate a detailed Service Line description for \"$topic\" in $niche. Include benefits and key features. Return formatted text.", "Service Architect"); break;
+            case 'project': $result = $ai->call_ai("Generate a compelling high-ticket Case Study for \"$topic\" in $niche. Include Challenge, Solution, and ROI Results.", "Success Storywriter"); break;
+            case 'inventory': $result = $ai->call_ai("Generate a luxury Portfolio/Inventory listing for \"$topic\" in $niche. Focus on high-end features and lifestyle appeal.", "Elite Marketer"); break;
+            case 'kb': $result = $ai->call_ai("Generate a technical Knowledge Base article explaining \"$topic\" for the $niche industry.", "Knowledge Specialist"); break;
             default: $result = 'Invalid selection.';
         }
 
@@ -88,6 +92,10 @@ class GrowthPress_Content_Studio {
                             <option value="sales">Discovery Talk Tracks</option>
                             <option value="ad">Direct-Response Ad Suite</option>
                             <option value="headlines">Conversion Headlines</option>
+                            <option value="service">Service Line Description</option>
+                            <option value="project">High-Ticket Case Study</option>
+                            <option value="inventory">Portfolio/Inventory Listing</option>
+                            <option value="kb">Technical KB Article</option>
                         </select>
                     </div>
 

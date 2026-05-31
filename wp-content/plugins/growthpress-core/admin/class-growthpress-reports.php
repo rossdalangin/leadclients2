@@ -41,6 +41,28 @@ class GrowthPress_Reports {
     public function render_reports() {
         $stats = $this->get_live_stats();
         $conv_rate = $stats['Total Leads'] > 0 ? round(($stats['Confirmed Bookings'] / $stats['Total Leads']) * 100, 1) : 0;
+
+        // Funnel Performance
+        $funnels = get_posts(array('post_type' => 'gp_funnel', 'posts_per_page' => 5));
+        $funnel_data = array();
+        foreach($funnels as $f) {
+            $hitsA = (int)get_post_meta($f->ID, '_hits_A', true);
+            $hitsB = (int)get_post_meta($f->ID, '_hits_B', true);
+            $funnel_data[] = array('title' => $f->post_title, 'hits' => $hitsA + $hitsB);
+        }
+
+        // Location Distribution
+        $locations = get_posts(array('post_type' => 'gp_location', 'posts_per_page' => -1));
+        $loc_stats = array();
+        foreach($locations as $l) {
+            $leads_count = count(get_posts(array(
+                'post_type' => 'gp_lead',
+                'meta_key' => '_assigned_location',
+                'meta_value' => $l->ID,
+                'posts_per_page' => -1
+            )));
+            $loc_stats[] = array('title' => $l->post_title, 'count' => $leads_count);
+        }
         ?>
         <div class="wrap growthpress-reports">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:50px;">
@@ -60,6 +82,33 @@ class GrowthPress_Reports {
                 <div class="stat-card glass-card" style="padding:45px; border-radius:35px; border-bottom: 8px solid #10B981;">
                     <h4 style="font-size:11px; font-weight:950; opacity:0.4; text-transform:uppercase; letter-spacing:2px; margin-bottom:15px;">CONVERSION VELOCITY</h4>
                     <div class="value" style="font-size:3.5rem; color:#10B981; font-weight:950; letter-spacing:-0.05em;"><?php echo $conv_rate; ?>%</div>
+                </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-top:40px;">
+                <div class="glass-card" style="padding:40px;">
+                    <h3 style="margin-top:0;">Funnel Conversion Node Performance</h3>
+                    <?php if($funnel_data): foreach($funnel_data as $fd): ?>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:13px; font-weight:700;">
+                            <span><?php echo esc_html($fd['title']); ?></span>
+                            <span style="color:var(--primary);"><?php echo $fd['hits']; ?> Traffic Hits</span>
+                        </div>
+                        <div style="height:6px; background:#F1F5F9; border-radius:10px; overflow:hidden; margin-bottom:20px;">
+                            <div style="width:<?php echo min(100, $fd['hits'] / 20); ?>%; height:100%; background:var(--primary);"></div>
+                        </div>
+                    <?php endforeach; else: echo "<p style='opacity:0.5;'>Calibrating conversion nodes...</p>"; endif; ?>
+                </div>
+                <div class="glass-card" style="padding:40px;">
+                    <h3 style="margin-top:0;">Sector Lead Distribution</h3>
+                    <?php if($loc_stats): foreach($loc_stats as $ls): ?>
+                        <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:13px; font-weight:700;">
+                            <span><?php echo esc_html($ls['title']); ?></span>
+                            <span style="color:#10B981;"><?php echo $ls['count']; ?> Leads</span>
+                        </div>
+                        <div style="height:6px; background:#F1F5F9; border-radius:10px; overflow:hidden; margin-bottom:20px;">
+                            <div style="width:<?php echo min(100, $ls['count'] * 10); ?>%; height:100%; background:#10B981;"></div>
+                        </div>
+                    <?php endforeach; else: echo "<p style='opacity:0.5;'>Mapping sector distribution...</p>"; endif; ?>
                 </div>
             </div>
 

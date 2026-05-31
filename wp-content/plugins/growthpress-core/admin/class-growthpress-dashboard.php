@@ -85,6 +85,13 @@ class GrowthPress_Dashboard {
         $discovery = get_post_meta($lead_id, '_gp_ai_discovery_questions', true) ?: 'Calibrating discovery questions...';
         $suggested = get_post_meta($lead_id, '_gp_ai_suggested_reply', true) ?: 'Drafting personalized response...';
 
+        $tasks = get_posts(array(
+            'post_type' => 'gp_task',
+            'meta_key' => '_related_lead',
+            'meta_value' => $lead_id,
+            'posts_per_page' => 5
+        ));
+
         ob_start();
         ?>
         <div class="gp-intel-brief-modal-content">
@@ -120,6 +127,19 @@ class GrowthPress_Dashboard {
                     </div>
                 </div>
             </div>
+            <?php if($tasks): ?>
+                <div style="margin-top:40px; padding-top:30px; border-top:1px solid #EEE;">
+                    <h4 style="margin-top:0; font-size:11px; font-weight:950; opacity:0.4; letter-spacing:2px; text-transform:uppercase;">Linked Strategic Tasks</h4>
+                    <div style="display:grid; gap:12px; margin-top:20px;">
+                        <?php foreach($tasks as $t): ?>
+                            <div style="background:#F8FAFC; padding:15px 20px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #F1F5F9;">
+                                <span style="font-size:12px; font-weight:700; color:var(--secondary);"><?php echo esc_html($t->post_title); ?></span>
+                                <span style="font-size:9px; background:white; border:1px solid #E2E8F0; padding:4px 10px; border-radius:30px; font-weight:900;">PENDING</span>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
         <?php
         $html = ob_get_clean();

@@ -176,6 +176,14 @@ class GrowthPress_CRM {
         $closing = $ai->call_ai("3 closing tactics for: \"{$lead->post_content}\"", "Closer");
         if ( ! is_wp_error($closing) ) update_post_meta($lead_id, '_gp_ai_closing_tips', $closing);
 
+        // Automated Staff Assignment (Round-Robin)
+        $staff = get_users( array( 'role__in' => array('author', 'editor', 'administrator'), 'fields' => 'ID' ) );
+        if ( ! empty($staff) ) {
+            $assigned_index = $lead_id % count($staff);
+            update_post_meta( $lead_id, '_assigned_staff', $staff[$assigned_index] );
+            GrowthPress_Activity::log( "Lead #$lead_id automatically assigned to Staff ID #{$staff[$assigned_index]}." );
+        }
+
         $discovery = $ai->call_ai("4 discovery questions for: \"{$lead->post_content}\"", "Qualifier");
         if ( ! is_wp_error($discovery) ) update_post_meta($lead_id, '_gp_ai_discovery_questions', $discovery);
 

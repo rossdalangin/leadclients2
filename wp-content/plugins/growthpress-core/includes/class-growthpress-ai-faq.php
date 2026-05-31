@@ -140,7 +140,13 @@ class GrowthPress_AI_FAQ {
         $query = sanitize_text_field($_POST['query']);
         $niche = get_option('growthpress_niche', 'Business');
         $ai = GrowthPress_AI::get_instance();
-        $prompt = "A visitor is asking: \"$query\". As a specialist in $niche, provide expert advice and next steps. Return ONLY a valid JSON object with keys 'answer' and 'intent' ('booking' if they want to schedule, 'general' otherwise).";
+
+        // KB Context Injection
+        $kb_posts = get_posts(array('post_type' => 'gp_kb', 's' => $query, 'posts_per_page' => 2));
+        $kb_context = "";
+        foreach($kb_posts as $post) $kb_context .= "KB Reference: " . $post->post_title . " - " . strip_tags($post->post_content) . "\n";
+
+        $prompt = "A visitor is asking: \"$query\". " . ($kb_context ? "Using this internal knowledge: \n$kb_context\n" : "") . " As a specialist in $niche, provide expert advice and next steps. Return ONLY a valid JSON object with keys 'answer' and 'intent' ('booking' if they want to schedule, 'general' otherwise).";
         $response_raw = $ai->call_ai($prompt, "Elite $niche Strategist");
         if ( is_wp_error($response_raw) ) wp_send_json_error($response_raw->get_error_message());
         $response = json_decode($response_raw, true);
