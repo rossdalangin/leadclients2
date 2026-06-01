@@ -62,7 +62,7 @@ get_header(); ?>
                     <div class="glass-card" style="padding:60px; text-align:center; border:2px solid var(--primary);">
                         <h2 class="text-gradient">Ready to Get Started?</h2>
                         <p style="margin-bottom:40px;">Schedule your high-stakes consultation for <?php the_title(); ?> below.</p>
-                        [gp_booking_form]
+                        <?php echo do_shortcode('[gp_booking_form]'); ?>
                     </div>
                 </div>
             </article>

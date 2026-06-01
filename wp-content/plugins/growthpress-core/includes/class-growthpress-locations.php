@@ -20,11 +20,15 @@ class GrowthPress_Locations {
     }
 
     public function location_columns( $cols ) {
+        $cols['_address'] = 'Physical Address';
+        $cols['_phone'] = 'Phone';
         $cols['_zips'] = 'Serviced ZIPs';
         return $cols;
     }
 
     public function location_column_content( $col, $post_id ) {
+        if ( $col === '_address' ) echo get_post_meta( $post_id, '_location_address', true ) ?: '-';
+        if ( $col === '_phone' ) echo get_post_meta( $post_id, '_location_phone', true ) ?: '-';
         if ( $col === '_zips' ) echo get_post_meta( $post_id, '_serviced_zips', true ) ?: '-';
     }
 
@@ -34,8 +38,23 @@ class GrowthPress_Locations {
 
     public function render_location_meta( $post ) {
         $zips = get_post_meta( $post->ID, '_serviced_zips', true );
+        $addr = get_post_meta( $post->ID, '_location_address', true );
+        $phone = get_post_meta( $post->ID, '_location_phone', true );
+        $map = get_post_meta( $post->ID, '_location_map_url', true );
         ?>
         <table class="form-table">
+            <tr>
+                <th><label>Physical Address</label></th>
+                <td><input type="text" name="gp_location_address" value="<?php echo esc_attr($addr); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Phone Number</label></th>
+                <td><input type="text" name="gp_location_phone" value="<?php echo esc_attr($phone); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Google Maps URL</label></th>
+                <td><input type="url" name="gp_location_map" value="<?php echo esc_url($map); ?>" class="regular-text"></td>
+            </tr>
             <tr>
                 <th><label>Serviced ZIP Codes</label></th>
                 <td>
@@ -51,6 +70,9 @@ class GrowthPress_Locations {
         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
         if ( ! isset( $_POST['gp_serviced_zips'] ) ) return;
         update_post_meta( $post_id, '_serviced_zips', sanitize_text_field( $_POST['gp_serviced_zips'] ) );
+        update_post_meta( $post_id, '_location_address', sanitize_text_field( $_POST['gp_location_address'] ) );
+        update_post_meta( $post_id, '_location_phone', sanitize_text_field( $_POST['gp_location_phone'] ) );
+        update_post_meta( $post_id, '_location_map_url', esc_url_raw( $_POST['gp_location_map'] ) );
     }
 
     public function register_location_cpt() {

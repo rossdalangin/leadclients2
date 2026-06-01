@@ -223,6 +223,8 @@ class GrowthPress_Dashboard {
         $suggested = get_post_meta($lead_id, '_gp_ai_suggested_reply', true) ?: 'Drafting personalized response...';
         $nudge = get_post_meta($lead_id, '_gp_behavioral_nudge', true);
         $nurture = get_post_meta($lead_id, '_gp_nurture_sequence', true);
+        $loc_id = get_post_meta($lead_id, '_assigned_location', true);
+        $location = $loc_id ? get_post($loc_id) : null;
 
         $tasks = get_posts(array(
             'post_type' => 'gp_task',
@@ -251,6 +253,13 @@ class GrowthPress_Dashboard {
                         <h4 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:1px;">Closing Tactics</h4>
                         <div style="font-size:12px; line-height:1.6; opacity:0.7;"><?php echo nl2br(esc_html($closing)); ?></div>
                     </div>
+                    <?php if($location): ?>
+                        <div style="background:#F0F9FF; padding:25px; border-radius:20px; border:1px solid #BAE6FD; margin-bottom:20px;">
+                            <h4 style="margin-top:0; font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#0369A1;">Routed Location</h4>
+                            <div style="font-size:13px; font-weight:700; color:#0369A1;"><?php echo esc_html($location->post_title); ?></div>
+                            <div style="font-size:11px; opacity:0.6;"><?php echo esc_html(get_post_meta($loc_id, '_location_address', true)); ?></div>
+                        </div>
+                    <?php endif; ?>
                     <?php if($nudge): ?>
                         <div style="background:var(--secondary); color:white; padding:25px; border-radius:20px;">
                             <h4 style="margin-top:0; font-size:10px; text-transform:uppercase; letter-spacing:2px; opacity:0.6;">Behavioral Nudge</h4>

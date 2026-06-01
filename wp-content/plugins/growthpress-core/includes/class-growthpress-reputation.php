@@ -21,11 +21,15 @@ class GrowthPress_Reputation {
 
     public function review_columns( $cols ) {
         $cols['_rating'] = 'Rating';
+        $cols['_source'] = 'Source';
+        $cols['_client'] = 'Client Name';
         return $cols;
     }
 
     public function review_column_content( $col, $post_id ) {
         if ( $col === '_rating' ) echo str_repeat('⭐', intval(get_post_meta( $post_id, '_gp_rating', true )));
+        if ( $col === '_source' ) echo get_post_meta( $post_id, '_gp_review_source', true ) ?: 'Direct';
+        if ( $col === '_client' ) echo get_post_meta( $post_id, '_gp_client_name', true ) ?: get_the_title($post_id);
     }
 
     public function add_review_meta_boxes() {
@@ -34,11 +38,41 @@ class GrowthPress_Reputation {
 
     public function render_review_meta( $post ) {
         $rating = get_post_meta( $post->ID, '_gp_rating', true ) ?: 5;
+        $source = get_post_meta( $post->ID, '_gp_review_source', true ) ?: 'Google';
+        $client = get_post_meta( $post->ID, '_gp_client_name', true );
+        $project_id = get_post_meta( $post->ID, '_related_project', true );
+        $projects = get_posts( array( 'post_type' => 'gp_project', 'posts_per_page' => -1 ) );
         ?>
         <table class="form-table">
             <tr>
+                <th><label>Client Name</label></th>
+                <td><input type="text" name="gp_client_name" value="<?php echo esc_attr($client); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
                 <th><label>Client Rating (1-5)</label></th>
                 <td><input type="number" name="gp_review_rating" value="<?php echo esc_attr($rating); ?>" min="1" max="5" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Review Source</label></th>
+                <td>
+                    <select name="gp_review_source" style="width:100%;">
+                        <option value="Google" <?php selected($source, 'Google'); ?>>Google Business</option>
+                        <option value="Trustpilot" <?php selected($source, 'Trustpilot'); ?>>Trustpilot</option>
+                        <option value="Facebook" <?php selected($source, 'Facebook'); ?>>Facebook</option>
+                        <option value="Direct" <?php selected($source, 'Direct'); ?>>Direct Testimonial</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label>Linked Case Study</label></th>
+                <td>
+                    <select name="gp_related_project" style="width:100%;">
+                        <option value="0">No Related Project</option>
+                        <?php foreach($projects as $p): ?>
+                            <option value="<?php echo $p->ID; ?>" <?php selected($project_id, $p->ID); ?>><?php echo esc_html($p->post_title); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
             </tr>
         </table>
         <?php
@@ -48,6 +82,9 @@ class GrowthPress_Reputation {
         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
         if ( ! isset( $_POST['gp_review_rating'] ) ) return;
         update_post_meta( $post_id, '_gp_rating', intval( $_POST['gp_review_rating'] ) );
+        update_post_meta( $post_id, '_gp_review_source', sanitize_text_field( $_POST['gp_review_source'] ) );
+        update_post_meta( $post_id, '_gp_client_name', sanitize_text_field( $_POST['gp_client_name'] ) );
+        update_post_meta( $post_id, '_related_project', intval( $_POST['gp_related_project'] ) );
     }
 
     public function register_review_cpt() {

@@ -54,10 +54,12 @@ class GrowthPress_Proposals {
 
     public function render_proposal_meta( $post ) {
         $lead_id = get_post_meta( $post->ID, '_related_lead', true );
+        $service_id = get_post_meta( $post->ID, '_related_service', true );
         $status = get_post_meta( $post->ID, '_gp_proposal_status', true ) ?: 'Sent';
         $email = get_post_meta( $post->ID, '_proposal_recipient', true );
         $value = get_post_meta( $post->ID, '_proposal_value', true );
         $leads = get_posts( array( 'post_type' => 'gp_lead', 'posts_per_page' => -1 ) );
+        $services = get_posts( array( 'post_type' => 'gp_service', 'posts_per_page' => -1 ) );
         ?>
         <table class="form-table">
             <tr>
@@ -71,6 +73,17 @@ class GrowthPress_Proposals {
                         <option value="0">Generic / No Lead</option>
                         <?php foreach($leads as $l): ?>
                             <option value="<?php echo $l->ID; ?>" <?php selected($lead_id, $l->ID); ?>><?php echo esc_html($l->post_title); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label>Target Service Line</label></th>
+                <td>
+                    <select name="gp_related_service" style="width:100%;">
+                        <option value="0">No Specific Service</option>
+                        <?php foreach($services as $s): ?>
+                            <option value="<?php echo $s->ID; ?>" <?php selected($service_id, $s->ID); ?>><?php echo esc_html($s->post_title); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </td>
@@ -137,6 +150,7 @@ class GrowthPress_Proposals {
         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
         if ( ! isset( $_POST['gp_proposal_status'] ) ) return;
         update_post_meta( $post_id, '_related_lead', intval( $_POST['gp_related_lead'] ) );
+        update_post_meta( $post_id, '_related_service', intval( $_POST['gp_related_service'] ) );
         update_post_meta( $post_id, '_proposal_recipient', sanitize_email( $_POST['gp_proposal_recipient'] ) );
         update_post_meta( $post_id, '_gp_proposal_status', sanitize_text_field( $_POST['gp_proposal_status'] ) );
         update_post_meta( $post_id, '_proposal_value', floatval( $_POST['gp_proposal_value'] ) );

@@ -42,7 +42,7 @@ get_header(); ?>
                     <div class="glass-card" style="padding:40px; position:sticky; top:40px;">
                         <h4 style="margin-top:0; font-size:11px; font-weight:950; opacity:0.3; letter-spacing:2px; text-transform:uppercase;">Hub Navigation</h4>
                         <div style="margin-top:30px;">
-                            [gp_kb_search]
+                            <?php echo do_shortcode('[gp_kb_search]'); ?>
                         </div>
                         <div style="margin-top:40px;">
                             <h5 style="margin-bottom:15px;">Related Intelligence</h5>

@@ -63,9 +63,9 @@ class GrowthPress_SEO {
             global $post;
             $schema['address'] = array(
                 '@type' => 'PostalAddress',
-                'streetAddress' => get_post_meta($post->ID, '_gp_address', true)
+                'streetAddress' => get_post_meta($post->ID, '_location_address', true)
             );
-            $schema['telephone'] = get_post_meta($post->ID, '_gp_phone', true);
+            $schema['telephone'] = get_post_meta($post->ID, '_location_phone', true);
         }
 
         return $schema;

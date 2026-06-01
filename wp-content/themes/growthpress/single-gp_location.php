@@ -23,7 +23,7 @@ get_header(); ?>
                         </div>
                         <hr style="opacity:0.05; margin:30px 0;">
                         <h5>Ready for Intake?</h5>
-                        [gp_lead_form]
+                        <?php echo do_shortcode('[gp_lead_form]'); ?>
                     </div>
                 </div>
             </div>

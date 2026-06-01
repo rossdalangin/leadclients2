@@ -22,14 +22,21 @@ class GrowthPress_Funnels {
 
     public function funnel_columns( $cols ) {
         $cols['_hits'] = 'Total Traffic';
+        $cols['_conv'] = 'Conv. Rate';
         return $cols;
     }
 
     public function funnel_column_content( $col, $post_id ) {
-        if ( $col === '_hits' ) {
-            $a = (int)get_post_meta($post_id, '_hits_A', true);
-            $b = (int)get_post_meta($post_id, '_hits_B', true);
-            echo ($a + $b) . ' Hits';
+        $a = (int)get_post_meta($post_id, '_hits_A', true);
+        $b = (int)get_post_meta($post_id, '_hits_B', true);
+        $ca = (int)get_post_meta($post_id, '_conv_A', true);
+        $cb = (int)get_post_meta($post_id, '_conv_B', true);
+
+        if ( $col === '_hits' ) echo ($a + $b) . ' Hits';
+        if ( $col === '_conv' ) {
+            $total_hits = ($a + $b) ?: 1;
+            $total_conv = ($ca + $cb);
+            echo round(($total_conv / $total_hits) * 100, 2) . '%';
         }
     }
 
@@ -40,15 +47,41 @@ class GrowthPress_Funnels {
     public function render_funnel_meta( $post ) {
         $hitsA = get_post_meta( $post->ID, '_hits_A', true ) ?: 0;
         $hitsB = get_post_meta( $post->ID, '_hits_B', true ) ?: 0;
+        $convA = get_post_meta( $post->ID, '_conv_A', true ) ?: 0;
+        $convB = get_post_meta( $post->ID, '_conv_B', true ) ?: 0;
+        $urlA = get_post_meta( $post->ID, '_url_A', true );
+        $urlB = get_post_meta( $post->ID, '_url_B', true );
         ?>
         <table class="form-table">
             <tr>
-                <th><label>Variation A Traffic Hits</label></th>
+                <th colspan="2" style="background:#f0f0f0; padding:10px;">Variation A</th>
+            </tr>
+            <tr>
+                <th><label>Target URL A</label></th>
+                <td><input type="url" name="gp_url_a" value="<?php echo esc_url($urlA); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Traffic Hits A</label></th>
                 <td><input type="number" name="gp_hits_a" value="<?php echo esc_attr($hitsA); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Variation B Traffic Hits</label></th>
+                <th><label>Conversions A</label></th>
+                <td><input type="number" name="gp_conv_a" value="<?php echo esc_attr($convA); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th colspan="2" style="background:#f0f0f0; padding:10px;">Variation B</th>
+            </tr>
+            <tr>
+                <th><label>Target URL B</label></th>
+                <td><input type="url" name="gp_url_b" value="<?php echo esc_url($urlB); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Traffic Hits B</label></th>
                 <td><input type="number" name="gp_hits_b" value="<?php echo esc_attr($hitsB); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Conversions B</label></th>
+                <td><input type="number" name="gp_conv_b" value="<?php echo esc_attr($convB); ?>" class="regular-text"></td>
             </tr>
         </table>
         <?php
@@ -59,6 +92,10 @@ class GrowthPress_Funnels {
         if ( ! isset( $_POST['gp_hits_a'] ) ) return;
         update_post_meta( $post_id, '_hits_A', intval( $_POST['gp_hits_a'] ) );
         update_post_meta( $post_id, '_hits_B', intval( $_POST['gp_hits_b'] ) );
+        update_post_meta( $post_id, '_conv_A', intval( $_POST['gp_conv_a'] ) );
+        update_post_meta( $post_id, '_conv_B', intval( $_POST['gp_conv_b'] ) );
+        update_post_meta( $post_id, '_url_A', esc_url_raw( $_POST['gp_url_a'] ) );
+        update_post_meta( $post_id, '_url_B', esc_url_raw( $_POST['gp_url_b'] ) );
     }
 
     public function register_funnel_cpt() {

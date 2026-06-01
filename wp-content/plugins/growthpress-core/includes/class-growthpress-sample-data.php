@@ -150,31 +150,44 @@ class GrowthPress_Sample_Data {
         ));
         if ($id) {
             update_post_meta($id, '_gp_is_sample', '1');
-            update_post_meta($id, '_proposal_status', 'Sent');
-            update_post_meta($id, '_proposal_value', 5000);
+            update_post_meta($id, '_gp_proposal_status', 'Sent');
+            update_post_meta($id, '_proposal_value', 12500);
+            update_post_meta($id, '_gp_proposal_sent_at', current_time('mysql'));
             if (!empty($lead_ids)) {
-                update_post_meta($id, '_related_lead', end($lead_ids));
+                $lead_id = end($lead_ids);
+                update_post_meta($id, '_related_lead', $lead_id);
+                update_post_meta($id, '_proposal_recipient', get_post_meta($lead_id, '_lead_email', true));
+            } else {
+                update_post_meta($id, '_proposal_recipient', 'prospect@example.com');
             }
         }
     }
 
     private static function generate_transactions() {
-        $id = wp_insert_post(array(
-            'post_title'  => 'Sample Transaction',
-            'post_type'   => 'gp_transaction',
-            'post_status' => 'publish'
-        ));
-        if ($id) {
-            update_post_meta($id, '_gp_is_sample', '1');
-            update_post_meta($id, '_amount', 150);
-            update_post_meta($id, '_status', 'Paid');
-            update_post_meta($id, '_related_id', 1); // Mock related ID
+        $methods = array('Stripe', 'PayPal', 'Bank');
+        for($i=0; $i<3; $i++) {
+            $id = wp_insert_post(array(
+                'post_title'  => 'Transaction: Invoice #' . (100 + $i),
+                'post_type'   => 'gp_transaction',
+                'post_status' => 'publish'
+            ));
+            if ($id) {
+                update_post_meta($id, '_gp_is_sample', '1');
+                update_post_meta($id, '_amount', rand(500, 5000));
+                update_post_meta($id, '_status', $i === 2 ? 'Pending' : 'Paid');
+                update_post_meta($id, '_payment_method', $methods[$i]);
+                update_post_meta($id, '_related_id', rand(1, 100));
+            }
         }
     }
 
     private static function generate_locations() {
-        $locs = array('Downtown HQ', 'Westside Satellite', 'Eastside Hub');
-        foreach ($locs as $l) {
+        $locs = array(
+            'Downtown HQ' => '123 Elite Way, Business District',
+            'Westside Satellite' => '456 Innovation Blvd, Tech Hub',
+            'Eastside Hub' => '789 Growth Terrace, Industry Park'
+        );
+        foreach ($locs as $l => $addr) {
             $id = wp_insert_post(array(
                 'post_title'   => $l,
                 'post_content' => 'Strategic service node for the ' . explode(' ', $l)[0] . ' district.',
@@ -184,34 +197,53 @@ class GrowthPress_Sample_Data {
             if ($id) {
                 update_post_meta($id, '_gp_is_sample', '1');
                 update_post_meta($id, '_serviced_zips', '90210, 90211, 90212, 10001');
+                update_post_meta($id, '_location_address', $addr);
+                update_post_meta($id, '_location_phone', '555-019' . rand(0,9));
+                update_post_meta($id, '_location_map_url', 'https://maps.google.com/?q=' . urlencode($addr));
             }
         }
     }
 
     private static function generate_funnels() {
         $id = wp_insert_post(array(
-            'post_title'  => 'Elite Conversion Funnel',
+            'post_title'  => 'Elite Scaling Funnel',
             'post_type'   => 'gp_funnel',
             'post_status' => 'publish'
         ));
         if ($id) {
             update_post_meta($id, '_gp_is_sample', '1');
-            update_post_meta($id, '_hits_A', 1240);
-            update_post_meta($id, '_hits_B', 1180);
+            update_post_meta($id, '_hits_A', 1540);
+            update_post_meta($id, '_hits_B', 1420);
+            update_post_meta($id, '_conv_A', 310);
+            update_post_meta($id, '_conv_B', 215);
+            update_post_meta($id, '_url_A', home_url('/v1'));
+            update_post_meta($id, '_url_B', home_url('/v2'));
         }
     }
 
     private static function generate_tasks($lead_ids = array()) {
-        $id = wp_insert_post(array(
-            'post_title'   => 'Follow up with priority leads',
-            'post_content' => 'Execute high-authority closing protocol.',
-            'post_type'    => 'gp_task',
-            'post_status'  => 'publish'
-        ));
-        if ($id) {
-            update_post_meta($id, '_gp_is_sample', '1');
-            if (!empty($lead_ids)) {
-                update_post_meta($id, '_related_lead', $lead_ids[0]);
+        $tasks = array(
+            'High-Priority Triage' => 'High',
+            'Strategic Onboarding' => 'Medium',
+            'Contract Review' => 'High',
+            'System Calibration' => 'Low'
+        );
+        foreach($tasks as $title => $prio) {
+            $id = wp_insert_post(array(
+                'post_title'   => $title,
+                'post_content' => 'Automated strategic maintenance task.',
+                'post_type'    => 'gp_task',
+                'post_status'  => 'publish'
+            ));
+            if ($id) {
+                update_post_meta($id, '_gp_is_sample', '1');
+                update_post_meta($id, '_task_priority', $prio);
+                update_post_meta($id, '_task_status', rand(0,1) ? 'Pending' : 'Completed');
+                update_post_meta($id, '_task_due_date', date('Y-m-d', strtotime('+' . rand(1, 14) . ' days')));
+                update_post_meta($id, '_assigned_staff', get_current_user_id());
+                if (!empty($lead_ids)) {
+                    update_post_meta($id, '_related_lead', $lead_ids[rand(0, count($lead_ids)-1)]);
+                }
             }
         }
     }
@@ -229,8 +261,13 @@ class GrowthPress_Sample_Data {
     }
 
     private static function generate_services() {
-        $services = array('Growth Strategy Audit', 'Neural Ecosystem Deployment', 'Performance Blueprinting');
-        foreach ($services as $s) {
+        $services = array(
+            'Growth Strategy Audit' => '📈',
+            'Neural Ecosystem Deployment' => '🤖',
+            'Performance Blueprinting' => '⚡',
+            'Financial Trajectory Analysis' => '💰'
+        );
+        foreach ($services as $s => $icon) {
             $id = wp_insert_post(array(
                 'post_title'   => $s,
                 'post_content' => 'Elite ' . strtolower($s) . ' for high-ticket service firms.',
@@ -239,13 +276,18 @@ class GrowthPress_Sample_Data {
             ));
             if ($id) {
                 update_post_meta($id, '_gp_is_sample', '1');
+                update_post_meta($id, '_gp_service_icon', $icon);
             }
         }
     }
 
     private static function generate_projects() {
-        $projects = array('Global Enterprise Migration', 'Sustainable Infrastructure Deployment');
-        foreach ($projects as $p) {
+        $projects = array(
+            'Global Enterprise Migration' => array('+420%', '15 HRS/WK'),
+            'Sustainable Infrastructure Deployment' => array('+215%', '22 HRS/WK'),
+            'Neural Triage Implementation' => array('+680%', '40 HRS/WK')
+        );
+        foreach ($projects as $p => $data) {
             $id = wp_insert_post(array(
                 'post_title'   => $p . ' (Demo User)',
                 'post_content' => 'High-stakes ' . strtolower($p) . ' successfully executed.',
@@ -254,12 +296,15 @@ class GrowthPress_Sample_Data {
             ));
             if ($id) {
                 update_post_meta($id, '_gp_is_sample', '1');
+                update_post_meta($id, '_gp_growth_roi', $data[0]);
+                update_post_meta($id, '_gp_efficiency_gain', $data[1]);
+                update_post_meta($id, '_gp_pipeline_value', '$' . rand(1, 10) . '.2M+');
             }
         }
     }
 
     private static function generate_inventory() {
-        $items = array('Elite Strategic Asset #1', 'High-Yield Node #2');
+        $items = array('Elite Strategic Asset #1', 'High-Yield Node #2', 'Dominance District Hub');
         foreach ($items as $item) {
             $id = wp_insert_post(array(
                 'post_title'   => $item,
@@ -269,7 +314,9 @@ class GrowthPress_Sample_Data {
             ));
             if ($id) {
                 update_post_meta($id, '_gp_is_sample', '1');
-                update_post_meta($id, '_gp_price', rand(100000, 5000000));
+                update_post_meta($id, '_gp_price', rand(1500000, 8000000));
+                update_post_meta($id, '_gp_sqft', rand(2000, 15000));
+                update_post_meta($id, '_gp_lifestyle_tags', 'Modernist, Enterprise, Elite');
             }
         }
     }
@@ -277,8 +324,11 @@ class GrowthPress_Sample_Data {
     private static function generate_reviews() {
         $reviews = array(
             'The autonomous triage is 10x more efficient than our old manual process.' => 'Director of Growth',
-            'Seamless client portal experience. Our enterprise partners love the transparency.' => 'Managing Partner'
+            'Seamless client portal experience. Our enterprise partners love the transparency.' => 'Managing Partner',
+            'Market dominance was achieved within 3 quarters of implementation.' => 'CEO, Nexus Corp'
         );
+        $sources = array('Google', 'Trustpilot', 'Direct');
+        $i = 0;
         foreach ($reviews as $content => $author) {
             $id = wp_insert_post(array(
                 'post_title'   => $author,
@@ -289,6 +339,9 @@ class GrowthPress_Sample_Data {
             if ($id) {
                 update_post_meta($id, '_gp_is_sample', '1');
                 update_post_meta($id, '_gp_rating', 5);
+                update_post_meta($id, '_gp_client_name', $author);
+                update_post_meta($id, '_gp_review_source', $sources[$i % 3]);
+                $i++;
             }
         }
     }

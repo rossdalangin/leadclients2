@@ -20,13 +20,19 @@ class GrowthPress_Payments {
 
     public function transaction_columns( $cols ) {
         $cols['_amt'] = 'Amount';
+        $cols['_method'] = 'Method';
         $cols['_status'] = 'Status';
         return $cols;
     }
 
     public function transaction_column_content( $col, $post_id ) {
         if ( $col === '_amt' ) echo '$' . number_format(get_post_meta( $post_id, '_amount', true ));
-        if ( $col === '_status' ) echo get_post_meta( $post_id, '_status', true ) ?: 'Pending';
+        if ( $col === '_method' ) echo get_post_meta( $post_id, '_payment_method', true ) ?: 'Stripe';
+        if ( $col === '_status' ) {
+            $s = get_post_meta( $post_id, '_status', true ) ?: 'Pending';
+            $color = ($s === 'Paid') ? '#10b981' : (($s === 'Refunded') ? '#ef4444' : '#f59e0b');
+            echo "<span style='color:$color; font-weight:bold;'>$s</span>";
+        }
     }
 
     public function add_payment_meta_boxes() {
@@ -36,6 +42,7 @@ class GrowthPress_Payments {
     public function render_payment_meta( $post ) {
         $amount = get_post_meta( $post->ID, '_amount', true );
         $status = get_post_meta( $post->ID, '_status', true ) ?: 'Pending';
+        $method = get_post_meta( $post->ID, '_payment_method', true ) ?: 'Stripe';
         $related = get_post_meta( $post->ID, '_related_id', true );
         ?>
         <table class="form-table">
@@ -54,6 +61,17 @@ class GrowthPress_Payments {
                 <td><input type="number" name="gp_payment_amount" value="<?php echo esc_attr($amount); ?>" class="regular-text"></td>
             </tr>
             <tr>
+                <th><label>Payment Method</label></th>
+                <td>
+                    <select name="gp_payment_method" style="width:100%;">
+                        <option value="Stripe" <?php selected($method, 'Stripe'); ?>>Stripe Card</option>
+                        <option value="PayPal" <?php selected($method, 'PayPal'); ?>>PayPal</option>
+                        <option value="Bank" <?php selected($method, 'Bank'); ?>>Bank Transfer</option>
+                        <option value="Cash" <?php selected($method, 'Cash'); ?>>Cash / Manual</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
                 <th><label>Related System Node ID</label></th>
                 <td><input type="number" name="gp_related_id" value="<?php echo esc_attr($related); ?>" class="regular-text" placeholder="e.g. Appointment or Proposal ID"></td>
             </tr>
@@ -66,6 +84,7 @@ class GrowthPress_Payments {
         if ( ! isset( $_POST['gp_payment_status'] ) ) return;
         update_post_meta( $post_id, '_status', sanitize_text_field( $_POST['gp_payment_status'] ) );
         update_post_meta( $post_id, '_amount', floatval( $_POST['gp_payment_amount'] ) );
+        update_post_meta( $post_id, '_payment_method', sanitize_text_field( $_POST['gp_payment_method'] ) );
         update_post_meta( $post_id, '_related_id', intval( $_POST['gp_related_id'] ) );
     }
 
