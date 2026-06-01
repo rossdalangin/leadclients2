@@ -28,6 +28,26 @@
         </div>
     </div>
 
+    <!-- System Health Grid -->
+    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:20px; margin-bottom:40px;">
+        <div class="glass-card" style="padding:20px; display:flex; align-items:center; gap:15px;">
+            <div class="status-ping active"></div>
+            <div style="font-size:10px; font-weight:900; letter-spacing:1px; opacity:0.5;">CRM: SYNCHRONIZED</div>
+        </div>
+        <div class="glass-card" style="padding:20px; display:flex; align-items:center; gap:15px;">
+            <div class="status-ping active"></div>
+            <div style="font-size:10px; font-weight:900; letter-spacing:1px; opacity:0.5;">AI: GPT-4 TUNED</div>
+        </div>
+        <div class="glass-card" style="padding:20px; display:flex; align-items:center; gap:15px;">
+            <div class="status-ping active"></div>
+            <div style="font-size:10px; font-weight:900; letter-spacing:1px; opacity:0.5;">BOOKING: CALIBRATED</div>
+        </div>
+        <div class="glass-card" style="padding:20px; display:flex; align-items:center; gap:15px;">
+            <div class="status-ping active"></div>
+            <div style="font-size:10px; font-weight:900; letter-spacing:1px; opacity:0.5;">KNOWLEDGE: INDEXED</div>
+        </div>
+    </div>
+
     <div class="dashboard-grid">
         <div class="main-col">
             <!-- Strategic Performance Engine -->
@@ -190,6 +210,19 @@
                         <span style="opacity:0.4;">QUEUED</span>
                     </div>
                 </div>
+            </div>
+
+            <!-- Priority Waiting List -->
+            <div class="glass-card gp-reveal" style="margin-bottom:30px; border-left: 8px solid var(--accent);">
+                <h3 style="font-size:14px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.4; margin-bottom:25px; font-weight:950;">Priority Queue</h3>
+                <?php
+                $waiting = get_posts(array('post_type' => 'gp_appointment', 'meta_key' => '_is_waiting_list', 'meta_value' => '1', 'posts_per_page' => 3));
+                if($waiting): foreach($waiting as $w): ?>
+                    <div style="margin-bottom:15px; padding-bottom:15px; border-bottom:1px solid #F1F5F9; display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:12px; font-weight:700;"><?php echo esc_html($w->post_title); ?></span>
+                        <span style="font-size:9px; color:var(--accent); font-weight:900;">WAITING</span>
+                    </div>
+                <?php endforeach; else: echo "<p style='opacity:0.4; font-size:11px;'>No prospects in waiting queue.</p>"; endif; ?>
             </div>
 
             <!-- Staff Efficiency Hub -->

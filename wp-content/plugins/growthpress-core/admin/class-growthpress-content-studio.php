@@ -63,6 +63,7 @@ class GrowthPress_Content_Studio {
         $ai = GrowthPress_AI::get_instance();
 
         switch($type) {
+            case 'optimize': $result = $ai->call_ai("Refine and optimize this service description for high-ticket conversion: \"$topic\". Focus on elite outcome-driven language and ROI.", "Service Architect"); break;
             case 'blog': $result = $ai->generate_blog_post($topic, $niche); break;
             case 'campaign': $result = $ai->generate_email_campaign($topic, $niche); break;
             case 'market': $result = $ai->generate_market_insights($topic, $niche); break;
@@ -115,6 +116,7 @@ class GrowthPress_Content_Studio {
                             <option value="market">Market Angle of Attack</option>
                             <option value="sales">Discovery Talk Tracks</option>
                             <option value="ad">Direct-Response Ad Suite</option>
+                            <option value="optimize">Service Line Optimization</option>
                             <option value="headlines">Conversion Headlines</option>
                             <option value="service">Service Line Description</option>
                             <option value="project">High-Ticket Case Study</option>

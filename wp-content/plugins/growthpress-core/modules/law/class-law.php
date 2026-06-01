@@ -5,6 +5,22 @@
 class GrowthPress_Law {
     public function __construct() {
         add_shortcode('gp_legal_intake', array($this, 'render_legal_intake'));
+        add_action('gp_niche_lead_analysis', array($this, 'analyze_law_lead'));
+    }
+
+    public function analyze_law_lead($lead_id) {
+        $lead = get_post($lead_id);
+        $content = strtolower($lead->post_content);
+        $crm = GrowthPress_CRM::get_instance();
+
+        if (strpos($content, 'conflict') !== false || strpos($content, 'parties') !== false) {
+            $crm->create_task("Legal Conflict Check", "Parties mentioned in inquiry. Execute priority clearance protocol.", $lead_id);
+        }
+
+        if (strpos($content, 'litigation') !== false || strpos($content, 'sue') !== false) {
+            $crm->create_task("Merit Review: Litigation", "Potential high-stakes case. Calibrate merit engine.", $lead_id);
+            wp_set_object_terms($lead_id, 'Litigation', 'gp_lead_tag', true);
+        }
     }
 
     public function render_legal_intake() {

@@ -6,6 +6,23 @@ class GrowthPress_Dental {
     public function __construct() {
         add_shortcode('gp_insurance_optimizer', array($this, 'render_insurance_optimizer'));
         add_shortcode('gp_smile_gallery', array($this, 'render_smile_gallery'));
+        add_action('gp_niche_lead_analysis', array($this, 'analyze_dental_lead'));
+    }
+
+    public function analyze_dental_lead($lead_id) {
+        $lead = get_post($lead_id);
+        $content = strtolower($lead->post_content);
+        $crm = GrowthPress_CRM::get_instance();
+
+        if (strpos($content, 'insurance') !== false || strpos($content, 'coverage') !== false) {
+            $crm->create_task("Dental Insurance Verification", "Lead inquired about coverage. Verify PPO/Elite eligibility.", $lead_id);
+            wp_set_object_terms($lead_id, 'Insurance-Check', 'gp_lead_tag', true);
+        }
+
+        if (strpos($content, 'emergency') !== false || strpos($content, 'pain') !== false) {
+            $crm->create_task("URGENT: Dental Triage", "Emergency inquiry detected. Immediate clinical routing required.", $lead_id);
+            wp_set_object_terms($lead_id, 'Emergency', 'gp_lead_tag', true);
+        }
     }
 
     public function render_insurance_optimizer() {
@@ -37,29 +54,34 @@ class GrowthPress_Dental {
     }
 
     public function render_smile_gallery() {
-        return '<div class="gp-smile-gallery" style="margin-top:150px;">
+        $projects = get_posts(array('post_type' => 'gp_project', 'posts_per_page' => 2));
+        ob_start(); ?>
+        <div class="gp-smile-gallery" style="margin-top:150px;">
             <div style="text-align:center; margin-bottom:120px;">
                 <div style="font-size:12px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:4px; margin-bottom:25px;">TRANSFORMATION ARCHIVE v4.0</div>
                 <h2 class="text-gradient" style="font-size:4.5rem; line-height:0.9; letter-spacing:-0.07em;">Elite Patient Transformations</h2>
                 <p style="max-width:800px; margin:30px auto 0; font-size:1.4rem; opacity:0.7;">Visual confirmation of our precision reconstructive engineering and aesthetic excellence.</p>
             </div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:80px;">
-                <div class="glass-card gp-reveal" style="padding:0; border-radius:60px; overflow:hidden;">
-                    <div style="height:600px; background:#F1F5F9; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:950; opacity:0.15; letter-spacing:3px;">INTEL: FULL-ARCH RECONSTRUCTION</div>
-                    <div style="padding:60px; text-align:center; border-top:1px solid #F1F5F9;">
-                        <h4 style="margin:0; font-size:30px; font-weight:950; letter-spacing:-0.04em;">Architectural Smile Sequence</h4>
-                        <p style="font-size:15px; opacity:0.5; margin-top:20px; font-weight:800; letter-spacing:2px;">TIER: ELITE RECONSTRUCTIVE</p>
+                <?php if($projects): foreach($projects as $p): ?>
+                    <div class="glass-card gp-reveal" style="padding:0; border-radius:60px; overflow:hidden;">
+                        <?php if(has_post_thumbnail($p->ID)): ?>
+                            <?php echo get_the_post_thumbnail($p->ID, 'full', array('style'=>'width:100%; height:600px; object-fit:cover;')); ?>
+                        <?php else: ?>
+                            <div style="height:600px; background:#F1F5F9; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:950; opacity:0.15; letter-spacing:3px;">INTEL: <?php echo strtoupper($p->post_title); ?></div>
+                        <?php endif; ?>
+                        <div style="padding:60px; text-align:center; border-top:1px solid #F1F5F9;">
+                            <h4 style="margin:0; font-size:30px; font-weight:950; letter-spacing:-0.04em;"><?php echo esc_html($p->post_title); ?></h4>
+                            <p style="font-size:15px; opacity:0.5; margin-top:20px; font-weight:800; letter-spacing:2px;">TIER: ELITE RESULT</p>
+                        </div>
                     </div>
-                </div>
-                <div class="glass-card gp-reveal" style="padding:0; border-radius:60px; overflow:hidden;" data-delay="400">
-                    <div style="height:600px; background:#F1F5F9; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:950; opacity:0.15; letter-spacing:3px;">INTEL: AESTHETIC VENEERS</div>
-                    <div style="padding:60px; text-align:center; border-top:1px solid #F1F5F9;">
-                        <h4 style="margin:0; font-size:30px; font-weight:950; letter-spacing:-0.04em;">Minimal Prep Ceramic Blueprint</h4>
-                        <p style="font-size:15px; opacity:0.5; margin-top:20px; font-weight:800; letter-spacing:2px;">TIER: COSMETIC PRECISION</p>
-                    </div>
-                </div>
+                <?php endforeach; else: ?>
+                    <p style="text-align:center; grid-column: span 2; opacity:0.4;">Awaiting clinical result synchronization...</p>
+                <?php endif; ?>
             </div>
-        </div>';
+        </div>
+        <?php
+        return ob_get_clean();
     }
 
     public function generate_sample_data() {

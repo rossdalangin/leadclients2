@@ -322,8 +322,8 @@ class GrowthPress_Settings {
             <div id="tab-docs" class="tab-content" style="display:none;">
                 <div class="glass-card" style="max-width:1100px; margin-bottom:40px;">
                     <h2 class="text-gradient">Integrated System Lifecycle</h2>
-                    <p>GrowthPress Ultra Elite automates the entire lead-to-revenue lifecycle. Below is the operational protocol:</p>
-                    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:30px; margin-top:40px;">
+                    <p>GrowthPress Ultra Elite automates the entire lead-to-revenue lifecycle across 12 strategic post types. Below is the operational protocol:</p>
+                    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:30px; margin-top:40px; margin-bottom:60px;">
                         <div style="background:#F8FAFC; padding:30px; border-radius:25px; border:1px solid #E2E8F0;">
                             <div style="font-size:24px; margin-bottom:15px;">📥</div>
                             <h4 style="margin:0;">INTAKE</h4>
@@ -354,6 +354,60 @@ class GrowthPress_Settings {
                             <h4 style="margin:0;">REPUTATION</h4>
                             <p style="font-size:12px; opacity:0.6;">Appointment completion triggers automated review request. AI suggests replies to new testimonials.</p>
                         </div>
+                    </div>
+
+                    <h3 class="text-gradient">Ecosystem Management Matrix</h3>
+                    <table class="wp-list-table widefat fixed striped" style="margin-top:30px; border:none; background:transparent;">
+                        <thead>
+                            <tr>
+                                <th style="font-weight:900; font-size:11px; opacity:0.5; letter-spacing:1px;">PROCESS NODE</th>
+                                <th style="font-weight:900; font-size:11px; opacity:0.5; letter-spacing:1px;">SYSTEM ACTIONS</th>
+                                <th style="font-weight:900; font-size:11px; opacity:0.5; letter-spacing:1px;">USER INTERACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody style="font-size:13px;">
+                            <tr>
+                                <td><strong>Leads & Tasks</strong></td>
+                                <td>AI Spam filter, Sentiment scoring, priority task auto-creation.</td>
+                                <td>Drag-and-drop movement in Kanban, execute strategic tasks.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Knowledge & Portfolios</strong></td>
+                                <td>AI Case Study drafting, KB context injection into AI FAQ.</td>
+                                <td>Generate assets in Content Studio, link projects to clients.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Funnels & Locations</strong></td>
+                                <td>A/B traffic tracking, ZIP-based lead routing to branches.</td>
+                                <td>Monitor traffic share in Funnel Command, manage location nodes.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Financials & Inventory</strong></td>
+                                <td>Transaction ledger logging, ROI calculation for asset heavy niches.</td>
+                                <td>Monitor pipeline equity, manage high-yield portfolio items.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Review & Reputation</strong></td>
+                                <td>Automated review request triggering upon session completion.</td>
+                                <td>Generate AI suggested replies to boost social proof authority.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>System Maintenance</strong></td>
+                                <td>demo ecosystem instantiation and safe metadata-driven purge.</td>
+                                <td>Calibrate AI personality and sync assets across the OS.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top:50px; background:var(--primary-glow); padding:40px; border-radius:30px; border:1px solid rgba(37,99,235,0.1);">
+                        <h4 style="margin-top:0; color:var(--primary);">System Entity Processing Guide</h4>
+                        <ul style="font-size:13px; opacity:0.8; line-height:1.8;">
+                            <li><strong>Leads & Tasks:</strong> Capture via [gp_quiz_lead_form]. System auto-triages, scores, and assigns staff. Reps execute tasks in 'Global Tasks' center.</li>
+                            <li><strong>Knowledge Base & Case Studies:</strong> Generate in 'AI Content Studio'. Sync to KB or Projects. AI FAQ uses KB articles for context-aware responses.</li>
+                            <li><strong>Service Lines & Inventory:</strong> Refine descriptions in Studio. Display via [gp_service_grid] or [gp_inventory_grid] to boost market authority.</li>
+                            <li><strong>Funnels & Locations:</strong> Monitor traffic share in 'Funnel Command'. Set ZIP codes in 'Locations' for autonomous lead branch routing.</li>
+                            <li><strong>Transactions & Proposals:</strong> Admin creates Proposals. Client accepting in Portal advances lead to 'Closed' and logs Transaction ROI.</li>
+                        </ul>
                     </div>
                 </div>
 

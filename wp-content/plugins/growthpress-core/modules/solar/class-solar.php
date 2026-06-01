@@ -5,6 +5,22 @@
 class GrowthPress_Solar {
     public function __construct() {
         add_shortcode('gp_solar_calculator', array($this, 'render_solar_calc'));
+        add_action('gp_niche_lead_analysis', array($this, 'analyze_solar_lead'));
+    }
+
+    public function analyze_solar_lead($lead_id) {
+        $lead = get_post($lead_id);
+        $content = strtolower($lead->post_content);
+        $crm = GrowthPress_CRM::get_instance();
+
+        if (strpos($content, 'bill') !== false || strpos($content, 'utility') !== false) {
+            $crm->create_task("Utility Load Analysis", "Lead provided bill context. Calculate ROI modeling.", $lead_id);
+        }
+
+        if (strpos($content, 'financing') !== false || strpos($content, 'credit') !== false) {
+            $crm->create_task("Solar Finance Qualification", "Lead inquired about $0-down options. Run preliminary check.", $lead_id);
+            wp_set_object_terms($lead_id, 'Financing-Lead', 'gp_lead_tag', true);
+        }
     }
 
     public function render_solar_calc() {

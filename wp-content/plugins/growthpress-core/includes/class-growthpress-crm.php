@@ -53,6 +53,7 @@ class GrowthPress_CRM {
         register_post_type( 'gp_kb', array(
             'labels' => array( 'name' => 'Knowledge Base', 'singular_name' => 'Article' ),
             'public' => true,
+            'taxonomies' => array('post_tag'),
             'show_ui' => true,
             'supports' => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
             'menu_icon' => 'dashicons-book-alt'
@@ -61,6 +62,7 @@ class GrowthPress_CRM {
         register_post_type( 'gp_project', array(
             'labels'      => array( 'name' => 'Case Studies/Projects', 'singular_name' => 'Project' ),
             'public'      => true, 'show_ui' => true, 'menu_icon' => 'dashicons-portfolio',
+            'taxonomies' => array('post_tag'),
             'supports'    => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
         ) );
 

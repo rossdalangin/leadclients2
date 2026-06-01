@@ -6,6 +6,23 @@ class GrowthPress_RealEstate {
     public function __construct() {
         add_shortcode('gp_property_matcher', array($this, 'render_property_matcher'));
         add_action('init', array($this, 'register_property_cpt'));
+        add_action('gp_niche_lead_analysis', array($this, 'analyze_re_lead'));
+    }
+
+    public function analyze_re_lead($lead_id) {
+        $lead = get_post($lead_id);
+        $content = strtolower($lead->post_content);
+        $crm = GrowthPress_CRM::get_instance();
+
+        if (strpos($content, 'buy') !== false || strpos($content, 'purchase') !== false) {
+            $crm->create_task("Buyer Inventory Match", "Lead looking to purchase. Cross-reference off-market nodes.", $lead_id);
+            wp_set_object_terms($lead_id, 'Buyer', 'gp_lead_tag', true);
+        }
+
+        if (strpos($content, 'sell') !== false || strpos($content, 'listing') !== false) {
+            $crm->create_task("Listing Value Valuation", "Lead looking to sell. Execute comparative market analysis.", $lead_id);
+            wp_set_object_terms($lead_id, 'Seller', 'gp_lead_tag', true);
+        }
     }
 
     public function register_property_cpt() {
@@ -19,25 +36,38 @@ class GrowthPress_RealEstate {
     }
 
     public function render_property_matcher() {
-        return '<div class="gp-property-matcher glass-card gp-reveal" style="text-align:center; padding:120px 80px; background: radial-gradient(circle at top right, rgba(37,99,235,0.05), transparent 50%), var(--glass-bg);">
+        $properties = get_posts(array('post_type' => 'gp_property', 'posts_per_page' => 3));
+        ob_start(); ?>
+        <div class="gp-property-matcher glass-card gp-reveal" style="text-align:center; padding:120px 80px; background: radial-gradient(circle at top right, rgba(37,99,235,0.05), transparent 50%), var(--glass-bg);">
             <div style="font-size:12px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:4px; margin-bottom:25px;">NEURAL INVENTORY MATCH v4.0</div>
             <h3 class="text-gradient" style="font-size:4rem; letter-spacing:-0.07em; line-height:1.0;">AI Lifestyle Matcher</h3>
             <p style="font-size:1.3rem; opacity:0.7; max-width:750px; margin:30px auto 0;">Our neural network cross-references your specific lifestyle DNA with our proprietary off-market inventory node.</p>
 
             <div id="lifestyle-steps" style="margin-top:80px;">
                 <div class="wp-block-columns" style="gap:40px;">
-                    <div class="wp-block-column"><button class="gp-btn" style="width:100%; height:120px; text-transform:none; border-radius:35px; font-size:20px; letter-spacing:0;" onclick="jQuery(\'#lifestyle-steps\').fadeOut(); jQuery(\'#gp-quiz-form\').fadeIn();">Suburban Sanctuary</button></div>
-                    <div class="wp-block-column"><button class="gp-btn" style="width:100%; height:120px; text-transform:none; border-radius:35px; font-size:20px; letter-spacing:0;" onclick="jQuery(\'#lifestyle-steps\').fadeOut(); jQuery(\'#gp-quiz-form\').fadeIn();">Urban Modernist</button></div>
-                    <div class="wp-block-column"><button class="gp-btn" style="width:100%; height:120px; text-transform:none; border-radius:35px; font-size:20px; letter-spacing:0;" onclick="jQuery(\'#lifestyle-steps\').fadeOut(); jQuery(\'#gp-quiz-form\').fadeIn();">Coastal Elite Hub</button></div>
+                    <?php if($properties): foreach($properties as $p):
+                        $tags = get_post_meta($p->ID, '_gp_lifestyle_tags', true) ?: 'Suburban Sanctuary';
+                        $first_tag = explode(',', $tags)[0];
+                        ?>
+                        <div class="wp-block-column">
+                            <button class="gp-btn" style="width:100%; height:120px; text-transform:none; border-radius:35px; font-size:20px; letter-spacing:0;" onclick="jQuery('#lifestyle-steps').fadeOut(); jQuery('#gp-quiz-form').fadeIn();">
+                                <?php echo esc_html($first_tag); ?>
+                            </button>
+                        </div>
+                    <?php endforeach; else: ?>
+                        <div class="wp-block-column"><button class="gp-btn" style="width:100%; height:120px; text-transform:none; border-radius:35px; font-size:20px; letter-spacing:0;" onclick="jQuery('#lifestyle-steps').fadeOut(); jQuery('#gp-quiz-form').fadeIn();">Suburban Sanctuary</button></div>
+                    <?php endif; ?>
                 </div>
                 <div style="margin-top:50px; font-size:12px; font-weight:950; opacity:0.3; letter-spacing:3px;">INFERENCE STATUS: READY FOR DOMAIN MAPPING</div>
             </div>
             <div id="gp-quiz-form" style="display:none; margin-top:60px;">
                 <div style="max-width:600px; margin:0 auto;">
-                    [gp_lead_form]
+                    <?php echo do_shortcode('[gp_lead_form]'); ?>
                 </div>
             </div>
-        </div>';
+        </div>
+        <?php
+        return ob_get_clean();
     }
 
     public function generate_sample_data() {

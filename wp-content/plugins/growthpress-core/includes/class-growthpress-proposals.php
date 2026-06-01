@@ -70,7 +70,7 @@ class GrowthPress_Proposals {
 
     public function handle_proposal_acceptance() {
         $proposal_id = intval($_POST['proposal_id']);
-        update_post_meta($proposal_id, '_proposal_status', 'Accepted');
+        update_post_meta($proposal_id, '_gp_proposal_status', 'Accepted');
 
         // Move Lead to Closed
         $lead_id = get_post_meta($proposal_id, '_related_lead', true);
@@ -104,7 +104,7 @@ class GrowthPress_Proposals {
         $proposals = get_posts(array(
             'post_type' => 'gp_proposal',
             'posts_per_page' => -1,
-            'meta_query' => array( array( 'key' => '_proposal_status', 'value' => 'Sent' ) )
+            'meta_query' => array( array( 'key' => '_gp_proposal_status', 'value' => 'Sent' ) )
         ));
         $total = 0;
         foreach($proposals as $p) $total += (float)get_post_meta($p->ID, '_proposal_value', true);

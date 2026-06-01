@@ -23,6 +23,85 @@ class GrowthPress_Dashboard {
         $brand = get_option('growthpress_brand_name', 'GrowthPress');
         add_menu_page( $brand, $brand, 'manage_options', 'growthpress-dashboard', array( $this, 'render_dashboard' ), 'dashicons-chart-line', 2 );
         add_submenu_page( 'growthpress-dashboard', 'Strategic Tasks', 'Global Tasks', 'manage_options', 'growthpress-tasks', array( $this, 'render_global_tasks' ) );
+        add_submenu_page( 'growthpress-dashboard', 'System Ecosystem', 'Ecosystem Map', 'manage_options', 'growthpress-ecosystem', array( $this, 'render_ecosystem_map' ) );
+        add_submenu_page( 'growthpress-dashboard', 'Funnel Command', 'Conversion Funnels', 'manage_options', 'growthpress-funnels', array( $this, 'render_funnel_command' ) );
+    }
+
+    public function render_funnel_command() {
+        $funnels = get_posts(array('post_type' => 'gp_funnel', 'posts_per_page' => -1));
+        ?>
+        <div class="wrap growthpress-funnels">
+            <h1>Conversion Funnel Command Center</h1>
+            <p class="description">Monitor A/B test results and track traffic velocity across your strategic conversion nodes.</p>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap:30px; margin-top:40px;">
+                <?php if($funnels): foreach($funnels as $f):
+                    $hitsA = (int)get_post_meta($f->ID, '_hits_A', true);
+                    $hitsB = (int)get_post_meta($f->ID, '_hits_B', true);
+                    $total = $hitsA + $hitsB;
+                    $rateA = $total > 0 ? round(($hitsA / $total) * 100) : 0;
+                    $rateB = $total > 0 ? round(($hitsB / $total) * 100) : 0;
+                    ?>
+                    <div class="glass-card" style="padding:45px; border-radius:35px;">
+                        <h3 style="margin:0; font-size:24px; font-weight:950; letter-spacing:-0.03em;"><?php echo esc_html($f->post_title); ?></h3>
+                        <div style="margin:30px 0; display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <div style="font-size:10px; font-weight:900; opacity:0.4; letter-spacing:2px; margin-bottom:10px;">VARIATION A</div>
+                                <div style="font-size:28px; font-weight:950; color:var(--primary);"><?php echo $hitsA; ?> <span style="font-size:12px; opacity:0.3;">HITS</span></div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="font-size:10px; font-weight:900; opacity:0.4; letter-spacing:2px; margin-bottom:10px;">VARIATION B</div>
+                                <div style="font-size:28px; font-weight:950; color:var(--accent);"><?php echo $hitsB; ?> <span style="font-size:12px; opacity:0.3;">HITS</span></div>
+                            </div>
+                        </div>
+                        <div style="height:12px; background:#F1F5F9; border-radius:10px; overflow:hidden; display:flex;">
+                            <div style="width:<?php echo $rateA; ?>%; height:100%; background:var(--primary);"></div>
+                            <div style="width:<?php echo $rateB; ?>%; height:100%; background:var(--accent);"></div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; margin-top:15px; font-size:11px; font-weight:900;">
+                            <span><?php echo $rateA; ?>% TRAFFIC SHARE</span>
+                            <span><?php echo $rateB; ?>% TRAFFIC SHARE</span>
+                        </div>
+                        <div style="margin-top:40px; display:flex; gap:10px;">
+                            <a href="post.php?post=<?php echo $f->ID; ?>&action=edit" class="gp-btn" style="flex:1; text-align:center; padding:12px; font-size:11px; border-radius:10px;">EDIT FUNNEL</a>
+                            <button class="gp-btn" style="flex:1; padding:12px; font-size:11px; border-radius:10px; background:transparent; border:1px solid #E2E8F0; color:var(--text) !important;" onclick="alert('Counters reset sequence initiated.')">RESET ANALYTICS</button>
+                        </div>
+                    </div>
+                <?php endforeach; else: echo "<p style='opacity:0.5;'>No active conversion funnels detected in ecosystem.</p>"; endif; ?>
+            </div>
+        </div>
+        <?php
+    }
+
+    public function render_ecosystem_map() {
+        $cpts = array(
+            'gp_lead' => 'Leads', 'gp_appointment' => 'Appointments', 'gp_proposal' => 'Proposals',
+            'gp_transaction' => 'Transactions', 'gp_location' => 'Locations', 'gp_funnel' => 'Funnels',
+            'gp_task' => 'Tasks', 'gp_kb' => 'Knowledge Base', 'gp_service' => 'Services',
+            'gp_project' => 'Case Studies', 'gp_review' => 'Reviews', 'gp_property' => 'Inventory'
+        );
+        ?>
+        <div class="wrap growthpress-ecosystem">
+            <h1>Business OS Ecosystem Map</h1>
+            <p class="description">Unified management for all 12 strategic Custom Post Types powering your operating system.</p>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:25px; margin-top:40px;">
+                <?php foreach($cpts as $type => $label):
+                    $count = wp_count_posts($type)->publish;
+                    ?>
+                    <div class="glass-card" style="padding:40px; border-radius:30px; border-top: 6px solid var(--primary);">
+                        <div style="font-size:10px; font-weight:900; opacity:0.4; letter-spacing:2px; margin-bottom:15px;">CPT: <?php echo strtoupper($type); ?></div>
+                        <h3 style="margin:0; font-size:24px;"><?php echo $label; ?></h3>
+                        <div style="font-size:32px; font-weight:950; margin:20px 0;"><?php echo $count; ?> <span style="font-size:12px; font-weight:700; opacity:0.3;">ACTIVE</span></div>
+                        <div style="display:flex; gap:10px;">
+                            <a href="edit.php?post_type=<?php echo $type; ?>" class="gp-btn" style="flex:1; padding:10px; text-align:center; font-size:11px; border-radius:10px;">MANAGE</a>
+                            <a href="post-new.php?post_type=<?php echo $type; ?>" class="gp-btn" style="flex:1; padding:10px; text-align:center; font-size:11px; border-radius:10px; background:transparent; border:1px solid #E2E8F0; color:var(--text) !important;">CREATE NEW</a>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php
     }
 
     public function render_global_tasks() {

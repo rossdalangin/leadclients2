@@ -11,7 +11,6 @@ class GrowthPress_Portal {
 
     public function __construct() {
         add_shortcode( 'gp_client_portal', array( $this, 'render_portal' ) );
-        add_action( 'wp_ajax_gp_accept_proposal', array( $this, 'handle_proposal_acceptance' ) );
         add_action( 'wp_ajax_gp_request_reschedule', array( $this, 'handle_reschedule_request' ) );
     }
 
@@ -168,7 +167,7 @@ class GrowthPress_Portal {
 
                     <div class="glass-card" style="padding:50px; border-radius:44px;">
                         <h3 style="font-size:22px; margin-bottom:30px; letter-spacing:-0.03em;">Intelligence Logs</h3>
-                        <?php $appts = get_posts( array( 'post_type' => 'gp_appointment', 'meta_key' => '_lead_email', 'meta_value' => $email ) );
+                        <?php $appts = get_posts( array( 'post_type' => 'gp_appointment', 'meta_key' => '_client_email', 'meta_value' => $email ) );
                         if($appts): foreach($appts as $a):
                             $date = get_post_meta($a->ID, '_appointment_date', true); ?>
                             <div style="padding:25px 0; border-bottom:1px solid #F1F5F9;">
@@ -198,11 +197,5 @@ class GrowthPress_Portal {
         return ob_get_clean();
     }
 
-    public function handle_proposal_acceptance() {
-        $proposal_id = intval($_POST['proposal_id']);
-        update_post_meta( $proposal_id, '_gp_proposal_status', 'Accepted' );
-        GrowthPress_Activity::log( "Proprietary agreement executed for Doc #$proposal_id." );
-        wp_send_json_success();
-    }
 }
 new GrowthPress_Portal();
