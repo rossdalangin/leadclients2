@@ -93,7 +93,17 @@ class GrowthPress_Reputation {
             'public'      => true,
             'show_ui'     => true,
             'menu_icon'   => 'dashicons-star-filled',
-            'supports'    => array( 'title', 'editor', 'custom-fields' ),
+            'supports'    => array( 'title', 'editor', 'custom-fields', 'thumbnail' ),
+        ) );
+    }
+
+    public function get_top_reviews( $limit = 3 ) {
+        return get_posts( array(
+            'post_type'      => 'gp_review',
+            'posts_per_page' => $limit,
+            'meta_key'       => '_gp_rating',
+            'orderby'        => 'meta_value_num',
+            'order'          => 'DESC'
         ) );
     }
 
