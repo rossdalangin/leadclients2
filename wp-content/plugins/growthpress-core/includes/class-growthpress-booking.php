@@ -27,6 +27,90 @@ class GrowthPress_Booking {
         add_action( 'wp_ajax_gp_join_waiting_list', array( $this, 'handle_waiting_list' ) );
         add_action( 'wp_ajax_nopriv_gp_join_waiting_list', array( $this, 'handle_waiting_list' ) );
         add_action( 'wp_ajax_gp_complete_appointment', array( $this, 'handle_appointment_completion' ) );
+        add_action( 'add_meta_boxes', array( $this, 'add_booking_meta_boxes' ) );
+        add_action( 'save_post', array( $this, 'save_booking_meta' ) );
+        add_filter( 'manage_gp_appointment_posts_columns', array( $this, 'booking_columns' ) );
+        add_action( 'manage_gp_appointment_posts_custom_column', array( $this, 'booking_column_content' ), 10, 2 );
+    }
+
+    public function booking_columns( $cols ) {
+        $cols['_date'] = 'Session Date';
+        $cols['_email'] = 'Client Email';
+        $cols['_status'] = 'Status';
+        return $cols;
+    }
+
+    public function booking_column_content( $col, $post_id ) {
+        if ( $col === '_date' ) echo get_post_meta( $post_id, '_appointment_date', true );
+        if ( $col === '_email' ) echo get_post_meta( $post_id, '_client_email', true );
+        if ( $col === '_status' ) echo get_post_meta( $post_id, '_status', true ) ?: 'Pending';
+    }
+
+    public function add_booking_meta_boxes() {
+        add_meta_box( 'gp_booking_details', 'Strategic Session Details', array( $this, 'render_booking_meta' ), 'gp_appointment', 'normal', 'high' );
+    }
+
+    public function render_booking_meta( $post ) {
+        $date = get_post_meta( $post->ID, '_appointment_date', true );
+        $staff_id = get_post_meta( $post->ID, '_staff_id', true );
+        $email = get_post_meta( $post->ID, '_client_email', true );
+        $link = get_post_meta( $post->ID, '_meeting_link', true );
+        $status = get_post_meta( $post->ID, '_status', true ) ?: 'Pending';
+        $is_waiting = get_post_meta( $post->ID, '_is_waiting_list', true );
+        $staff = get_users( array( 'role__in' => array('author', 'editor', 'administrator') ) );
+        ?>
+        <table class="form-table">
+            <tr>
+                <th><label>Appointment Status</label></th>
+                <td>
+                    <select name="gp_status" style="width:100%;">
+                        <option value="Pending" <?php selected($status, 'Pending'); ?>>Pending</option>
+                        <option value="Confirmed" <?php selected($status, 'Confirmed'); ?>>Confirmed</option>
+                        <option value="Completed" <?php selected($status, 'Completed'); ?>>Completed</option>
+                        <option value="Cancelled" <?php selected($status, 'Cancelled'); ?>>Cancelled</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label>Session Date & Time</label></th>
+                <td><input type="text" name="gp_appointment_date" value="<?php echo esc_attr($date); ?>" class="regular-text" placeholder="YYYY-MM-DD HH:MM"></td>
+            </tr>
+            <tr>
+                <th><label>Assigned Specialist</label></th>
+                <td>
+                    <select name="gp_staff_id" style="width:100%;">
+                        <option value="0">Unassigned</option>
+                        <?php foreach($staff as $s): ?>
+                            <option value="<?php echo $s->ID; ?>" <?php selected($staff_id, $s->ID); ?>><?php echo esc_html($s->display_name); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label>Client Email</label></th>
+                <td><input type="email" name="gp_client_email" value="<?php echo esc_attr($email); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Secure Meeting Link</label></th>
+                <td><input type="url" name="gp_meeting_link" value="<?php echo esc_attr($link); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Priority Queue</label></th>
+                <td><input type="checkbox" name="gp_is_waiting" value="1" <?php checked($is_waiting, '1'); ?>> Marked as Waiting List</td>
+            </tr>
+        </table>
+        <?php
+    }
+
+    public function save_booking_meta( $post_id ) {
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+        if ( ! isset( $_POST['gp_appointment_date'] ) ) return;
+        update_post_meta( $post_id, '_appointment_date', sanitize_text_field( $_POST['gp_appointment_date'] ) );
+        update_post_meta( $post_id, '_staff_id', intval( $_POST['gp_staff_id'] ) );
+        update_post_meta( $post_id, '_client_email', sanitize_email( $_POST['gp_client_email'] ) );
+        update_post_meta( $post_id, '_meeting_link', esc_url_raw( $_POST['gp_meeting_link'] ) );
+        update_post_meta( $post_id, '_status', sanitize_text_field( $_POST['gp_status'] ) );
+        update_post_meta( $post_id, '_is_waiting_list', isset($_POST['gp_is_waiting']) ? '1' : '0' );
     }
 
     public function handle_appointment_completion() {

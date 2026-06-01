@@ -7,6 +7,58 @@ class GrowthPress_RealEstate {
         add_shortcode('gp_property_matcher', array($this, 'render_property_matcher'));
         add_action('init', array($this, 'register_property_cpt'));
         add_action('gp_niche_lead_analysis', array($this, 'analyze_re_lead'));
+        add_action('add_meta_boxes', array($this, 'add_property_meta_boxes'));
+        add_action('save_post', array($this, 'save_property_meta'));
+        add_filter('manage_gp_property_posts_columns', array($this, 'property_columns'));
+        add_action('manage_gp_property_posts_custom_column', array($this, 'property_column_content'), 10, 2);
+    }
+
+    public function property_columns($cols) {
+        $cols['_price'] = 'Price';
+        $cols['_sqft'] = 'SQFT';
+        return $cols;
+    }
+
+    public function property_column_content($col, $post_id) {
+        if ($col === '_price') echo '$' . number_format(get_post_meta($post_id, '_gp_price', true));
+        if ($col === '_sqft') echo number_format(get_post_meta($post_id, '_gp_sqft', true)) . ' SQFT';
+    }
+
+    public function add_property_meta_boxes() {
+        add_meta_box('gp_property_details', 'Asset Inventory Data', array($this, 'render_property_meta'), 'gp_property', 'normal', 'high');
+    }
+
+    public function render_property_meta($post) {
+        $price = get_post_meta($post->ID, '_gp_price', true);
+        $sqft = get_post_meta($post->ID, '_gp_sqft', true);
+        $tags = get_post_meta($post->ID, '_gp_lifestyle_tags', true);
+        ?>
+        <table class="form-table">
+            <tr>
+                <th><label>Asset Price ($)</label></th>
+                <td><input type="number" name="gp_property_price" value="<?php echo esc_attr($price); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Total Square Footage</label></th>
+                <td><input type="number" name="gp_property_sqft" value="<?php echo esc_attr($sqft); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Lifestyle Strategic Tags</label></th>
+                <td>
+                    <input type="text" name="gp_property_tags" value="<?php echo esc_attr($tags); ?>" class="regular-text" placeholder="e.g. Suburban, Modern, Elite">
+                    <p class="description">Used by the Neural Inventory Matcher for client lifestyle DNS mapping.</p>
+                </td>
+            </tr>
+        </table>
+        <?php
+    }
+
+    public function save_property_meta($post_id) {
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+        if (!isset($_POST['gp_property_price'])) return;
+        update_post_meta($post_id, '_gp_price', sanitize_text_field($_POST['gp_property_price']));
+        update_post_meta($post_id, '_gp_sqft', sanitize_text_field($_POST['gp_property_sqft']));
+        update_post_meta($post_id, '_gp_lifestyle_tags', sanitize_text_field($_POST['gp_property_tags']));
     }
 
     public function analyze_re_lead($lead_id) {

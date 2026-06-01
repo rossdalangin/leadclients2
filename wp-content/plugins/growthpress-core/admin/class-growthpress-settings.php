@@ -79,6 +79,7 @@ class GrowthPress_Settings {
                 <h2 class="nav-tab-wrapper" style="border-bottom:none; margin-bottom:30px;">
                     <a href="#tab-config" class="nav-tab nav-tab-active">Configuration</a>
                     <a href="#tab-ai" class="nav-tab">AI Providers</a>
+                    <a href="#tab-integrations" class="nav-tab">Integrations</a>
                     <a href="#tab-lab" class="nav-tab">AI Prompt Lab</a>
                     <a href="#tab-white-label" class="nav-tab">White-Label & Agency</a>
                     <a href="#tab-tools" class="nav-tab">System Tools</a>
@@ -128,6 +129,42 @@ class GrowthPress_Settings {
                         </tr>
                     </table>
                     <?php submit_button('Update OS Core'); ?>
+                </form>
+            </div>
+
+            <div id="tab-integrations" class="tab-content" style="display:none;">
+                <form method="post" action="options.php" class="glass-card" style="max-width:1100px;">
+                    <?php settings_fields( 'growthpress_settings_group' ); ?>
+                    <table class="form-table">
+                        <tr class="section-header"><th colspan="2"><h3>Payment Gateways</h3></th></tr>
+                        <tr>
+                            <th scope="row"><label>Stripe Publishable Key</label></th>
+                            <td><input type="text" name="growthpress_stripe_key" value="<?php echo esc_attr( get_option('growthpress_stripe_key') ); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label>Stripe Secret Key</label></th>
+                            <td><input type="password" name="growthpress_stripe_secret" value="<?php echo esc_attr( get_option('growthpress_stripe_secret') ); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr class="section-header"><th colspan="2"><h3>External Strategic Nodes</h3></th></tr>
+                        <tr>
+                            <th scope="row"><label>Google Maps Intelligence Key</label></th>
+                            <td><input type="text" name="growthpress_google_maps_key" value="<?php echo esc_attr( get_option('growthpress_google_maps_key') ); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label>WhatsApp Business API Key</label></th>
+                            <td><input type="text" name="growthpress_whatsapp_key" value="<?php echo esc_attr( get_option('growthpress_whatsapp_key') ); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr class="section-header"><th colspan="2"><h3>License & Maintenance</h3></th></tr>
+                        <tr>
+                            <th scope="row"><label>OS License Key</label></th>
+                            <td><input type="text" name="growthpress_license_key" value="<?php echo esc_attr( get_option('growthpress_license_key') ); ?>" class="regular-text"></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label>Hot Lead Threshold (%)</label></th>
+                            <td><input type="number" name="growthpress_hot_threshold" value="<?php echo esc_attr( get_option('growthpress_hot_threshold', 80) ); ?>" class="regular-text"></td>
+                        </tr>
+                    </table>
+                    <?php submit_button('Update Integrations Cluster'); ?>
                 </form>
             </div>
 

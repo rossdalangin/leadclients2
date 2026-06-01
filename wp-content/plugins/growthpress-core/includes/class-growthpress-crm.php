@@ -23,6 +23,7 @@ class GrowthPress_CRM {
         add_action( 'gp_lead_captured', array( $this, 'trigger_lead_automations' ) );
         add_action( 'gp_cron_followup', array( $this, 'handle_abandoned_inquiry_followup' ) );
         add_action( 'add_meta_boxes', array( $this, 'add_crm_meta_boxes' ) );
+        add_action( 'save_post', array( $this, 'save_crm_meta' ) );
         add_action( 'wp_ajax_gp_log_behavior', array( $this, 'handle_behavior_logging' ) );
         add_action( 'wp_ajax_nopriv_gp_log_behavior', array( $this, 'handle_behavior_logging' ) );
         add_action( 'wp_ajax_gp_export_leads', array( $this, 'handle_lead_export' ) );
@@ -86,6 +87,21 @@ class GrowthPress_CRM {
 
         add_shortcode( 'gp_lead_form', array( $this, 'render_lead_form' ) );
         add_shortcode( 'gp_quiz_lead_form', array( $this, 'render_quiz_form' ) );
+
+        add_filter( 'manage_gp_lead_posts_columns', array( $this, 'lead_columns' ) );
+        add_action( 'manage_gp_lead_posts_custom_column', array( $this, 'lead_column_content' ), 10, 2 );
+
+        add_filter( 'manage_gp_task_posts_columns', array( $this, 'task_columns' ) );
+        add_action( 'manage_gp_task_posts_custom_column', array( $this, 'task_column_content' ), 10, 2 );
+
+        add_filter( 'manage_gp_kb_posts_columns', array( $this, 'kb_columns' ) );
+        add_action( 'manage_gp_kb_posts_custom_column', array( $this, 'kb_column_content' ), 10, 2 );
+
+        add_filter( 'manage_gp_project_posts_columns', array( $this, 'project_columns' ) );
+        add_action( 'manage_gp_project_posts_custom_column', array( $this, 'project_column_content' ), 10, 2 );
+
+        add_filter( 'manage_gp_service_posts_columns', array( $this, 'service_columns' ) );
+        add_action( 'manage_gp_service_posts_custom_column', array( $this, 'service_column_content' ), 10, 2 );
         add_action( 'wp_ajax_gp_submit_lead', array( $this, 'handle_lead_submission' ) );
         add_action( 'wp_ajax_nopriv_gp_submit_lead', array( $this, 'handle_lead_submission' ) );
         add_action( 'gp_async_lead_analysis', array( $this, 'process_async_analysis' ) );
@@ -96,7 +112,11 @@ class GrowthPress_CRM {
         return '<form class="gp-form glass-card" data-action="gp_submit_lead">
             <input type="hidden" name="nonce" value="' . $nonce . '">
             <div style="margin-bottom:20px;"><label style="font-weight:900; font-size:10px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">IDENTITY</label><input type="text" name="lead_name" placeholder="Full Name" required></div>
-            <div style="margin-bottom:20px;"><label style="font-weight:900; font-size:10px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">COMMUNICATION</label><input type="email" name="lead_email" placeholder="Email Address" required></div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:20px;">
+                <div><label style="font-weight:900; font-size:10px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">COMMUNICATION</label><input type="email" name="lead_email" placeholder="Email Address" required></div>
+                <div><label style="font-weight:900; font-size:10px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">SECURE PHONE</label><input type="tel" name="lead_phone" placeholder="Phone Number"></div>
+            </div>
+            <div style="margin-bottom:20px;"><label style="font-weight:900; font-size:10px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">GEOGRAPHIC DATA (ZIP)</label><input type="text" name="lead_zip" placeholder="ZIP Code"></div>
             <div style="margin-bottom:20px;"><label style="font-weight:900; font-size:10px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">INQUIRY DETAIL</label><textarea name="lead_msg" placeholder="Describe your growth goals..."></textarea></div>
             <button type="submit" class="gp-btn" style="width:100%;">Initialize Sequence</button>
         </form>';
@@ -133,6 +153,8 @@ class GrowthPress_CRM {
         }
         $name  = isset( $_POST['lead_name'] ) ? sanitize_text_field( $_POST['lead_name'] ) : '';
         $email = isset( $_POST['lead_email'] ) ? sanitize_email( $_POST['lead_email'] ) : '';
+        $phone = isset( $_POST['lead_phone'] ) ? sanitize_text_field( $_POST['lead_phone'] ) : '';
+        $zip   = isset( $_POST['lead_zip'] ) ? sanitize_text_field( $_POST['lead_zip'] ) : '';
         $msg   = isset( $_POST['lead_msg'] ) ? sanitize_textarea_field( $_POST['lead_msg'] ) : '';
 
         if ( empty( $name ) || empty( $email ) ) {
@@ -143,6 +165,8 @@ class GrowthPress_CRM {
         if ( $ai->is_spam($msg, $name, $email) ) wp_send_json_error("Flagged as spam.");
         $lead_id = wp_insert_post(array( 'post_title' => $name, 'post_content' => $msg, 'post_type' => 'gp_lead', 'post_status' => 'publish' ));
         update_post_meta($lead_id, '_lead_email', $email);
+        update_post_meta($lead_id, '_lead_phone', $phone);
+        update_post_meta($lead_id, '_lead_zip', $zip);
         wp_set_object_terms($lead_id, 'new', 'gp_lead_stage');
         do_action('gp_lead_captured', $lead_id);
         wp_send_json_success("Sequence initiated. AI Triage in progress.");
@@ -204,9 +228,167 @@ class GrowthPress_CRM {
     }
 
     public function add_crm_meta_boxes() {
+        add_meta_box( 'gp_lead_config', 'Lead Configuration', array( $this, 'render_lead_config_meta' ), 'gp_lead', 'normal', 'high' );
         add_meta_box( 'gp_lead_insights', '🧠 AI Strategic Intelligence', array( $this, 'render_insights_meta' ), 'gp_lead', 'normal', 'high' );
         add_meta_box( 'gp_lead_behavior', '📈 Behavioral Timeline', array( $this, 'render_behavior_meta' ), 'gp_lead', 'side', 'default' );
         add_meta_box( 'gp_lead_notes', 'Team Collaboration', array( $this, 'render_notes_meta' ), 'gp_lead', 'side', 'low' );
+        add_meta_box( 'gp_task_details', 'Task Context', array( $this, 'render_task_meta' ), 'gp_task', 'normal', 'high' );
+        add_meta_box( 'gp_project_details', 'Success ROI Data', array( $this, 'render_project_meta' ), 'gp_project', 'normal', 'high' );
+        add_meta_box( 'gp_service_details', 'Service Line Strategy', array( $this, 'render_service_meta' ), 'gp_service', 'normal', 'high' );
+    }
+
+    public function render_lead_config_meta( $post ) {
+        $email = get_post_meta( $post->ID, '_lead_email', true );
+        $phone = get_post_meta( $post->ID, '_lead_phone', true );
+        $zip = get_post_meta( $post->ID, '_lead_zip', true );
+        $source = get_post_meta( $post->ID, '_lead_source', true ) ?: 'Direct Triage';
+        $nurture = get_post_meta( $post->ID, '_gp_nurture_sequence', true );
+        $prob = get_post_meta( $post->ID, '_gp_ai_probability', true );
+        $sentiment = get_post_meta( $post->ID, '_gp_ai_sentiment_json', true );
+        $staff_id = get_post_meta( $post->ID, '_assigned_staff', true );
+        $staff = get_users( array( 'role__in' => array('author', 'editor', 'administrator') ) );
+        ?>
+        <table class="form-table">
+            <tr>
+                <th><label>Assigned Staff</label></th>
+                <td>
+                    <select name="gp_assigned_staff" style="width:100%;">
+                        <option value="0">Unassigned</option>
+                        <?php foreach($staff as $s): ?>
+                            <option value="<?php echo $s->ID; ?>" <?php selected($staff_id, $s->ID); ?>><?php echo esc_html($s->display_name); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label>Email Address</label></th>
+                <td><input type="email" name="gp_lead_email" value="<?php echo esc_attr($email); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Phone Number</label></th>
+                <td><input type="text" name="gp_lead_phone" value="<?php echo esc_attr($phone); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>ZIP Code</label></th>
+                <td><input type="text" name="gp_lead_zip" value="<?php echo esc_attr($zip); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Lead Source</label></th>
+                <td><input type="text" name="gp_lead_source" value="<?php echo esc_attr($source); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>AI Confidence Score (%)</label></th>
+                <td><input type="number" name="gp_lead_prob" value="<?php echo esc_attr($prob); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Raw Sentiment Data (JSON)</label></th>
+                <td><textarea name="gp_lead_sentiment" style="width:100%; height:100px; font-family:monospace;"><?php echo esc_textarea($sentiment); ?></textarea></td>
+            </tr>
+            <tr>
+                <th><label>AI Nurture Sequence</label></th>
+                <td><textarea name="gp_lead_nurture" style="width:100%; height:150px;"><?php echo esc_textarea($nurture); ?></textarea></td>
+            </tr>
+        </table>
+        <?php
+    }
+
+    public function render_service_meta( $post ) {
+        $icon = get_post_meta( $post->ID, '_gp_service_icon', true ) ?: '💎';
+        ?>
+        <table class="form-table">
+            <tr>
+                <th><label>Service Icon (Emoji)</label></th>
+                <td><input type="text" name="gp_service_icon" value="<?php echo esc_attr($icon); ?>" class="regular-text"></td>
+            </tr>
+        </table>
+        <?php
+    }
+
+    public function render_task_meta( $post ) {
+        $lead_id = get_post_meta( $post->ID, '_related_lead', true );
+        $status = get_post_meta( $post->ID, '_task_status', true ) ?: 'Pending';
+        $due = get_post_meta( $post->ID, '_task_due_date', true );
+        $leads = get_posts( array( 'post_type' => 'gp_lead', 'posts_per_page' => -1 ) );
+        ?>
+        <table class="form-table">
+            <tr>
+                <th><label>Task Status</label></th>
+                <td>
+                    <select name="gp_task_status" style="width:100%;">
+                        <option value="Pending" <?php selected($status, 'Pending'); ?>>Pending</option>
+                        <option value="Completed" <?php selected($status, 'Completed'); ?>>Completed</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label>Related Lead</label></th>
+                <td>
+                    <select name="gp_related_lead" style="width:100%;">
+                        <option value="0">No Related Lead</option>
+                        <?php foreach($leads as $l): ?>
+                            <option value="<?php echo $l->ID; ?>" <?php selected($lead_id, $l->ID); ?>><?php echo esc_html($l->post_title); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label>Due Date</label></th>
+                <td><input type="date" name="gp_task_due" value="<?php echo esc_attr($due); ?>" class="regular-text"></td>
+            </tr>
+        </table>
+        <?php
+    }
+
+    public function render_project_meta( $post ) {
+        $growth = get_post_meta( $post->ID, '_gp_growth_roi', true );
+        $efficiency = get_post_meta( $post->ID, '_gp_efficiency_gain', true );
+        $pipe = get_post_meta( $post->ID, '_gp_pipeline_value', true );
+        ?>
+        <table class="form-table">
+            <tr>
+                <th><label>Growth Increase (%)</label></th>
+                <td><input type="text" name="gp_growth_roi" value="<?php echo esc_attr($growth); ?>" placeholder="+320%" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Efficiency Gain</label></th>
+                <td><input type="text" name="gp_efficiency_gain" value="<?php echo esc_attr($efficiency); ?>" placeholder="40 HRS/WK" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Pipeline Value ($)</label></th>
+                <td><input type="text" name="gp_pipeline_value" value="<?php echo esc_attr($pipe); ?>" placeholder="$1.2M+" class="regular-text"></td>
+            </tr>
+        </table>
+        <?php
+    }
+
+    public function save_crm_meta( $post_id ) {
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+
+        if ( isset( $_POST['gp_lead_email'] ) ) {
+            update_post_meta( $post_id, '_lead_email', sanitize_email( $_POST['gp_lead_email'] ) );
+            update_post_meta( $post_id, '_lead_phone', sanitize_text_field( $_POST['gp_lead_phone'] ) );
+            update_post_meta( $post_id, '_lead_zip', sanitize_text_field( $_POST['gp_lead_zip'] ) );
+            update_post_meta( $post_id, '_lead_source', sanitize_text_field( $_POST['gp_lead_source'] ) );
+            update_post_meta( $post_id, '_gp_nurture_sequence', wp_kses_post( $_POST['gp_lead_nurture'] ) );
+            update_post_meta( $post_id, '_gp_ai_probability', intval( $_POST['gp_lead_prob'] ) );
+            update_post_meta( $post_id, '_gp_ai_sentiment_json', sanitize_textarea_field( $_POST['gp_lead_sentiment'] ) );
+            update_post_meta( $post_id, '_assigned_staff', intval( $_POST['gp_assigned_staff'] ) );
+        }
+
+        if ( isset( $_POST['gp_task_status'] ) ) {
+            update_post_meta( $post_id, '_task_status', sanitize_text_field( $_POST['gp_task_status'] ) );
+            update_post_meta( $post_id, '_related_lead', intval( $_POST['gp_related_lead'] ) );
+        }
+
+        if ( isset( $_POST['gp_growth_roi'] ) ) {
+            update_post_meta( $post_id, '_gp_growth_roi', sanitize_text_field( $_POST['gp_growth_roi'] ) );
+            update_post_meta( $post_id, '_gp_efficiency_gain', sanitize_text_field( $_POST['gp_efficiency_gain'] ) );
+            update_post_meta( $post_id, '_gp_pipeline_value', sanitize_text_field( $_POST['gp_pipeline_value'] ) );
+        }
+
+        if ( isset( $_POST['gp_service_icon'] ) ) {
+            update_post_meta( $post_id, '_gp_service_icon', sanitize_text_field( $_POST['gp_service_icon'] ) );
+        }
     }
 
     public function render_behavior_meta( $post ) {
@@ -316,7 +498,7 @@ class GrowthPress_CRM {
             'post_type'  => 'gp_lead',
             'meta_key'   => '_lead_email',
             'meta_value' => sanitize_email( $_POST['email'] ),
-            'number'     => 1
+            'posts_per_page' => 1
         ) );
 
         if ( ! empty( $leads ) ) {
@@ -343,6 +525,63 @@ class GrowthPress_CRM {
         $leads = get_posts( array( 'post_type' => 'gp_lead', 'posts_per_page' => -1 ) );
         foreach($leads as $l) fputcsv($output, array($l->post_title, get_post_meta($l->ID, '_lead_email', true), $l->post_date));
         fclose($output); exit;
+    }
+
+    public function lead_columns( $cols ) {
+        $cols['_email'] = 'Email';
+        $cols['_prob'] = 'AI Score';
+        $cols['_staff'] = 'Assigned To';
+        return $cols;
+    }
+
+    public function lead_column_content( $col, $post_id ) {
+        if ( $col === '_email' ) echo get_post_meta( $post_id, '_lead_email', true );
+        if ( $col === '_prob' ) echo (get_post_meta( $post_id, '_gp_ai_probability', true ) ?: 0) . '%';
+        if ( $col === '_staff' ) {
+            $sid = get_post_meta($post_id, '_assigned_staff', true);
+            echo $sid ? get_userdata($sid)->display_name : 'Unassigned';
+        }
+    }
+
+    public function task_columns( $cols ) {
+        $cols['_status'] = 'Status';
+        $cols['_lead'] = 'Related Lead';
+        return $cols;
+    }
+
+    public function task_column_content( $col, $post_id ) {
+        if ( $col === '_status' ) echo get_post_meta( $post_id, '_task_status', true ) ?: 'Pending';
+        if ( $col === '_lead' ) {
+            $lid = get_post_meta($post_id, '_related_lead', true);
+            echo $lid ? get_the_title($lid) : '-';
+        }
+    }
+
+    public function kb_columns( $cols ) {
+        $cols['_tags'] = 'Intelligence Tags';
+        return $cols;
+    }
+
+    public function kb_column_content( $col, $post_id ) {
+        if ( $col === '_tags' ) the_tags('', ', ', '');
+    }
+
+    public function project_columns( $cols ) {
+        $cols['_roi'] = 'Growth ROI';
+        return $cols;
+    }
+
+    public function project_column_content( $col, $post_id ) {
+        if ( $col === '_roi' ) echo get_post_meta( $post_id, '_gp_growth_roi', true ) ?: '-';
+    }
+
+    public function service_columns( $cols ) {
+        $cols['_icon'] = 'Icon';
+        return $cols;
+    }
+
+    public function service_column_content( $col, $post_id ) {
+        if ( $col === '_icon' ) echo get_post_meta( $post_id, '_gp_service_icon', true ) ?: '💎';
     }
 
     public function handle_abandoned_inquiry_followup() {

@@ -12,6 +12,21 @@ class GrowthPress_Portal {
     public function __construct() {
         add_shortcode( 'gp_client_portal', array( $this, 'render_portal' ) );
         add_action( 'wp_ajax_gp_request_reschedule', array( $this, 'handle_reschedule_request' ) );
+        add_action( 'wp_ajax_gp_update_portal_profile', array( $this, 'handle_profile_update' ) );
+    }
+
+    public function handle_profile_update() {
+        $user = wp_get_current_user();
+        $email = $user->user_email;
+        $leads = get_posts( array( 'post_type' => 'gp_lead', 'meta_key' => '_lead_email', 'meta_value' => $email, 'posts_per_page' => 1 ) );
+
+        if ( ! empty($leads) ) {
+            $lead_id = $leads[0]->ID;
+            update_post_meta( $lead_id, '_lead_phone', sanitize_text_field( $_POST['phone'] ) );
+            update_post_meta( $lead_id, '_lead_zip', sanitize_text_field( $_POST['zip'] ) );
+            wp_send_json_success( 'Strategic profile synchronized.' );
+        }
+        wp_send_json_error();
     }
 
     public function handle_reschedule_request() {
@@ -165,6 +180,26 @@ class GrowthPress_Portal {
                         <?php endforeach; else: echo "<p style='opacity:0.5;'>No financial ledger entries detected.</p>"; endif; ?>
                     </div>
 
+                    <div class="glass-card" style="padding:50px; border-radius:44px; margin-bottom:40px;">
+                        <h3 style="font-size:22px; margin-bottom:30px; letter-spacing:-0.03em;">Strategic Profile</h3>
+                        <?php
+                        $lead = !empty($leads) ? $leads[0] : null;
+                        $phone = $lead ? get_post_meta($lead->ID, '_lead_phone', true) : '';
+                        $zip = $lead ? get_post_meta($lead->ID, '_lead_zip', true) : '';
+                        ?>
+                        <form id="gp-portal-profile">
+                            <div style="margin-bottom:20px;">
+                                <label style="font-size:10px; font-weight:900; opacity:0.4; letter-spacing:1px; display:block; margin-bottom:10px;">SECURE PHONE</label>
+                                <input type="text" id="prof-phone" value="<?php echo esc_attr($phone); ?>" style="width:100%; height:50px; border-radius:12px; border:1px solid #E2E8F0; padding:0 15px;">
+                            </div>
+                            <div style="margin-bottom:30px;">
+                                <label style="font-size:10px; font-weight:900; opacity:0.4; letter-spacing:1px; display:block; margin-bottom:10px;">GEOGRAPHIC ZIP</label>
+                                <input type="text" id="prof-zip" value="<?php echo esc_attr($zip); ?>" style="width:100%; height:50px; border-radius:12px; border:1px solid #E2E8F0; padding:0 15px;">
+                            </div>
+                            <button type="button" class="gp-btn" style="width:100%; height:55px; font-size:12px; border-radius:12px;" onclick="updatePortalProfile()">SYNC PROFILE</button>
+                        </form>
+                    </div>
+
                     <div class="glass-card" style="padding:50px; border-radius:44px;">
                         <h3 style="font-size:22px; margin-bottom:30px; letter-spacing:-0.03em;">Intelligence Logs</h3>
                         <?php $appts = get_posts( array( 'post_type' => 'gp_appointment', 'meta_key' => '_client_email', 'meta_value' => $email ) );
@@ -183,6 +218,16 @@ class GrowthPress_Portal {
             </div>
         </div>
         <script>
+            function updatePortalProfile() {
+                jQuery.post(gp_ajax.ajaxurl, {
+                    action: 'gp_update_portal_profile',
+                    phone: jQuery('#prof-phone').val(),
+                    zip: jQuery('#prof-zip').val()
+                }, function(res) {
+                    if(res.success) alert(res.data);
+                });
+            }
+
             function acceptProposal(id) {
                 if(!confirm("Execute agreement and engagement of proprietary services?")) return;
                 jQuery.post(gp_ajax.ajaxurl, { action: 'gp_accept_proposal', proposal_id: id }, function(res) {

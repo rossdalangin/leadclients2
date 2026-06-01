@@ -23,6 +23,70 @@ class GrowthPress_Proposals {
         add_action( 'wp_ajax_gp_generate_ai_proposal', array( $this, 'handle_ai_proposal_generation' ) );
         add_action( 'wp_ajax_gp_accept_proposal', array( $this, 'handle_proposal_acceptance' ) );
         add_action( 'wp_ajax_nopriv_gp_accept_proposal', array( $this, 'handle_proposal_acceptance' ) );
+        add_action( 'add_meta_boxes', array( $this, 'add_proposal_meta_boxes' ) );
+        add_action( 'save_post', array( $this, 'save_proposal_meta' ) );
+        add_filter( 'manage_gp_proposal_posts_columns', array( $this, 'proposal_columns' ) );
+        add_action( 'manage_gp_proposal_posts_custom_column', array( $this, 'proposal_column_content' ), 10, 2 );
+    }
+
+    public function proposal_columns( $cols ) {
+        $cols['_status'] = 'Status';
+        $cols['_val'] = 'Value';
+        return $cols;
+    }
+
+    public function proposal_column_content( $col, $post_id ) {
+        if ( $col === '_status' ) echo get_post_meta( $post_id, '_gp_proposal_status', true ) ?: 'Sent';
+        if ( $col === '_val' ) echo '$' . number_format(get_post_meta( $post_id, '_proposal_value', true ));
+    }
+
+    public function add_proposal_meta_boxes() {
+        add_meta_box( 'gp_proposal_details', 'Strategic Proposal Intel', array( $this, 'render_proposal_meta' ), 'gp_proposal', 'normal', 'high' );
+    }
+
+    public function render_proposal_meta( $post ) {
+        $lead_id = get_post_meta( $post->ID, '_related_lead', true );
+        $status = get_post_meta( $post->ID, '_gp_proposal_status', true ) ?: 'Sent';
+        $value = get_post_meta( $post->ID, '_proposal_value', true );
+        $leads = get_posts( array( 'post_type' => 'gp_lead', 'posts_per_page' => -1 ) );
+        ?>
+        <table class="form-table">
+            <tr>
+                <th><label>Related Business Lead</label></th>
+                <td>
+                    <select name="gp_related_lead" style="width:100%;">
+                        <option value="0">Generic / No Lead</option>
+                        <?php foreach($leads as $l): ?>
+                            <option value="<?php echo $l->ID; ?>" <?php selected($lead_id, $l->ID); ?>><?php echo esc_html($l->post_title); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label>Proposal Status</label></th>
+                <td>
+                    <select name="gp_proposal_status" style="width:100%;">
+                        <option value="Draft" <?php selected($status, 'Draft'); ?>>Draft</option>
+                        <option value="Sent" <?php selected($status, 'Sent'); ?>>Sent / Active</option>
+                        <option value="Accepted" <?php selected($status, 'Accepted'); ?>>Accepted / Executed</option>
+                        <option value="Declined" <?php selected($status, 'Declined'); ?>>Declined</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label>Strategic Value ($)</label></th>
+                <td><input type="number" name="gp_proposal_value" value="<?php echo esc_attr($value); ?>" class="regular-text"></td>
+            </tr>
+        </table>
+        <?php
+    }
+
+    public function save_proposal_meta( $post_id ) {
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+        if ( ! isset( $_POST['gp_proposal_status'] ) ) return;
+        update_post_meta( $post_id, '_related_lead', intval( $_POST['gp_related_lead'] ) );
+        update_post_meta( $post_id, '_gp_proposal_status', sanitize_text_field( $_POST['gp_proposal_status'] ) );
+        update_post_meta( $post_id, '_proposal_value', floatval( $_POST['gp_proposal_value'] ) );
     }
 
     public function register_proposal_cpt() {

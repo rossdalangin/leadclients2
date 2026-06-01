@@ -13,6 +13,44 @@ class GrowthPress_Locations {
         add_action( 'init', array( $this, 'register_location_cpt' ) );
         add_action( 'gp_lead_captured', array( $this, 'route_lead_by_location' ) );
         add_shortcode( 'gp_location_switcher', array( $this, 'render_location_switcher' ) );
+        add_action( 'add_meta_boxes', array( $this, 'add_location_meta_boxes' ) );
+        add_action( 'save_post', array( $this, 'save_location_meta' ) );
+        add_filter( 'manage_gp_location_posts_columns', array( $this, 'location_columns' ) );
+        add_action( 'manage_gp_location_posts_custom_column', array( $this, 'location_column_content' ), 10, 2 );
+    }
+
+    public function location_columns( $cols ) {
+        $cols['_zips'] = 'Serviced ZIPs';
+        return $cols;
+    }
+
+    public function location_column_content( $col, $post_id ) {
+        if ( $col === '_zips' ) echo get_post_meta( $post_id, '_serviced_zips', true ) ?: '-';
+    }
+
+    public function add_location_meta_boxes() {
+        add_meta_box( 'gp_location_details', 'Regional Node Configuration', array( $this, 'render_location_meta' ), 'gp_location', 'normal', 'high' );
+    }
+
+    public function render_location_meta( $post ) {
+        $zips = get_post_meta( $post->ID, '_serviced_zips', true );
+        ?>
+        <table class="form-table">
+            <tr>
+                <th><label>Serviced ZIP Codes</label></th>
+                <td>
+                    <textarea name="gp_serviced_zips" style="width:100%; height:100px;" placeholder="90210, 90211, 90212..."><?php echo esc_textarea($zips); ?></textarea>
+                    <p class="description">Comma-separated list of ZIP codes for autonomous lead routing.</p>
+                </td>
+            </tr>
+        </table>
+        <?php
+    }
+
+    public function save_location_meta( $post_id ) {
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+        if ( ! isset( $_POST['gp_serviced_zips'] ) ) return;
+        update_post_meta( $post_id, '_serviced_zips', sanitize_text_field( $_POST['gp_serviced_zips'] ) );
     }
 
     public function register_location_cpt() {

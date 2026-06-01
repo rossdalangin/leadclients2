@@ -14,6 +14,51 @@ class GrowthPress_Funnels {
         add_shortcode( 'gp_funnel_step', array( $this, 'render_funnel_step' ) );
         add_action( 'wp_ajax_gp_track_funnel', array( $this, 'handle_tracking' ) );
         add_action( 'wp_ajax_nopriv_gp_track_funnel', array( $this, 'handle_tracking' ) );
+        add_action( 'add_meta_boxes', array( $this, 'add_funnel_meta_boxes' ) );
+        add_action( 'save_post', array( $this, 'save_funnel_meta' ) );
+        add_filter( 'manage_gp_funnel_posts_columns', array( $this, 'funnel_columns' ) );
+        add_action( 'manage_gp_funnel_posts_custom_column', array( $this, 'funnel_column_content' ), 10, 2 );
+    }
+
+    public function funnel_columns( $cols ) {
+        $cols['_hits'] = 'Total Traffic';
+        return $cols;
+    }
+
+    public function funnel_column_content( $col, $post_id ) {
+        if ( $col === '_hits' ) {
+            $a = (int)get_post_meta($post_id, '_hits_A', true);
+            $b = (int)get_post_meta($post_id, '_hits_B', true);
+            echo ($a + $b) . ' Hits';
+        }
+    }
+
+    public function add_funnel_meta_boxes() {
+        add_meta_box( 'gp_funnel_details', 'A/B Analytics Metrics', array( $this, 'render_funnel_meta' ), 'gp_funnel', 'normal', 'high' );
+    }
+
+    public function render_funnel_meta( $post ) {
+        $hitsA = get_post_meta( $post->ID, '_hits_A', true ) ?: 0;
+        $hitsB = get_post_meta( $post->ID, '_hits_B', true ) ?: 0;
+        ?>
+        <table class="form-table">
+            <tr>
+                <th><label>Variation A Traffic Hits</label></th>
+                <td><input type="number" name="gp_hits_a" value="<?php echo esc_attr($hitsA); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Variation B Traffic Hits</label></th>
+                <td><input type="number" name="gp_hits_b" value="<?php echo esc_attr($hitsB); ?>" class="regular-text"></td>
+            </tr>
+        </table>
+        <?php
+    }
+
+    public function save_funnel_meta( $post_id ) {
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+        if ( ! isset( $_POST['gp_hits_a'] ) ) return;
+        update_post_meta( $post_id, '_hits_A', intval( $_POST['gp_hits_a'] ) );
+        update_post_meta( $post_id, '_hits_B', intval( $_POST['gp_hits_b'] ) );
     }
 
     public function register_funnel_cpt() {

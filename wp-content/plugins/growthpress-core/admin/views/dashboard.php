@@ -34,13 +34,15 @@
             <div class="status-ping active"></div>
             <div style="font-size:10px; font-weight:900; letter-spacing:1px; opacity:0.5;">CRM: SYNCHRONIZED</div>
         </div>
+        <?php $ai_active = get_option('growthpress_openai_api_key') || get_option('growthpress_claude_api_key'); ?>
         <div class="glass-card" style="padding:20px; display:flex; align-items:center; gap:15px;">
-            <div class="status-ping active"></div>
-            <div style="font-size:10px; font-weight:900; letter-spacing:1px; opacity:0.5;">AI: GPT-4 TUNED</div>
+            <div class="status-ping <?php echo $ai_active ? 'active' : 'warning'; ?>"></div>
+            <div style="font-size:10px; font-weight:900; letter-spacing:1px; opacity:0.5;">AI: <?php echo $ai_active ? 'GPT-4 TUNED' : 'OFFLINE'; ?></div>
         </div>
+        <?php $stripe_active = get_option('growthpress_stripe_secret'); ?>
         <div class="glass-card" style="padding:20px; display:flex; align-items:center; gap:15px;">
-            <div class="status-ping active"></div>
-            <div style="font-size:10px; font-weight:900; letter-spacing:1px; opacity:0.5;">BOOKING: CALIBRATED</div>
+            <div class="status-ping <?php echo $stripe_active ? 'active' : 'warning'; ?>"></div>
+            <div style="font-size:10px; font-weight:900; letter-spacing:1px; opacity:0.5;">STRIPE: <?php echo $stripe_active ? 'CALIBRATED' : 'DISCONNECTED'; ?></div>
         </div>
         <div class="glass-card" style="padding:20px; display:flex; align-items:center; gap:15px;">
             <div class="status-ping active"></div>
@@ -223,6 +225,27 @@
                         <span style="font-size:9px; color:var(--accent); font-weight:900;">WAITING</span>
                     </div>
                 <?php endforeach; else: echo "<p style='opacity:0.4; font-size:11px;'>No prospects in waiting queue.</p>"; endif; ?>
+            </div>
+
+            <!-- Revenue ROI Hub -->
+            <div class="glass-card gp-reveal" style="margin-bottom:30px; background:var(--primary); color:white; border:none;">
+                <h3 style="color:white; font-size:14px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6; margin-bottom:25px; font-weight:950;">Revenue Analytics</h3>
+                <div style="display:grid; gap:20px;">
+                    <div>
+                        <div style="font-size:10px; font-weight:900; opacity:0.6; letter-spacing:1px; margin-bottom:5px;">EARNED EQUITY</div>
+                        <div style="font-size:24px; font-weight:950;">$<?php
+                            $earned = 0;
+                            $paid_tx = get_posts(array('post_type'=>'gp_transaction', 'meta_key'=>'_status', 'meta_value'=>'Paid', 'posts_per_page'=>-1));
+                            foreach($paid_tx as $tx) $earned += (float)get_post_meta($tx->ID, '_amount', true);
+                            echo number_format($earned);
+                        ?></div>
+                    </div>
+                    <div style="height:1px; background:rgba(255,255,255,0.1);"></div>
+                    <div>
+                        <div style="font-size:10px; font-weight:900; opacity:0.6; letter-spacing:1px; margin-bottom:5px;">POTENTIAL UPSIDE</div>
+                        <div style="font-size:24px; font-weight:950;">$<?php echo number_format($pipe_val * 0.4); ?></div>
+                    </div>
+                </div>
             </div>
 
             <!-- Staff Efficiency Hub -->

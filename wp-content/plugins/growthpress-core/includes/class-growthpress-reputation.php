@@ -13,6 +13,41 @@ class GrowthPress_Reputation {
         add_action( 'init', array( $this, 'register_review_cpt' ) );
         add_shortcode( 'gp_review_feed', array( $this, 'render_review_feed' ) );
         add_action( 'gp_appointment_completed', array( $this, 'trigger_review_request' ) );
+        add_action( 'add_meta_boxes', array( $this, 'add_review_meta_boxes' ) );
+        add_action( 'save_post', array( $this, 'save_review_meta' ) );
+        add_filter( 'manage_gp_review_posts_columns', array( $this, 'review_columns' ) );
+        add_action( 'manage_gp_review_posts_custom_column', array( $this, 'review_column_content' ), 10, 2 );
+    }
+
+    public function review_columns( $cols ) {
+        $cols['_rating'] = 'Rating';
+        return $cols;
+    }
+
+    public function review_column_content( $col, $post_id ) {
+        if ( $col === '_rating' ) echo str_repeat('⭐', intval(get_post_meta( $post_id, '_gp_rating', true )));
+    }
+
+    public function add_review_meta_boxes() {
+        add_meta_box( 'gp_review_details', 'Testimonial Authority Data', array( $this, 'render_review_meta' ), 'gp_review', 'normal', 'high' );
+    }
+
+    public function render_review_meta( $post ) {
+        $rating = get_post_meta( $post->ID, '_gp_rating', true ) ?: 5;
+        ?>
+        <table class="form-table">
+            <tr>
+                <th><label>Client Rating (1-5)</label></th>
+                <td><input type="number" name="gp_review_rating" value="<?php echo esc_attr($rating); ?>" min="1" max="5" class="regular-text"></td>
+            </tr>
+        </table>
+        <?php
+    }
+
+    public function save_review_meta( $post_id ) {
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+        if ( ! isset( $_POST['gp_review_rating'] ) ) return;
+        update_post_meta( $post_id, '_gp_rating', intval( $_POST['gp_review_rating'] ) );
     }
 
     public function register_review_cpt() {
