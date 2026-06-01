@@ -33,17 +33,20 @@ class GrowthPress_RealEstate {
         $sqft = get_post_meta($post->ID, '_gp_sqft', true);
         $tags = get_post_meta($post->ID, '_gp_lifestyle_tags', true);
         ?>
+        <div style="background: #fff7ed; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #f97316;">
+            <p style="margin: 0; font-size: 13px; color: #9a3412;"><strong>Asset Inventory Hub:</strong> High-yield portfolio items or real estate listings are managed here. These fields are utilized by the 'Neural Lifestyle Matcher' to autonomously pair prospects with their ideal strategic assets.</p>
+        </div>
         <table class="form-table">
             <tr>
-                <th><label>Asset Price ($)</label></th>
+                <th><label>Asset Price ($)</label><p class="description">Market value of the strategic asset.</p></th>
                 <td><input type="number" name="gp_property_price" value="<?php echo esc_attr($price); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Total Square Footage</label></th>
+                <th><label>Total Square Footage</label><p class="description">Physical dimensions of the node.</p></th>
                 <td><input type="number" name="gp_property_sqft" value="<?php echo esc_attr($sqft); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Lifestyle Strategic Tags</label></th>
+                <th><label>Lifestyle Strategic Tags</label><p class="description">Keywords for the AI matching engine (e.g. Modern, Corporate, Elite).</p></th>
                 <td>
                     <input type="text" name="gp_property_tags" value="<?php echo esc_attr($tags); ?>" class="regular-text" placeholder="e.g. Suburban, Modern, Elite">
                     <p class="description">Used by the Neural Inventory Matcher for client lifestyle DNS mapping.</p>

@@ -56,6 +56,8 @@ class GrowthPress_Proposals {
         $lead_id = get_post_meta( $post->ID, '_related_lead', true );
         $service_id = get_post_meta( $post->ID, '_related_service', true );
         $status = get_post_meta( $post->ID, '_gp_proposal_status', true ) ?: 'Sent';
+        $type = get_post_meta( $post->ID, '_proposal_type', true ) ?: 'Project';
+        $approval = get_post_meta( $post->ID, '_internal_approval', true ) ?: 'Pending';
         $email = get_post_meta( $post->ID, '_proposal_recipient', true );
         $value = get_post_meta( $post->ID, '_proposal_value', true );
         $expires = get_post_meta( $post->ID, '_proposal_expires', true );
@@ -90,6 +92,26 @@ class GrowthPress_Proposals {
                         <?php foreach($services as $s): ?>
                             <option value="<?php echo $s->ID; ?>" <?php selected($service_id, $s->ID); ?>><?php echo esc_html($s->post_title); ?></option>
                         <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label>Internal Approval</label><p class="description">Administrative state. Ensure technical review is complete before dispatching to client.</p></th>
+                <td>
+                    <select name="gp_internal_approval" style="width:100%;">
+                        <option value="Pending" <?php selected($approval, 'Pending'); ?>>Pending Technical Review</option>
+                        <option value="Approved" <?php selected($approval, 'Approved'); ?>>Approved for Dispatch</option>
+                        <option value="Rejected" <?php selected($approval, 'Rejected'); ?>>Rejected / Revision Required</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label>Engagement Type</label><p class="description">Classifies the proposal for service line ROI tracking.</p></th>
+                <td>
+                    <select name="gp_proposal_type" style="width:100%;">
+                        <option value="Project" <?php selected($type, 'Project'); ?>>One-Time Project</option>
+                        <option value="Retainer" <?php selected($type, 'Retainer'); ?>>Strategic Retainer</option>
+                        <option value="Consulting" <?php selected($type, 'Consulting'); ?>>Management Consulting</option>
                     </select>
                 </td>
             </tr>
@@ -166,6 +188,8 @@ class GrowthPress_Proposals {
         update_post_meta( $post_id, '_related_service', intval( $_POST['gp_related_service'] ) );
         update_post_meta( $post_id, '_proposal_recipient', sanitize_email( $_POST['gp_proposal_recipient'] ) );
         update_post_meta( $post_id, '_gp_proposal_status', sanitize_text_field( $_POST['gp_proposal_status'] ) );
+        update_post_meta( $post_id, '_proposal_type', sanitize_text_field( $_POST['gp_proposal_type'] ) );
+        update_post_meta( $post_id, '_internal_approval', sanitize_text_field( $_POST['gp_internal_approval'] ) );
         update_post_meta( $post_id, '_proposal_value', floatval( $_POST['gp_proposal_value'] ) );
         update_post_meta( $post_id, '_proposal_expires', sanitize_text_field( $_POST['gp_proposal_expires'] ) );
         update_post_meta( $post_id, '_proposal_terms', wp_kses_post( $_POST['gp_proposal_terms'] ) );

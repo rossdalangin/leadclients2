@@ -59,9 +59,12 @@ class GrowthPress_Booking {
         $is_waiting = get_post_meta( $post->ID, '_is_waiting_list', true );
         $staff = get_users( array( 'role__in' => array('author', 'editor', 'administrator') ) );
         ?>
+        <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #0ea5e9;">
+            <p style="margin: 0; font-size: 13px; color: #0369a1;"><strong>Strategic Scheduling:</strong> Manage confirmed strategy sessions and virtual briefings here. Completing an appointment can automatically trigger review requests and move leads to the next lifecycle stage.</p>
+        </div>
         <table class="form-table">
             <tr>
-                <th><label>Appointment Status</label></th>
+                <th><label>Appointment Status</label><p class="description">Current state of the session. 'Completed' triggers reputation automations.</p></th>
                 <td>
                     <select name="gp_status" style="width:100%;">
                         <option value="Pending" <?php selected($status, 'Pending'); ?>>Pending</option>
@@ -72,11 +75,11 @@ class GrowthPress_Booking {
                 </td>
             </tr>
             <tr>
-                <th><label>Session Date & Time</label></th>
+                <th><label>Session Date & Time</label><p class="description">Format: YYYY-MM-DD HH:MM. Used for calendar synchronization.</p></th>
                 <td><input type="text" name="gp_appointment_date" value="<?php echo esc_attr($date); ?>" class="regular-text" placeholder="YYYY-MM-DD HH:MM"></td>
             </tr>
             <tr>
-                <th><label>Assigned Specialist</label></th>
+                <th><label>Assigned Specialist</label><p class="description">The team member hosting this strategy session.</p></th>
                 <td>
                     <select name="gp_staff_id" style="width:100%;">
                         <option value="0">Unassigned</option>
@@ -87,15 +90,15 @@ class GrowthPress_Booking {
                 </td>
             </tr>
             <tr>
-                <th><label>Client Email</label></th>
+                <th><label>Client Email</label><p class="description">Email of the attendee. Links the appointment to a Lead record.</p></th>
                 <td><input type="email" name="gp_client_email" value="<?php echo esc_attr($email); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Secure Meeting Link</label></th>
+                <th><label>Secure Meeting Link</label><p class="description">Zoom, Google Meet, or Telemedicine URL for the virtual session.</p></th>
                 <td><input type="url" name="gp_meeting_link" value="<?php echo esc_attr($link); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Priority Queue</label></th>
+                <th><label>Priority Queue</label><p class="description">Flag for leads on the high-intent waiting list.</p></th>
                 <td><input type="checkbox" name="gp_is_waiting" value="1" <?php checked($is_waiting, '1'); ?>> Marked as Waiting List</td>
             </tr>
         </table>

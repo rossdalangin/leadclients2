@@ -51,6 +51,8 @@ class GrowthPress_Funnels {
         $convB = get_post_meta( $post->ID, '_conv_B', true ) ?: 0;
         $urlA = get_post_meta( $post->ID, '_url_A', true );
         $urlB = get_post_meta( $post->ID, '_url_B', true );
+        $goal = get_post_meta( $post->ID, '_conversion_goal', true ) ?: 'Lead Capture';
+        $strategy = get_post_meta( $post->ID, '_winning_strategy_note', true );
 
         $rateA = $hitsA > 0 ? round(($convA / $hitsA) * 100, 2) : 0;
         $rateB = $hitsB > 0 ? round(($convB / $hitsB) * 100, 2) : 0;
@@ -92,6 +94,15 @@ class GrowthPress_Funnels {
                 <th><label>Conversions B</label><p class="description">Total leads captured through Variation B.</p></th>
                 <td><input type="number" name="gp_conv_b" value="<?php echo esc_attr($convB); ?>" class="regular-text"> <span style="margin-left:10px; font-weight:700; color:#10b981;"><?php echo $rateB; ?>% CV</span></td>
             </tr>
+            <tr class="section-header"><th colspan="2"><h3>Funnel Calibration</h3></th></tr>
+            <tr>
+                <th><label>Primary Conversion Goal</label><p class="description">The specific user action being tracked (e.g. Booking, Purchase, Quiz Completion).</p></th>
+                <td><input type="text" name="gp_conv_goal" value="<?php echo esc_attr($goal); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Winning Strategy Note</label><p class="description">Document why the winning variation outperformed the control for future funnel optimizations.</p></th>
+                <td><textarea name="gp_winning_strategy" style="width:100%; height:100px;"><?php echo esc_textarea($strategy); ?></textarea></td>
+            </tr>
         </table>
         <?php
     }
@@ -105,6 +116,8 @@ class GrowthPress_Funnels {
         update_post_meta( $post_id, '_conv_B', intval( $_POST['gp_conv_b'] ) );
         update_post_meta( $post_id, '_url_A', esc_url_raw( $_POST['gp_url_a'] ) );
         update_post_meta( $post_id, '_url_B', esc_url_raw( $_POST['gp_url_b'] ) );
+        update_post_meta( $post_id, '_conversion_goal', sanitize_text_field( $_POST['gp_conv_goal'] ) );
+        update_post_meta( $post_id, '_winning_strategy_note', sanitize_textarea_field( $_POST['gp_winning_strategy'] ) );
     }
 
     public function register_funnel_cpt() {

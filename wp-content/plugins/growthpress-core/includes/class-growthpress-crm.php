@@ -355,9 +355,12 @@ class GrowthPress_CRM {
     public function render_service_meta( $post ) {
         $icon = get_post_meta( $post->ID, '_gp_service_icon', true ) ?: '💎';
         ?>
+        <div style="background: #f0fdfa; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #0d9488;">
+            <p style="margin: 0; font-size: 13px; color: #0f766e;"><strong>Service Line Strategy:</strong> Define your primary revenue-generating services. These are featured in grids and used by AI to generate targeted proposals and marketing assets.</p>
+        </div>
         <table class="form-table">
             <tr>
-                <th><label>Service Icon (Emoji)</label></th>
+                <th><label>Service Icon (Emoji)</label><p class="description">Visual identifier used in the [gp_service_grid] and high-ticket sales decks.</p></th>
                 <td><input type="text" name="gp_service_icon" value="<?php echo esc_attr($icon); ?>" class="regular-text"></td>
             </tr>
         </table>
@@ -443,17 +446,20 @@ class GrowthPress_CRM {
         $efficiency = get_post_meta( $post->ID, '_gp_efficiency_gain', true );
         $pipe = get_post_meta( $post->ID, '_gp_pipeline_value', true );
         ?>
+        <div style="background: #fdf4ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #a855f7;">
+            <p style="margin: 0; font-size: 13px; color: #7e22ce;"><strong>Success Result Data:</strong> Case studies provide the 'Reason to Believe' for high-ticket prospects. Input measurable outcomes here to power the 'Ecosystem ROI Hub' and automated sales briefs.</p>
+        </div>
         <table class="form-table">
             <tr>
-                <th><label>Growth Increase (%)</label></th>
+                <th><label>Growth Increase (%)</label><p class="description">Quantifiable revenue or traffic growth (e.g. +320%).</p></th>
                 <td><input type="text" name="gp_growth_roi" value="<?php echo esc_attr($growth); ?>" placeholder="+320%" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Efficiency Gain</label></th>
+                <th><label>Efficiency Gain</label><p class="description">Time or resource savings achieved (e.g. 40 HRS/WK).</p></th>
                 <td><input type="text" name="gp_efficiency_gain" value="<?php echo esc_attr($efficiency); ?>" placeholder="40 HRS/WK" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Pipeline Value ($)</label></th>
+                <th><label>Pipeline Value ($)</label><p class="description">Estimated total value added to the client's business (e.g. $1.2M+).</p></th>
                 <td><input type="text" name="gp_pipeline_value" value="<?php echo esc_attr($pipe); ?>" placeholder="$1.2M+" class="regular-text"></td>
             </tr>
         </table>

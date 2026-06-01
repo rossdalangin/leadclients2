@@ -44,6 +44,8 @@ class GrowthPress_Payments {
         $status = get_post_meta( $post->ID, '_status', true ) ?: 'Pending';
         $method = get_post_meta( $post->ID, '_payment_method', true ) ?: 'Stripe';
         $type = get_post_meta( $post->ID, '_transaction_type', true ) ?: 'Revenue';
+        $category = get_post_meta( $post->ID, '_transaction_category', true ) ?: 'Operations';
+        $tax = get_post_meta( $post->ID, '_is_tax_deductible', true );
         $audit = get_post_meta( $post->ID, '_audit_notes', true );
         $related = get_post_meta( $post->ID, '_related_id', true );
         ?>
@@ -75,6 +77,21 @@ class GrowthPress_Payments {
                 </td>
             </tr>
             <tr>
+                <th><label>Strategic Category</label><p class="description">Used for departmental ROI and expense tracking.</p></th>
+                <td>
+                    <select name="gp_transaction_category" style="width:100%;">
+                        <option value="Marketing" <?php selected($category, 'Marketing'); ?>>Marketing & Lead Gen</option>
+                        <option value="Operations" <?php selected($category, 'Operations'); ?>>Operations & Delivery</option>
+                        <option value="Software" <?php selected($category, 'Software'); ?>>Software & AI Infrastructure</option>
+                        <option value="Payroll" <?php selected($category, 'Payroll'); ?>>Payroll & Specialists</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label>Tax Deductible</label><p class="description">Flag for end-of-year accounting audits.</p></th>
+                <td><input type="checkbox" name="gp_is_tax" value="1" <?php checked($tax, '1'); ?>> Mark as Deductible</td>
+            </tr>
+            <tr>
                 <th><label>Payment Method</label><p class="description">The gateway or channel used for the fund transfer.</p></th>
                 <td>
                     <select name="gp_payment_method" style="width:100%;">
@@ -104,6 +121,8 @@ class GrowthPress_Payments {
         update_post_meta( $post_id, '_amount', floatval( $_POST['gp_payment_amount'] ) );
         update_post_meta( $post_id, '_payment_method', sanitize_text_field( $_POST['gp_payment_method'] ) );
         update_post_meta( $post_id, '_transaction_type', sanitize_text_field( $_POST['gp_transaction_type'] ) );
+        update_post_meta( $post_id, '_transaction_category', sanitize_text_field( $_POST['gp_transaction_category'] ) );
+        update_post_meta( $post_id, '_is_tax_deductible', isset($_POST['gp_is_tax']) ? '1' : '0' );
         update_post_meta( $post_id, '_audit_notes', sanitize_textarea_field( $_POST['gp_audit_notes'] ) );
         update_post_meta( $post_id, '_related_id', intval( $_POST['gp_related_id'] ) );
     }

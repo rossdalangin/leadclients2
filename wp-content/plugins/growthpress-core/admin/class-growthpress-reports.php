@@ -21,20 +21,32 @@ class GrowthPress_Reports {
         $leads = get_posts(array('post_type' => 'gp_lead', 'posts_per_page' => -1, 'post_status' => 'publish'));
         $appts = get_posts(array('post_type' => 'gp_appointment', 'posts_per_page' => -1, 'post_status' => 'publish'));
         $proposals = get_posts(array('post_type' => 'gp_proposal', 'posts_per_page' => -1, 'post_status' => 'publish'));
+        $transactions = get_posts(array('post_type' => 'gp_transaction', 'posts_per_page' => -1, 'post_status' => 'publish'));
 
         $total_value = 0;
         foreach($proposals as $p) {
             $status = get_post_meta($p->ID, '_gp_proposal_status', true);
             if($status === 'Accepted') {
-                $total_value += (float)get_post_meta($p->ID, '_proposal_value', true) ?: 12500;
+                $total_value += (float)get_post_meta($p->ID, '_proposal_value', true) ?: 0;
             }
+        }
+
+        $revenue = 0;
+        $expenses = 0;
+        foreach($transactions as $t) {
+            $amt = (float)get_post_meta($t->ID, '_amount', true);
+            $type = get_post_meta($t->ID, '_transaction_type', true) ?: 'Revenue';
+            if($type === 'Revenue') $revenue += $amt;
+            else $expenses += $amt;
         }
 
         return array(
             'Total Leads' => count($leads),
             'Confirmed Bookings' => count($appts),
-            'Executed Agreements' => count($proposals),
-            'Pipeline Equity' => $total_value
+            'Revenue' => $revenue,
+            'OpEx' => $expenses,
+            'Net Equity' => $revenue - $expenses,
+            'Pipeline Upside' => $total_value
         );
     }
 
@@ -71,11 +83,14 @@ class GrowthPress_Reports {
             </div>
 
             <div class="stats-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:30px;">
-                <?php foreach($stats as $label => $val): ?>
-                    <div class="stat-card glass-card" style="padding:45px; border-radius:35px; border-bottom: 8px solid <?php echo (strpos($label, 'Equity') !== false) ? 'var(--primary)' : 'var(--border)'; ?>;">
+                <?php foreach($stats as $label => $val):
+                    $is_money = in_array($label, array('Revenue', 'OpEx', 'Net Equity', 'Pipeline Upside'));
+                    $border_color = ($label === 'Net Equity') ? '#10B981' : (($label === 'OpEx') ? '#EF4444' : 'var(--border)');
+                ?>
+                    <div class="stat-card glass-card" style="padding:45px; border-radius:35px; border-bottom: 8px solid <?php echo $border_color; ?>;">
                         <h4 style="font-size:11px; font-weight:950; opacity:0.4; text-transform:uppercase; letter-spacing:2px; margin-bottom:15px;"><?php echo $label; ?></h4>
-                        <div class="value" style="font-size:3.5rem; color:var(--secondary); font-weight:950; letter-spacing:-0.05em;">
-                            <?php echo (strpos($label, 'Equity') !== false) ? '$'.number_format($val) : $val; ?>
+                        <div class="value" style="font-size:3rem; color:var(--secondary); font-weight:950; letter-spacing:-0.05em;">
+                            <?php echo $is_money ? '$'.number_format($val) : $val; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>

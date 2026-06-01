@@ -43,17 +43,20 @@ class GrowthPress_Reputation {
         $project_id = get_post_meta( $post->ID, '_related_project', true );
         $projects = get_posts( array( 'post_type' => 'gp_project', 'posts_per_page' => -1 ) );
         ?>
+        <div style="background: #fdf2f8; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #db2777;">
+            <p style="margin: 0; font-size: 13px; color: #9d174d;"><strong>Reputation Management:</strong> Testimonials are the primary driver of market authority. Linking reviews to specific 'Case Studies' creates a verified chain of success that boosts frontend conversion rates.</p>
+        </div>
         <table class="form-table">
             <tr>
-                <th><label>Client Name</label></th>
+                <th><label>Client Name</label><p class="description">The identity of the reviewer as it will appear on the frontend wall.</p></th>
                 <td><input type="text" name="gp_client_name" value="<?php echo esc_attr($client); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Client Rating (1-5)</label></th>
+                <th><label>Client Rating (1-5)</label><p class="description">Numeric authority score. 5 stars is the benchmark for high-ticket service excellence.</p></th>
                 <td><input type="number" name="gp_review_rating" value="<?php echo esc_attr($rating); ?>" min="1" max="5" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Review Source</label></th>
+                <th><label>Review Source</label><p class="description">The platform where this review originated.</p></th>
                 <td>
                     <select name="gp_review_source" style="width:100%;">
                         <option value="Google" <?php selected($source, 'Google'); ?>>Google Business</option>
@@ -64,7 +67,7 @@ class GrowthPress_Reputation {
                 </td>
             </tr>
             <tr>
-                <th><label>Linked Case Study</label></th>
+                <th><label>Linked Case Study</label><p class="description">Associates this testimonial with a specific project outcome for maximum social proof.</p></th>
                 <td>
                     <select name="gp_related_project" style="width:100%;">
                         <option value="0">No Related Project</option>

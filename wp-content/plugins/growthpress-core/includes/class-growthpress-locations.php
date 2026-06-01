@@ -42,21 +42,24 @@ class GrowthPress_Locations {
         $phone = get_post_meta( $post->ID, '_location_phone', true );
         $map = get_post_meta( $post->ID, '_location_map_url', true );
         ?>
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #64748b;">
+            <p style="margin: 0; font-size: 13px; color: #334155;"><strong>Regional Node Management:</strong> Configure regional hubs to enable autonomous lead routing. When a lead submits a ZIP code, the system cross-references these records to assign the prospect to the nearest office.</p>
+        </div>
         <table class="form-table">
             <tr>
-                <th><label>Physical Address</label></th>
+                <th><label>Physical Address</label><p class="description">Used for Schema.org LocalBusiness markup and client-facing contact info.</p></th>
                 <td><input type="text" name="gp_location_address" value="<?php echo esc_attr($addr); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Phone Number</label></th>
+                <th><label>Phone Number</label><p class="description">Regional contact number for this specific strategic hub.</p></th>
                 <td><input type="text" name="gp_location_phone" value="<?php echo esc_attr($phone); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Google Maps URL</label></th>
+                <th><label>Google Maps URL</label><p class="description">Link to the business profile. Injected into the 'Join Meeting' and contact templates.</p></th>
                 <td><input type="url" name="gp_location_map" value="<?php echo esc_url($map); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Serviced ZIP Codes</label></th>
+                <th><label>Serviced ZIP Codes</label><p class="description">Comma-separated list. Critical for neural routing logic.</p></th>
                 <td>
                     <textarea name="gp_serviced_zips" style="width:100%; height:100px;" placeholder="90210, 90211, 90212..."><?php echo esc_textarea($zips); ?></textarea>
                     <p class="description">Comma-separated list of ZIP codes for autonomous lead routing.</p>
