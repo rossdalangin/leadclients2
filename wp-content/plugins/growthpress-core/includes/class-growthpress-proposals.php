@@ -23,6 +23,8 @@ class GrowthPress_Proposals {
         add_action( 'wp_ajax_gp_generate_ai_proposal', array( $this, 'handle_ai_proposal_generation' ) );
         add_action( 'wp_ajax_gp_accept_proposal', array( $this, 'handle_proposal_acceptance' ) );
         add_action( 'wp_ajax_nopriv_gp_accept_proposal', array( $this, 'handle_proposal_acceptance' ) );
+        add_action( 'wp_ajax_gp_send_proposal', array( $this, 'handle_send_proposal' ) );
+        add_action( 'wp_ajax_gp_archive_proposal', array( $this, 'handle_archive_proposal' ) );
         add_action( 'add_meta_boxes', array( $this, 'add_proposal_meta_boxes' ) );
         add_action( 'save_post', array( $this, 'save_proposal_meta' ) );
         add_filter( 'manage_gp_proposal_posts_columns', array( $this, 'proposal_columns' ) );
@@ -30,13 +32,19 @@ class GrowthPress_Proposals {
     }
 
     public function proposal_columns( $cols ) {
+        $cols['_email'] = 'Recipient';
         $cols['_status'] = 'Status';
         $cols['_val'] = 'Value';
         return $cols;
     }
 
     public function proposal_column_content( $col, $post_id ) {
-        if ( $col === '_status' ) echo get_post_meta( $post_id, '_gp_proposal_status', true ) ?: 'Sent';
+        if ( $col === '_email' ) echo get_post_meta( $post_id, '_proposal_recipient', true ) ?: '-';
+        if ( $col === '_status' ) {
+            $status = get_post_meta( $post_id, '_gp_proposal_status', true ) ?: 'Draft';
+            $colors = array('Draft' => '#94a3b8', 'Sent' => '#3b82f6', 'Accepted' => '#10b981', 'Declined' => '#ef4444', 'Archived' => '#64748b');
+            echo "<span style='color:".($colors[$status] ?? '#000')."; font-weight:bold;'>$status</span>";
+        }
         if ( $col === '_val' ) echo '$' . number_format(get_post_meta( $post_id, '_proposal_value', true ));
     }
 
@@ -47,10 +55,15 @@ class GrowthPress_Proposals {
     public function render_proposal_meta( $post ) {
         $lead_id = get_post_meta( $post->ID, '_related_lead', true );
         $status = get_post_meta( $post->ID, '_gp_proposal_status', true ) ?: 'Sent';
+        $email = get_post_meta( $post->ID, '_proposal_recipient', true );
         $value = get_post_meta( $post->ID, '_proposal_value', true );
         $leads = get_posts( array( 'post_type' => 'gp_lead', 'posts_per_page' => -1 ) );
         ?>
         <table class="form-table">
+            <tr>
+                <th><label>Recipient Email</label></th>
+                <td><input type="email" name="gp_proposal_recipient" value="<?php echo esc_attr($email); ?>" class="regular-text" placeholder="client@example.com"></td>
+            </tr>
             <tr>
                 <th><label>Related Business Lead</label></th>
                 <td>
@@ -70,6 +83,7 @@ class GrowthPress_Proposals {
                         <option value="Sent" <?php selected($status, 'Sent'); ?>>Sent / Active</option>
                         <option value="Accepted" <?php selected($status, 'Accepted'); ?>>Accepted / Executed</option>
                         <option value="Declined" <?php selected($status, 'Declined'); ?>>Declined</option>
+                        <option value="Archived" <?php selected($status, 'Archived'); ?>>Archived</option>
                     </select>
                 </td>
             </tr>
@@ -79,12 +93,51 @@ class GrowthPress_Proposals {
             </tr>
         </table>
         <?php
+        $sent_at = get_post_meta($post->ID, '_gp_proposal_sent_at', true);
+        if ($sent_at):
+        ?>
+        <div style="background:#f9f9f9; padding:15px; border:1px solid #ddd; border-radius:4px; margin-top:20px;">
+            <h4 style="margin:0 0 10px 0;">📜 Dispatch History</h4>
+            <div style="font-size:12px;">Sent to <strong><?php echo esc_html($email); ?></strong> on <?php echo date('M j, Y @ H:i', strtotime($sent_at)); ?></div>
+        </div>
+        <?php endif; ?>
+        <div style="margin-top:20px; padding-top:20px; border-top:1px solid #eee; display:flex; gap:10px;">
+            <button type="button" class="button button-primary" onclick="gpDispatchProposal(<?php echo $post->ID; ?>)">🚀 Send to Client</button>
+            <?php if ($status !== 'Accepted'): ?>
+                <button type="button" class="button" style="background:#10b981; color:white; border-color:#059669;" onclick="gpForceAcceptProposal(<?php echo $post->ID; ?>)">✅ Manual Accept</button>
+            <?php endif; ?>
+            <button type="button" class="button" onclick="gpArchiveProposal(<?php echo $post->ID; ?>)">📂 Archive Proposal</button>
+        </div>
+        <script>
+            function gpDispatchProposal(id) {
+                if(!confirm('Dispatch this proposal to the recipient?')) return;
+                jQuery.post(ajaxurl, {action:'gp_send_proposal', proposal_id:id, gp_nonce:'<?php echo wp_create_nonce("gp_admin_nonce"); ?>'}, function(r){
+                    alert(r.data);
+                    location.reload();
+                });
+            }
+            function gpArchiveProposal(id) {
+                jQuery.post(ajaxurl, {action:'gp_archive_proposal', proposal_id:id, gp_nonce:'<?php echo wp_create_nonce("gp_admin_nonce"); ?>'}, function(r){
+                    alert(r.data);
+                    location.reload();
+                });
+            }
+            function gpForceAcceptProposal(id) {
+                if(!confirm('Manually mark this proposal as ACCEPTED? This will trigger project kickoff.')) return;
+                jQuery.post(ajaxurl, {action:'gp_accept_proposal', proposal_id:id, gp_nonce:'<?php echo wp_create_nonce("gp_admin_nonce"); ?>'}, function(r){
+                    alert('Proposal Accepted. Project initialized.');
+                    location.reload();
+                });
+            }
+        </script>
+        <?php
     }
 
     public function save_proposal_meta( $post_id ) {
         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
         if ( ! isset( $_POST['gp_proposal_status'] ) ) return;
         update_post_meta( $post_id, '_related_lead', intval( $_POST['gp_related_lead'] ) );
+        update_post_meta( $post_id, '_proposal_recipient', sanitize_email( $_POST['gp_proposal_recipient'] ) );
         update_post_meta( $post_id, '_gp_proposal_status', sanitize_text_field( $_POST['gp_proposal_status'] ) );
         update_post_meta( $post_id, '_proposal_value', floatval( $_POST['gp_proposal_value'] ) );
     }
@@ -92,10 +145,13 @@ class GrowthPress_Proposals {
     public function register_proposal_cpt() {
         register_post_type( 'gp_proposal', array(
             'labels'      => array( 'name' => 'Proposals', 'singular_name' => 'Proposal' ),
-            'public'      => false,
+            'public'      => true,
             'show_ui'     => true,
+            'show_in_rest' => true,
             'menu_icon'   => 'dashicons-media-text',
-            'supports'    => array( 'title', 'editor', 'custom-fields' ),
+            'supports'    => array( 'title', 'editor', 'custom-fields', 'excerpt' ),
+            'rewrite'     => array( 'slug' => 'p' ),
+            'has_archive' => false,
         ) );
     }
 
@@ -120,7 +176,8 @@ class GrowthPress_Proposals {
         ));
 
         update_post_meta($proposal_id, '_related_lead', $lead_id);
-        update_post_meta($proposal_id, '_proposal_status', 'Sent');
+        update_post_meta($proposal_id, '_proposal_recipient', get_post_meta($lead_id, '_lead_email', true));
+        update_post_meta($proposal_id, '_gp_proposal_status', 'Draft');
 
         // Estimate value based on niche/probability
         $prob = get_post_meta($lead_id, '_gp_ai_probability', true) ?: 50;
@@ -130,6 +187,33 @@ class GrowthPress_Proposals {
 
         GrowthPress_Activity::log( "AI Proposal #$proposal_id generated for " . $lead->post_title );
         wp_send_json_success( "Proposal generated! ID: $proposal_id. Value: $$est_val" );
+    }
+
+    public function handle_send_proposal() {
+        if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error();
+        check_ajax_referer( 'gp_admin_nonce', 'gp_nonce' );
+
+        $proposal_id = intval($_POST['proposal_id']);
+        $email = get_post_meta($proposal_id, '_proposal_recipient', true);
+
+        if ( ! $email ) wp_send_json_error('No recipient email specified.');
+
+        update_post_meta($proposal_id, '_gp_proposal_status', 'Sent');
+        update_post_meta($proposal_id, '_gp_proposal_sent_at', current_time('mysql'));
+
+        GrowthPress_Activity::log( "Proposal #$proposal_id sent to $email." );
+        wp_send_json_success('Proposal dispatched successfully.');
+    }
+
+    public function handle_archive_proposal() {
+        if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error();
+        check_ajax_referer( 'gp_admin_nonce', 'gp_nonce' );
+
+        $proposal_id = intval($_POST['proposal_id']);
+        update_post_meta($proposal_id, '_gp_proposal_status', 'Archived');
+
+        GrowthPress_Activity::log( "Proposal #$proposal_id moved to archive." );
+        wp_send_json_success('Proposal archived.');
     }
 
     public function handle_proposal_acceptance() {

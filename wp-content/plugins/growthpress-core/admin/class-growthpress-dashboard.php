@@ -114,6 +114,8 @@ class GrowthPress_Dashboard {
                     <thead>
                         <tr>
                             <th style="padding:20px; font-weight:900;">STRATEGIC TASK</th>
+                            <th style="padding:20px; font-weight:900;">PRIORITY</th>
+                            <th style="padding:20px; font-weight:900;">DUE DATE</th>
                             <th style="padding:20px; font-weight:900;">RELATED LEAD</th>
                             <th style="padding:20px; font-weight:900;">STATUS</th>
                             <th style="padding:20px; font-weight:900;">ACTION</th>
@@ -123,9 +125,18 @@ class GrowthPress_Dashboard {
                         <?php foreach($tasks as $t):
                             $lead_id = get_post_meta($t->ID, '_related_lead', true);
                             $status = get_post_meta($t->ID, '_task_status', true) ?: 'Pending';
+                            $priority = get_post_meta($t->ID, '_task_priority', true) ?: 'Medium';
+                            $due = get_post_meta($t->ID, '_task_due_date', true);
                             ?>
                             <tr style="<?php echo $status === 'Completed' ? 'opacity:0.5;' : ''; ?>">
                                 <td style="padding:20px; font-weight:700;"><?php echo esc_html($t->post_title); ?></td>
+                                <td style="padding:20px;">
+                                    <?php
+                                    $p_color = ($priority === 'High') ? '#ef4444' : (($priority === 'Medium') ? '#f59e0b' : '#3b82f6');
+                                    echo "<span style='color:$p_color; font-weight:900; font-size:10px;'>".strtoupper($priority)."</span>";
+                                    ?>
+                                </td>
+                                <td style="padding:20px; font-size:11px; font-weight:600;"><?php echo $due ?: 'ASAP'; ?></td>
                                 <td style="padding:20px;"><?php echo $lead_id ? '<a href="'.get_edit_post_link($lead_id).'">'.get_the_title($lead_id).'</a>' : 'General Ecosystem'; ?></td>
                                 <td style="padding:20px;"><span style="background:<?php echo $status === 'Completed' ? '#D1FAE5' : '#FEF2F2'; ?>; color:<?php echo $status === 'Completed' ? '#065F46' : '#991B1B'; ?>; padding:6px 15px; border-radius:30px; font-size:10px; font-weight:900;"><?php echo strtoupper($status); ?></span></td>
                                 <td style="padding:20px;">
