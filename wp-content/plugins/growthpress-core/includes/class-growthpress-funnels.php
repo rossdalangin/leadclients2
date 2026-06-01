@@ -51,37 +51,46 @@ class GrowthPress_Funnels {
         $convB = get_post_meta( $post->ID, '_conv_B', true ) ?: 0;
         $urlA = get_post_meta( $post->ID, '_url_A', true );
         $urlB = get_post_meta( $post->ID, '_url_B', true );
+
+        $rateA = $hitsA > 0 ? round(($convA / $hitsA) * 100, 2) : 0;
+        $rateB = $hitsB > 0 ? round(($convB / $hitsB) * 100, 2) : 0;
+        $winner = ($rateA > $rateB) ? 'Variation A' : (($rateB > $rateA) ? 'Variation B' : 'Inconclusive');
         ?>
+        <div style="background: #fdf2f8; padding: 20px; border-radius: 12px; margin-bottom: 25px; border-left: 4px solid #db2777;">
+            <h4 style="margin: 0 0 10px 0; color: #9d174d;">🎯 A/B Intelligence Summary</h4>
+            <p style="margin: 0; font-size: 14px; color: #9d174d;">Current Winning Node: <strong><?php echo $winner; ?></strong></p>
+            <p style="margin: 10px 0 0 0; font-size: 12px; opacity: 0.8;">The system is tracking traffic and lead conversions for two variations. Variation A (Control) vs Variation B (Challenger). Direct the winning URL to your primary ad campaigns.</p>
+        </div>
         <table class="form-table">
             <tr>
-                <th colspan="2" style="background:#f0f0f0; padding:10px;">Variation A</th>
+                <th colspan="2" style="background:#f0f0f0; padding:15px; border-radius:8px 8px 0 0;">Variation A (The Control)</th>
             </tr>
             <tr>
-                <th><label>Target URL A</label></th>
+                <th><label>Target URL A</label><p class="description">The landing page for the control variation.</p></th>
                 <td><input type="url" name="gp_url_a" value="<?php echo esc_url($urlA); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Traffic Hits A</label></th>
+                <th><label>Traffic Hits A</label><p class="description">Total sessions recorded for Variation A.</p></th>
                 <td><input type="number" name="gp_hits_a" value="<?php echo esc_attr($hitsA); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Conversions A</label></th>
-                <td><input type="number" name="gp_conv_a" value="<?php echo esc_attr($convA); ?>" class="regular-text"></td>
+                <th><label>Conversions A</label><p class="description">Total leads captured through Variation A.</p></th>
+                <td><input type="number" name="gp_conv_a" value="<?php echo esc_attr($convA); ?>" class="regular-text"> <span style="margin-left:10px; font-weight:700; color:#10b981;"><?php echo $rateA; ?>% CV</span></td>
             </tr>
             <tr>
-                <th colspan="2" style="background:#f0f0f0; padding:10px;">Variation B</th>
+                <th colspan="2" style="background:#f0f0f0; padding:15px;">Variation B (The Challenger)</th>
             </tr>
             <tr>
-                <th><label>Target URL B</label></th>
+                <th><label>Target URL B</label><p class="description">The landing page for the test variation.</p></th>
                 <td><input type="url" name="gp_url_b" value="<?php echo esc_url($urlB); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Traffic Hits B</label></th>
+                <th><label>Traffic Hits B</label><p class="description">Total sessions recorded for Variation B.</p></th>
                 <td><input type="number" name="gp_hits_b" value="<?php echo esc_attr($hitsB); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Conversions B</label></th>
-                <td><input type="number" name="gp_conv_b" value="<?php echo esc_attr($convB); ?>" class="regular-text"></td>
+                <th><label>Conversions B</label><p class="description">Total leads captured through Variation B.</p></th>
+                <td><input type="number" name="gp_conv_b" value="<?php echo esc_attr($convB); ?>" class="regular-text"> <span style="margin-left:10px; font-weight:700; color:#10b981;"><?php echo $rateB; ?>% CV</span></td>
             </tr>
         </table>
         <?php

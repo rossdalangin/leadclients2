@@ -305,9 +305,12 @@ class GrowthPress_CRM {
         $staff_id = get_post_meta( $post->ID, '_assigned_staff', true );
         $staff = get_users( array( 'role__in' => array('author', 'editor', 'administrator') ) );
         ?>
+        <div style="background: #f0f4f8; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #2563eb;">
+            <p style="margin: 0; font-size: 13px; color: #1e293b;"><strong>Operational Intelligence:</strong> This section manages the core identity and triage parameters of the lead. AI-generated scores and nurture sequences should be reviewed and refined by the assigned specialist.</p>
+        </div>
         <table class="form-table">
             <tr>
-                <th><label>Assigned Staff</label></th>
+                <th><label>Assigned Staff</label><p class="description">Select the primary specialist responsible for this lead's conversion journey.</p></th>
                 <td>
                     <select name="gp_assigned_staff" style="width:100%;">
                         <option value="0">Unassigned</option>
@@ -318,31 +321,31 @@ class GrowthPress_CRM {
                 </td>
             </tr>
             <tr>
-                <th><label>Email Address</label></th>
+                <th><label>Email Address</label><p class="description">Primary contact channel. Used for automated nurture sequences and portal access.</p></th>
                 <td><input type="email" name="gp_lead_email" value="<?php echo esc_attr($email); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Phone Number</label></th>
+                <th><label>Phone Number</label><p class="description">Required for high-stakes follow-up and SMS triage notifications.</p></th>
                 <td><input type="text" name="gp_lead_phone" value="<?php echo esc_attr($phone); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>ZIP Code</label></th>
+                <th><label>ZIP Code</label><p class="description">Used for autonomous regional routing to the nearest strategic node.</p></th>
                 <td><input type="text" name="gp_lead_zip" value="<?php echo esc_attr($zip); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Lead Source</label></th>
+                <th><label>Lead Source</label><p class="description">Identifies the acquisition channel (e.g. Organic, Paid Ads, Neural Quiz).</p></th>
                 <td><input type="text" name="gp_lead_source" value="<?php echo esc_attr($source); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>AI Confidence Score (%)</label></th>
+                <th><label>AI Confidence Score (%)</label><p class="description">Neural network prediction of closing probability. Override if manual triage suggests otherwise.</p></th>
                 <td><input type="number" name="gp_lead_prob" value="<?php echo esc_attr($prob); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Raw Sentiment Data (JSON)</label></th>
+                <th><label>Raw Sentiment Data (JSON)</label><p class="description">Parsed intent analysis from the initial inquiry. Do not edit unless calibrating models.</p></th>
                 <td><textarea name="gp_lead_sentiment" style="width:100%; height:100px; font-family:monospace;"><?php echo esc_textarea($sentiment); ?></textarea></td>
             </tr>
             <tr>
-                <th><label>AI Nurture Sequence</label></th>
+                <th><label>AI Nurture Sequence</label><p class="description">Custom 5-day campaign generated for this lead. Use this as a script for manual outreach or review for automation.</p></th>
                 <td><textarea name="gp_lead_nurture" style="width:100%; height:150px;"><?php echo esc_textarea($nurture); ?></textarea></td>
             </tr>
         </table>
@@ -370,9 +373,12 @@ class GrowthPress_CRM {
         $leads = get_posts( array( 'post_type' => 'gp_lead', 'posts_per_page' => -1 ) );
         $staff = get_users( array( 'role__in' => array('author', 'editor', 'administrator') ) );
         ?>
+        <div style="background: #fffbeb; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #f59e0b;">
+            <p style="margin: 0; font-size: 13px; color: #92400e;"><strong>Execution Guidance:</strong> Assign tasks to specific specialists and set priorities to optimize the system-wide triage queue. Tasks linked to leads will appear in their individual dossiers.</p>
+        </div>
         <table class="form-table">
             <tr>
-                <th><label>Assigned Staff</label></th>
+                <th><label>Assigned Staff</label><p class="description">The specialist responsible for executing this specific strategic action.</p></th>
                 <td>
                     <select name="gp_task_staff" style="width:100%;">
                         <option value="0">Unassigned</option>
@@ -383,17 +389,17 @@ class GrowthPress_CRM {
                 </td>
             </tr>
             <tr>
-                <th><label>Priority</label></th>
+                <th><label>Priority</label><p class="description">Defines the sorting order in the Strategic Command Center dashboard.</p></th>
                 <td>
                     <select name="gp_task_priority" style="width:100%;">
-                        <option value="Low" <?php selected($priority, 'Low'); ?>>Low</option>
-                        <option value="Medium" <?php selected($priority, 'Medium'); ?>>Medium</option>
-                        <option value="High" <?php selected($priority, 'High'); ?>>High</option>
+                        <option value="Low" <?php selected($priority, 'Low'); ?>>Low - Standard Maintenance</option>
+                        <option value="Medium" <?php selected($priority, 'Medium'); ?>>Medium - Routine Follow-up</option>
+                        <option value="High" <?php selected($priority, 'High'); ?>>High - Immediate Closing Action</option>
                     </select>
                 </td>
             </tr>
             <tr>
-                <th><label>Task Status</label></th>
+                <th><label>Task Status</label><p class="description">Mark as 'Completed' to remove from active queue and log in the audit trail.</p></th>
                 <td>
                     <select name="gp_task_status" style="width:100%;">
                         <option value="Pending" <?php selected($status, 'Pending'); ?>>Pending</option>
@@ -402,10 +408,10 @@ class GrowthPress_CRM {
                 </td>
             </tr>
             <tr>
-                <th><label>Related Lead</label></th>
+                <th><label>Related Lead</label><p class="description">Links this task to a specific business lead for context-aware triage.</p></th>
                 <td>
                     <select name="gp_related_lead" style="width:100%;">
-                        <option value="0">No Related Lead</option>
+                        <option value="0">No Related Lead (General System Task)</option>
                         <?php foreach($leads as $l): ?>
                             <option value="<?php echo $l->ID; ?>" <?php selected($lead_id, $l->ID); ?>><?php echo esc_html($l->post_title); ?></option>
                         <?php endforeach; ?>
@@ -413,7 +419,7 @@ class GrowthPress_CRM {
                 </td>
             </tr>
             <tr>
-                <th><label>Due Date</label></th>
+                <th><label>Due Date</label><p class="description">Deadline for strategic execution. Leaving blank defaults to 'ASAP'.</p></th>
                 <td><input type="date" name="gp_task_due" value="<?php echo esc_attr($due); ?>" class="regular-text"></td>
             </tr>
         </table>

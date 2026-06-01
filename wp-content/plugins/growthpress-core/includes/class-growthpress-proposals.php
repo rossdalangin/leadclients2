@@ -58,16 +58,21 @@ class GrowthPress_Proposals {
         $status = get_post_meta( $post->ID, '_gp_proposal_status', true ) ?: 'Sent';
         $email = get_post_meta( $post->ID, '_proposal_recipient', true );
         $value = get_post_meta( $post->ID, '_proposal_value', true );
+        $expires = get_post_meta( $post->ID, '_proposal_expires', true );
+        $terms = get_post_meta( $post->ID, '_proposal_terms', true );
         $leads = get_posts( array( 'post_type' => 'gp_lead', 'posts_per_page' => -1 ) );
         $services = get_posts( array( 'post_type' => 'gp_service', 'posts_per_page' => -1 ) );
         ?>
+        <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #10b981;">
+            <p style="margin: 0; font-size: 13px; color: #065f46;"><strong>Engagement Protocol:</strong> Drafting a proposal creates a binding strategic document. Once sent, the client can execute it via the secure portal, which will autonomously trigger project kickoff and financial ledger entries.</p>
+        </div>
         <table class="form-table">
             <tr>
-                <th><label>Recipient Email</label></th>
+                <th><label>Recipient Email</label><p class="description">Target email for proposal dispatch and portal access.</p></th>
                 <td><input type="email" name="gp_proposal_recipient" value="<?php echo esc_attr($email); ?>" class="regular-text" placeholder="client@example.com"></td>
             </tr>
             <tr>
-                <th><label>Related Business Lead</label></th>
+                <th><label>Related Business Lead</label><p class="description">Links the proposal to a CRM lead for automated status advancement.</p></th>
                 <td>
                     <select name="gp_related_lead" style="width:100%;">
                         <option value="0">Generic / No Lead</option>
@@ -78,7 +83,7 @@ class GrowthPress_Proposals {
                 </td>
             </tr>
             <tr>
-                <th><label>Target Service Line</label></th>
+                <th><label>Target Service Line</label><p class="description">The specific elite service being proposed.</p></th>
                 <td>
                     <select name="gp_related_service" style="width:100%;">
                         <option value="0">No Specific Service</option>
@@ -89,7 +94,7 @@ class GrowthPress_Proposals {
                 </td>
             </tr>
             <tr>
-                <th><label>Proposal Status</label></th>
+                <th><label>Proposal Status</label><p class="description">Current lifecycle stage. 'Accepted' triggers system-wide kickoff automations.</p></th>
                 <td>
                     <select name="gp_proposal_status" style="width:100%;">
                         <option value="Draft" <?php selected($status, 'Draft'); ?>>Draft</option>
@@ -101,8 +106,16 @@ class GrowthPress_Proposals {
                 </td>
             </tr>
             <tr>
-                <th><label>Strategic Value ($)</label></th>
+                <th><label>Strategic Value ($)</label><p class="description">Total contract value. Used for ROI modeling and revenue forecasting.</p></th>
                 <td><input type="number" name="gp_proposal_value" value="<?php echo esc_attr($value); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Expiration Date</label><p class="description">The date this strategic offer becomes void.</p></th>
+                <td><input type="date" name="gp_proposal_expires" value="<?php echo esc_attr($expires); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Custom Client Terms</label><p class="description">Specific conditions or project-level nuances for this agreement.</p></th>
+                <td><textarea name="gp_proposal_terms" style="width:100%; height:100px;"><?php echo esc_textarea($terms); ?></textarea></td>
             </tr>
         </table>
         <?php
@@ -154,6 +167,8 @@ class GrowthPress_Proposals {
         update_post_meta( $post_id, '_proposal_recipient', sanitize_email( $_POST['gp_proposal_recipient'] ) );
         update_post_meta( $post_id, '_gp_proposal_status', sanitize_text_field( $_POST['gp_proposal_status'] ) );
         update_post_meta( $post_id, '_proposal_value', floatval( $_POST['gp_proposal_value'] ) );
+        update_post_meta( $post_id, '_proposal_expires', sanitize_text_field( $_POST['gp_proposal_expires'] ) );
+        update_post_meta( $post_id, '_proposal_terms', wp_kses_post( $_POST['gp_proposal_terms'] ) );
     }
 
     public function register_proposal_cpt() {

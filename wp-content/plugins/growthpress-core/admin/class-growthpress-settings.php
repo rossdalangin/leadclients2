@@ -88,6 +88,10 @@ class GrowthPress_Settings {
             </div>
 
             <div id="tab-config" class="tab-content">
+                <div class="glass-card" style="max-width:1100px; background:#f0f7ff; border-left:5px solid #2563eb; margin-bottom:30px;">
+                    <p style="margin:0; font-size:14px; color:#1e40af;"><strong>Configuration Guide:</strong> Set your primary brand identity and industry niche here. This recalibrates the entire system's terminology, AI prompts, and conversion calculators to match your specific business sector.</p>
+                </div>
+
                 <div class="glass-card" style="max-width:1100px; border-bottom: 8px solid #10B981; margin-bottom:40px;">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <div>
@@ -169,6 +173,12 @@ class GrowthPress_Settings {
             </div>
 
             <div id="tab-ai" class="tab-content" style="display:none;">
+                <div class="glass-card" style="max-width:1100px; background:#fff7ed; border-left:5px solid #ea580c; margin-bottom:30px;">
+                    <p style="margin:0; font-size:14px; color:#9a3412;"><strong>AI Integration Note:</strong> Input your API keys for the respective providers. The system supports multi-node failover. Ensure your billing is active on the provider's side to maintain neural link stability.</p>
+                </div>
+                <div class="glass-card" style="max-width:1100px; background:#f0fdf4; border-left:5px solid #16a34a; margin-bottom:30px;">
+                    <p style="margin:0; font-size:14px; color:#166534;"><strong>External Node Connectivity:</strong> Link Stripe for financial ledger synchronization, Google Maps for location-based routing, and WhatsApp for priority lead notifications.</p>
+                </div>
                 <form method="post" action="options.php" class="glass-card" style="max-width:1100px;">
                     <?php settings_fields( 'growthpress_settings_group' ); ?>
                     <table class="form-table">
@@ -225,6 +235,9 @@ class GrowthPress_Settings {
             </div>
 
             <div id="tab-lab" class="tab-content" style="display:none;">
+                <div class="glass-card" style="max-width:1100px; background:#fdf2f8; border-left:5px solid #db2777; margin-bottom:30px;">
+                    <p style="margin:0; font-size:14px; color:#9d174d;"><strong>Prompt Engineering Center:</strong> Refine the 'System Prompt' that dictates how the AI behaves during discovery calls and FAQ sessions. Use high-authority keywords to ensure elite strategic output.</p>
+                </div>
                 <div class="glass-card" style="max-width:1100px;">
                     <h3 class="text-gradient">Neural Personality Lab</h3>
                     <p style="opacity:0.6;">Test and refine your autonomous agent's tone and strategy. Changes made here will be instantly injected into all Neural Hub conversations.</p>
@@ -260,6 +273,9 @@ class GrowthPress_Settings {
             </script>
 
             <div id="tab-tools" class="tab-content" style="display:none;">
+                <div class="glass-card" style="max-width:1100px; background:#f5f3ff; border-left:5px solid #7c3aed; margin-bottom:30px;">
+                    <p style="margin:0; font-size:14px; color:#5b21b6;"><strong>Maintenance Protocol:</strong> Use these tools to manage sample data. Generating sample data is recommended for first-time setup to understand the interconnected system lifecycle.</p>
+                </div>
                 <div class="glass-card" style="max-width:1100px;">
                     <h3 class="text-gradient">System Intelligence & Data Tools</h3>
                     <p style="opacity:0.6;">Manage system sample data and ecosystem maintenance protocols.</p>
@@ -294,6 +310,9 @@ class GrowthPress_Settings {
             </script>
 
             <div id="tab-white-label" class="tab-content" style="display:none;">
+                <div class="glass-card" style="max-width:1100px; background:#f8fafc; border-left:5px solid #64748b; margin-bottom:30px;">
+                    <p style="margin:0; font-size:14px; color:#334155;"><strong>Agency Customization:</strong> Rebrand the operating system interface for your clients. Upload custom logos and inject CSS to match their enterprise brand guidelines.</p>
+                </div>
                 <form method="post" action="options.php" class="glass-card" style="max-width:1100px;">
                     <?php settings_fields( 'growthpress_settings_group' ); ?>
                     <table class="form-table">

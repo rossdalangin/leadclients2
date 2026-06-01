@@ -97,6 +97,9 @@ class GrowthPress_Content_Studio {
         $current_prompts = $prompt_library[$niche] ?? array('Market Dominance', 'Client Acquisition', 'Authority Building');
         ?>
         <div class="wrap growthpress-studio">
+            <div class="glass-card" style="background:#fdf2f8; border-left:5px solid #db2777; margin-bottom:40px;">
+                <p style="margin:0; font-size:14px; color:#9d174d;"><strong>Strategic Command:</strong> Use the Content Studio to generate high-authority assets. Select an asset type, define your topic, and click 'Generate'. You can instantly sync the output to any of the 4 primary content post types (KB, Services, Projects, or Inventory) to expand your business ecosystem.</p>
+            </div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
                 <h1>AI Content & Insights Command Center</h1>
                 <div style="background:var(--primary-glow); color:var(--primary); padding:8px 16px; border-radius:30px; font-size:11px; font-weight:900; letter-spacing:1px;">ENGINE: GPT-4-TURBO</div>

@@ -43,11 +43,16 @@ class GrowthPress_Payments {
         $amount = get_post_meta( $post->ID, '_amount', true );
         $status = get_post_meta( $post->ID, '_status', true ) ?: 'Pending';
         $method = get_post_meta( $post->ID, '_payment_method', true ) ?: 'Stripe';
+        $type = get_post_meta( $post->ID, '_transaction_type', true ) ?: 'Revenue';
+        $audit = get_post_meta( $post->ID, '_audit_notes', true );
         $related = get_post_meta( $post->ID, '_related_id', true );
         ?>
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #64748b;">
+            <p style="margin: 0; font-size: 13px; color: #334155;"><strong>Ledger Instructions:</strong> This record serves as the financial source of truth for the system. Transactions linked to appointments or proposals will contribute to the real-time ROI reports on the dashboard.</p>
+        </div>
         <table class="form-table">
             <tr>
-                <th><label>Transaction Status</label></th>
+                <th><label>Transaction Status</label><p class="description">Current payment state. 'Paid' records are included in earned equity reports.</p></th>
                 <td>
                     <select name="gp_payment_status" style="width:100%;">
                         <option value="Pending" <?php selected($status, 'Pending'); ?>>Pending / Unpaid</option>
@@ -57,11 +62,20 @@ class GrowthPress_Payments {
                 </td>
             </tr>
             <tr>
-                <th><label>Ledger Amount ($)</label></th>
+                <th><label>Ledger Amount ($)</label><p class="description">The specific monetary value of this entry.</p></th>
                 <td><input type="number" name="gp_payment_amount" value="<?php echo esc_attr($amount); ?>" class="regular-text"></td>
             </tr>
             <tr>
-                <th><label>Payment Method</label></th>
+                <th><label>Entry Classification</label><p class="description">Distinguish between income and outgoing strategic costs.</p></th>
+                <td>
+                    <select name="gp_transaction_type" style="width:100%;">
+                        <option value="Revenue" <?php selected($type, 'Revenue'); ?>>Strategic Revenue (Income)</option>
+                        <option value="Expense" <?php selected($type, 'Expense'); ?>>Operating Expense (Outgoing)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label>Payment Method</label><p class="description">The gateway or channel used for the fund transfer.</p></th>
                 <td>
                     <select name="gp_payment_method" style="width:100%;">
                         <option value="Stripe" <?php selected($method, 'Stripe'); ?>>Stripe Card</option>
@@ -72,8 +86,12 @@ class GrowthPress_Payments {
                 </td>
             </tr>
             <tr>
-                <th><label>Related System Node ID</label></th>
-                <td><input type="number" name="gp_related_id" value="<?php echo esc_attr($related); ?>" class="regular-text" placeholder="e.g. Appointment or Proposal ID"></td>
+                <th><label>Related System Node ID</label><p class="description">ID of the linked Lead, Appointment, or Proposal.</p></th>
+                <td><input type="number" name="gp_related_id" value="<?php echo esc_attr($related); ?>" class="regular-text" placeholder="e.g. 422"></td>
+            </tr>
+            <tr>
+                <th><label>Financial Audit Notes</label><p class="description">Internal notes for accounting verification and reconciliation.</p></th>
+                <td><textarea name="gp_audit_notes" style="width:100%; height:100px;"><?php echo esc_textarea($audit); ?></textarea></td>
             </tr>
         </table>
         <?php
@@ -85,6 +103,8 @@ class GrowthPress_Payments {
         update_post_meta( $post_id, '_status', sanitize_text_field( $_POST['gp_payment_status'] ) );
         update_post_meta( $post_id, '_amount', floatval( $_POST['gp_payment_amount'] ) );
         update_post_meta( $post_id, '_payment_method', sanitize_text_field( $_POST['gp_payment_method'] ) );
+        update_post_meta( $post_id, '_transaction_type', sanitize_text_field( $_POST['gp_transaction_type'] ) );
+        update_post_meta( $post_id, '_audit_notes', sanitize_textarea_field( $_POST['gp_audit_notes'] ) );
         update_post_meta( $post_id, '_related_id', intval( $_POST['gp_related_id'] ) );
     }
 
