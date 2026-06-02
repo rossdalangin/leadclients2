@@ -12,6 +12,9 @@ class GrowthPress_Settings {
     public function __construct() {
         add_action( 'admin_menu', array( $this, 'add_settings_menu' ) );
         add_action( 'admin_init', array( $this, 'register_settings' ) );
+        add_action( 'wp_ajax_gp_test_connectivity', array( $this, 'test_connectivity' ) );
+        add_action( 'wp_ajax_gp_generate_sample_data', array( $this, 'ajax_generate_sample_data' ) );
+        add_action( 'wp_ajax_gp_remove_sample_data', array( $this, 'ajax_remove_sample_data' ) );
     }
 
     public function add_settings_menu() {
@@ -32,9 +35,6 @@ class GrowthPress_Settings {
             'growthpress_portal_branding', 'growthpress_neural_triggers'
         );
         foreach($keys as $k) register_setting( 'growthpress_settings_group', $k );
-        add_action( 'wp_ajax_gp_test_connectivity', array( $this, 'test_connectivity' ) );
-        add_action( 'wp_ajax_gp_generate_sample_data', array( $this, 'ajax_generate_sample_data' ) );
-        add_action( 'wp_ajax_gp_remove_sample_data', array( $this, 'ajax_remove_sample_data' ) );
     }
 
     public function ajax_generate_sample_data() {

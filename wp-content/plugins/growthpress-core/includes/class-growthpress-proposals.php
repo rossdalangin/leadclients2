@@ -241,7 +241,11 @@ class GrowthPress_Proposals {
         $niche = get_option('growthpress_niche', 'business');
         $ai = GrowthPress_AI::get_instance();
 
-        $proposal_content = $ai->generate_proposal($lead->post_title, "Advanced $niche Solutions", $niche);
+        $proposal_content = $ai->generate_proposal(array(
+            'title'   => $lead->post_title,
+            'service' => "Advanced $niche Solutions",
+            'niche'   => $niche
+        ));
 
         $proposal_id = wp_insert_post(array(
             'post_title'   => 'Proposal: ' . $lead->post_title,
