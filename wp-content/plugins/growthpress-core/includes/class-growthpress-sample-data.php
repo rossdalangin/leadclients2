@@ -49,7 +49,7 @@ class GrowthPress_Sample_Data {
 
     public static function remove_all_sample_data() {
         $args = array(
-            'post_type'      => array('gp_lead', 'gp_appointment', 'gp_property', 'gp_review', 'gp_proposal', 'gp_transaction', 'gp_funnel', 'gp_location', 'gp_task', 'gp_kb', 'gp_project', 'gp_service'),
+            'post_type'      => array('gp_lead', 'gp_appointment', 'gp_property', 'gp_review', 'gp_proposal', 'gp_transaction', 'gp_funnel', 'gp_location', 'gp_task', 'gp_kb', 'gp_project', 'gp_service', 'gp_treatment'),
             'posts_per_page' => -1,
             'meta_query'     => array(
                 array(

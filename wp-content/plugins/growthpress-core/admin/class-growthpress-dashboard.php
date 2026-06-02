@@ -78,7 +78,8 @@ class GrowthPress_Dashboard {
             'gp_lead' => 'Leads', 'gp_appointment' => 'Appointments', 'gp_proposal' => 'Proposals',
             'gp_transaction' => 'Transactions', 'gp_location' => 'Locations', 'gp_funnel' => 'Funnels',
             'gp_task' => 'Tasks', 'gp_kb' => 'Knowledge Base', 'gp_service' => 'Services',
-            'gp_project' => 'Case Studies', 'gp_review' => 'Reviews', 'gp_property' => 'Inventory'
+            'gp_project' => 'Case Studies', 'gp_review' => 'Reviews', 'gp_property' => 'Inventory',
+            'gp_treatment' => 'Treatments'
         );
         ?>
         <div class="wrap growthpress-ecosystem">

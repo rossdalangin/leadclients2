@@ -4,9 +4,62 @@
  */
 class GrowthPress_Dental {
     public function __construct() {
+        add_action('init', array($this, 'register_cpts'));
         add_shortcode('gp_insurance_optimizer', array($this, 'render_insurance_optimizer'));
         add_shortcode('gp_smile_gallery', array($this, 'render_smile_gallery'));
         add_action('gp_niche_lead_analysis', array($this, 'analyze_dental_lead'));
+        add_action('add_meta_boxes', array($this, 'add_dental_meta_boxes'));
+        add_action('save_post', array($this, 'save_dental_meta'));
+    }
+
+    public function register_cpts() {
+        register_post_type('gp_treatment', array(
+            'labels'      => array('name' => 'Treatments', 'singular_name' => 'Treatment'),
+            'public'      => true,
+            'show_ui'     => true,
+            'menu_icon'   => 'dashicons-heart',
+            'supports'    => array('title', 'editor', 'thumbnail', 'excerpt'),
+            'rewrite'     => array('slug' => 'treatments')
+        ));
+    }
+
+    public function add_dental_meta_boxes() {
+        add_meta_box('gp_treatment_details', 'Clinical Treatment Protocol', array($this, 'render_treatment_meta'), 'gp_treatment', 'normal', 'high');
+    }
+
+    public function render_treatment_meta($post) {
+        $duration = get_post_meta($post->ID, '_treatment_duration', true) ?: '60 mins';
+        $complexity = get_post_meta($post->ID, '_treatment_complexity', true) ?: 'Standard';
+        ?>
+        <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #0ea5e9;">
+            <p style="margin: 0; font-size: 13px; color: #0369a1;"><strong>Clinical Protocol:</strong> Define the operational parameters for this dental treatment. These values inform the 'Insurance Optimization Engine' and help set patient expectations during the triage phase.</p>
+        </div>
+        <table class="form-table">
+            <tr>
+                <th><label>Average Duration</label></th>
+                <td><input type="text" name="gp_treatment_duration" value="<?php echo esc_attr($duration); ?>" class="regular-text" placeholder="e.g. 90 mins"></td>
+            </tr>
+            <tr>
+                <th><label>Clinical Complexity</label></th>
+                <td>
+                    <select name="gp_treatment_complexity" style="width:100%;">
+                        <option value="Routine" <?php selected($complexity, 'Routine'); ?>>Routine / Maintenance</option>
+                        <option value="Standard" <?php selected($complexity, 'Standard'); ?>>Standard Clinical</option>
+                        <option value="Advanced" <?php selected($complexity, 'Advanced'); ?>>Advanced Reconstructive</option>
+                        <option value="Elite" <?php selected($complexity, 'Elite'); ?>>Elite Multi-Stage</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <?php
+    }
+
+    public function save_dental_meta($post_id) {
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+        if (isset($_POST['gp_treatment_duration'])) {
+            update_post_meta($post_id, '_treatment_duration', sanitize_text_field($_POST['gp_treatment_duration']));
+            update_post_meta($post_id, '_treatment_complexity', sanitize_text_field($_POST['gp_treatment_complexity']));
+        }
     }
 
     public function analyze_dental_lead($lead_id) {
@@ -87,6 +140,25 @@ class GrowthPress_Dental {
     public function generate_sample_data() {
         $id = wp_insert_post(array('post_title' => 'Sarah V. (Supreme Transformation)', 'post_content' => 'High-authority smile reconstruction for a global leadership profile.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
         if ($id) update_post_meta($id, '_gp_is_sample', '1');
+
+        $treatments = array(
+            'Invisalign Elite' => array('12 months', 'Advanced'),
+            'Full Mouth Restoration' => array('4-6 months', 'Elite'),
+            'Biological Periodontics' => array('90 mins', 'Standard')
+        );
+        foreach ($treatments as $title => $data) {
+            $tid = wp_insert_post(array(
+                'post_title'   => $title,
+                'post_content' => 'Specialized dental treatment protocol for ' . strtolower($title) . '.',
+                'post_type'    => 'gp_treatment',
+                'post_status'  => 'publish'
+            ));
+            if ($tid) {
+                update_post_meta($tid, '_gp_is_sample', '1');
+                update_post_meta($tid, '_treatment_duration', $data[0]);
+                update_post_meta($tid, '_treatment_complexity', $data[1]);
+            }
+        }
     }
 }
 new GrowthPress_Dental();
