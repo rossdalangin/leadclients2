@@ -20,81 +20,56 @@ add_action( 'after_setup_theme', 'growthpress_setup' );
  * Register Customizer Settings
  */
 function growthpress_customize_register( $wp_customize ) {
-    // Branding Section
+    // 1. Branding Section
     $wp_customize->add_section( 'growthpress_branding', array(
         'title' => 'Elite Branding & Identity',
         'description' => 'Configure your premium business aesthetics.',
         'priority' => 30,
     ) );
 
-    // Design Style Selector
-    $wp_customize->add_setting( 'gp_design_style', array(
-        'default' => 'unisex',
-        'sanitize_callback' => 'sanitize_text_field',
-    ) );
+    $wp_customize->add_setting( 'gp_design_style', array( 'default' => 'unisex', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_design_style', array(
-        'label' => 'System Design Set',
-        'section' => 'growthpress_branding',
-        'type' => 'select',
-        'choices' => array(
-            'unisex' => 'Minimalist Modern (Unisex)',
-            'male'   => 'Bold Executive (Male Focus)',
-            'female' => 'Elegant Professional (Female Focus)',
-        ),
+        'label' => 'System Design Set', 'section' => 'growthpress_branding', 'type' => 'select',
+        'choices' => array( 'unisex' => 'Minimalist Modern (Unisex)', 'male' => 'Bold Executive (Male Focus)', 'female' => 'Elegant Professional (Female Focus)' ),
     ) );
 
-    // Primary Color
-    $wp_customize->add_setting( 'growthpress_primary_color', array(
-        'default' => '#2563EB',
-        'sanitize_callback' => 'sanitize_hex_color',
-    ) );
-    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'growthpress_primary_color', array(
-        'label' => 'Primary Brand Color',
-        'section' => 'growthpress_branding',
-    ) ) );
+    $wp_customize->add_setting( 'growthpress_primary_color', array( 'default' => '#4F46E5', 'sanitize_callback' => 'sanitize_hex_color' ) );
+    $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'growthpress_primary_color', array( 'label' => 'Primary Brand Color', 'section' => 'growthpress_branding' ) ) );
 
-    // Homepage Content Section
-    $wp_customize->add_section( 'growthpress_homepage', array(
-        'title' => 'Homepage Hero Engine',
-        'priority' => 31,
-    ) );
+    // 2. Homepage Hero Engine
+    $wp_customize->add_section( 'growthpress_homepage', array( 'title' => 'Homepage Hero Engine', 'priority' => 31 ) );
+    $wp_customize->add_setting( 'gp_hero_headline', array( 'default' => 'Transform Your Business with AI Intelligence', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_hero_headline', array( 'label' => 'Hero Headline', 'section' => 'growthpress_homepage', 'type' => 'text' ) );
+    $wp_customize->add_setting( 'gp_hero_subheadline', array( 'default' => 'The unified operating system for high-ticket service firms. Scale faster, automate smarter.', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_hero_subheadline', array( 'label' => 'Hero Subheadline', 'section' => 'growthpress_homepage', 'type' => 'textarea' ) );
 
-    $wp_customize->add_setting( 'gp_hero_headline', array(
-        'default' => 'Transform Your Business with AI Intelligence',
-        'sanitize_callback' => 'sanitize_text_field',
-    ) );
-    $wp_customize->add_control( 'gp_hero_headline', array(
-        'label' => 'Hero Headline',
-        'section' => 'growthpress_homepage',
-        'type' => 'text',
-    ) );
+    // 3. Strategic Services Admin
+    $wp_customize->add_section( 'growthpress_services_admin', array( 'title' => 'Service Page Strategy', 'priority' => 32 ) );
+    $wp_customize->add_setting( 'gp_services_headline', array( 'default' => 'Elite Service Infrastructure', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_services_headline', array( 'label' => 'Services Headline', 'section' => 'growthpress_services_admin', 'type' => 'text' ) );
+    $wp_customize->add_setting( 'gp_services_subheadline', array( 'default' => 'Proprietary methodologies engineered for market dominance and high-ticket returns.', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_services_subheadline', array( 'label' => 'Services Subheadline', 'section' => 'growthpress_services_admin', 'type' => 'textarea' ) );
 
-    $wp_customize->add_setting( 'gp_hero_subheadline', array(
-        'default' => 'The unified operating system for high-ticket service firms. Scale faster, automate smarter.',
-        'sanitize_callback' => 'sanitize_text_field',
-    ) );
-    $wp_customize->add_control( 'gp_hero_subheadline', array(
-        'label' => 'Hero Subheadline',
-        'section' => 'growthpress_homepage',
-        'type' => 'textarea',
-    ) );
+    // 4. Case Studies & ROI Admin
+    $wp_customize->add_section( 'growthpress_results_admin', array( 'title' => 'Case Study Layouts', 'priority' => 33 ) );
+    $wp_customize->add_setting( 'gp_results_headline', array( 'default' => 'Verified Results & ROI Profiles', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_results_headline', array( 'label' => 'Results Headline', 'section' => 'growthpress_results_admin', 'type' => 'text' ) );
+    $wp_customize->add_setting( 'gp_results_subheadline', array( 'default' => 'Visual confirmation of our precision engineering and client success trajectories.', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_results_subheadline', array( 'label' => 'Results Subheadline', 'section' => 'growthpress_results_admin', 'type' => 'textarea' ) );
 
-    // Ecosystem Maintenance Section
-    $wp_customize->add_section( 'growthpress_maintenance', array(
-        'title' => 'OS Maintenance & Sync',
-        'priority' => 100,
-    ) );
+    // 5. Contact & Support Admin
+    $wp_customize->add_section( 'growthpress_contact_admin', array( 'title' => 'Contact Configuration', 'priority' => 34 ) );
+    $wp_customize->add_setting( 'gp_contact_headline', array( 'default' => 'Initiate Strategic Sequence', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_contact_headline', array( 'label' => 'Contact Headline', 'section' => 'growthpress_contact_admin', 'type' => 'text' ) );
+    $wp_customize->add_setting( 'gp_contact_subheadline', array( 'default' => 'Uplink with our specialist team to calibrate your growth operating system.', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_contact_subheadline', array( 'label' => 'Contact Subheadline', 'section' => 'growthpress_contact_admin', 'type' => 'textarea' ) );
 
+    // 6. Ecosystem Maintenance
+    $wp_customize->add_section( 'growthpress_maintenance', array( 'title' => 'OS Maintenance & Sync', 'priority' => 100 ) );
     $wp_customize->add_setting( 'gp_regenerate_trigger', array( 'default' => '' ) );
     $wp_customize->add_control( new WP_Customize_Control( $wp_customize, 'gp_regenerate_trigger', array(
-        'label' => 'Sync Ecosystem',
-        'section' => 'growthpress_maintenance',
-        'type' => 'button',
-        'input_attrs' => array(
-            'value' => 'Apply Updates & Sync',
-            'class' => 'button button-primary',
-            'onclick' => 'if(confirm("Regenerate core pages now?")){ jQuery.post(ajaxurl, {action:"gp_regenerate_pages", gp_nonce:"'.wp_create_nonce("gp_admin_nonce").'"}); }',
-        ),
+        'label' => 'Sync Ecosystem', 'section' => 'growthpress_maintenance', 'type' => 'button',
+        'input_attrs' => array( 'value' => 'Apply Updates & Sync Pages', 'class' => 'button button-primary', 'onclick' => 'if(confirm("Regenerate and template core pages now?")){ jQuery.post(ajaxurl, {action:"gp_regenerate_pages", gp_nonce:"'.wp_create_nonce("gp_admin_nonce").'"}); }' ),
     ) ) );
 }
 add_action( 'customize_register', 'growthpress_customize_register' );
@@ -105,7 +80,7 @@ function growthpress_scripts() {
     wp_enqueue_style( 'growthpress-accents', get_template_directory_uri() . '/niche-accents.css' );
     wp_enqueue_style( 'growthpress-mobile-cta', get_template_directory_uri() . '/mobile-cta.css' );
 
-    $primary = get_theme_mod( 'growthpress_primary_color', '#2563EB' );
+    $primary = get_theme_mod( 'growthpress_primary_color', '#4F46E5' );
     wp_add_inline_style( 'growthpress-style', ":root { --primary: $primary; }" );
 
     if ( defined( 'GROWTHPRESS_CORE_URL' ) ) {

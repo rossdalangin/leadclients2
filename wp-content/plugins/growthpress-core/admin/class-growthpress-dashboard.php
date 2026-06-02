@@ -436,27 +436,39 @@ class GrowthPress_Dashboard {
         $book_now_content = "<h1>Secure Your Session</h1><p>Book a direct briefing with our specialist team.</p>[gp_booking_form]";
 
         $pages = array(
-            'Home'         => array('content' => $home_content, 'desc' => "Transform your $niche_label business with our AI-powered operating system."),
-            'Services'     => array('content' => $services_content, 'desc' => "Explore our elite $niche_label services designed for high-ticket growth."),
-            'Pricing'      => array('content' => $pricing_content, 'desc' => "Transparent investment tiers for enterprise scaling."),
-            'Case Studies' => array('content' => $case_studies_content, 'desc' => "Verified ROI profiles and success stories."),
-            'FAQ'          => array('content' => $faq_content, 'desc' => "Instant answers from our neural intelligence base."),
-            'Our Mission'  => array('content' => $mission_content, 'desc' => "The vision behind the GrowthPress ecosystem."),
-            'Book Now'     => array('content' => $book_now_content, 'desc' => "Direct uplink to our strategic specialists."),
-            'Client Portal' => array('content' => "[gp_client_portal]", 'desc' => "Secure access to project velocity and financial ledgers."),
-            'Contact'      => array('content' => "[gp_lead_form]", 'desc' => "Connect with our $niche_label specialists today.")
+            'Home'         => array('content' => $home_content, 'desc' => "Transform your $niche_label business with our AI-powered operating system.", 'template' => ''),
+            'Services'     => array('content' => '', 'desc' => "Explore our elite $niche_label services designed for high-ticket growth.", 'template' => 'template-services.php'),
+            'Pricing'      => array('content' => $pricing_content, 'desc' => "Transparent investment tiers for enterprise scaling.", 'template' => 'template-full-width-glass.php'),
+            'Case Studies' => array('content' => '', 'desc' => "Verified ROI profiles and success stories.", 'template' => 'template-case-studies.php'),
+            'FAQ'          => array('content' => $faq_content, 'desc' => "Instant answers from our neural intelligence base.", 'template' => 'template-full-width-glass.php'),
+            'Our Mission'  => array('content' => $mission_content, 'desc' => "The vision behind the GrowthPress ecosystem.", 'template' => 'template-full-width-glass.php'),
+            'Book Now'     => array('content' => $book_now_content, 'desc' => "Direct uplink to our strategic specialists.", 'template' => 'template-full-width-glass.php'),
+            'Login'        => array('content' => '', 'desc' => "Portal authentication command node.", 'template' => 'template-portal-login.php'),
+            'Client Portal'=> array('content' => "[gp_client_portal]", 'desc' => "Secure access to project velocity and financial ledgers.", 'template' => 'template-full-width-glass.php'),
+            'Contact'      => array('content' => $this->get_contact_content(), 'desc' => "Connect with our $niche_label specialists today.", 'template' => 'template-full-width-glass.php')
         );
 
         foreach($pages as $t => $data) {
             $c = $data['content'];
             $query = new WP_Query(array( 'post_type' => 'page', 'title' => $t, 'post_status' => 'any', 'posts_per_page' => 1 ));
             if ( $query->have_posts() ) {
-                if ( $replace ) wp_update_post(array( 'ID' => $query->posts[0]->ID, 'post_content' => $c, 'post_excerpt' => $data['desc'] ));
+                $pid = $query->posts[0]->ID;
+                if ( $replace ) wp_update_post(array( 'ID' => $pid, 'post_content' => $c, 'post_excerpt' => $data['desc'] ));
             } else {
-                wp_insert_post(array( 'post_title' => $t, 'post_content' => $c, 'post_excerpt' => $data['desc'], 'post_type' => 'page', 'post_status' => 'publish' ));
+                $pid = wp_insert_post(array( 'post_title' => $t, 'post_content' => $c, 'post_excerpt' => $data['desc'], 'post_type' => 'page', 'post_status' => 'publish' ));
+            }
+
+            if ( $pid && $data['template'] ) {
+                update_post_meta( $pid, '_wp_page_template', $data['template'] );
             }
             wp_reset_postdata();
         }
+    }
+
+    private function get_contact_content() {
+        $headline = get_theme_mod('gp_contact_headline', 'Initiate Strategic Sequence');
+        $sub = get_theme_mod('gp_contact_subheadline', 'Uplink with our specialist team to calibrate your growth operating system.');
+        return "<div style='text-align:center; margin-bottom:60px;'><h1>{$headline}</h1><p>{$sub}</p></div>[gp_lead_form]";
     }
 
     private function generate_niche_funnel($n) {
