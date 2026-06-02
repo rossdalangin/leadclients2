@@ -5,15 +5,15 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Lexend:wght@400;700;800;900&display=swap" rel="stylesheet">
 	<?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
-<header id="masthead" class="site-header">
-	<div class="container" style="display:flex; justify-content:space-between; align-items:center;">
+<header id="masthead" class="site-header gp-reveal">
+	<div class="container" style="display:flex; justify-content:space-between; align-items:center; width: 100%;">
 		<div class="site-branding">
-			<?php if(has_custom_logo()) { the_custom_logo(); } else { echo '<h2 style="margin:0; font-weight:900; letter-spacing:-0.05em;">' . get_bloginfo('name') . '</h2>'; } ?>
+			<?php if(has_custom_logo()) { the_custom_logo(); } else { echo '<h2 style="margin:0; font-weight:950; letter-spacing:-0.05em; font-family:var(--font-heading);">' . get_bloginfo('name') . '</h2>'; } ?>
 		</div>
 		<nav id="site-navigation" class="main-navigation">
 			<?php
@@ -25,25 +25,25 @@
 			) );
 			?>
 		</nav>
-        <div class="header-cta" style="display: flex; gap: 20px; align-items: center;">
-            <div id="gp-theme-toggle" class="theme-toggle" title="Toggle Dark/Light Mode">
-                <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-                <svg class="moon" style="display:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <div class="header-cta" style="display: flex; gap: 30px; align-items: center;">
+            <div id="gp-theme-toggle" class="theme-toggle" title="Toggle Dark/Light Mode" style="display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:12px; background:rgba(0,0,0,0.03); border:1px solid var(--border);">
+                <svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                <svg class="moon" style="display:none;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
             </div>
-            <a href="<?php echo home_url('/book-now'); ?>" class="gp-btn" style="padding: 12px 24px; font-size: 14px; border-radius:100px;">Book Session</a>
+            <a href="<?php echo home_url('/book-now'); ?>" class="gp-btn" style="padding: 1rem 2.5rem; font-size: 11px; border-radius:100px;">Secure My Slot</a>
         </div>
 	</div>
 </header>
 <style>
-    .theme-toggle { cursor: pointer; color: var(--text); opacity: 0.6; transition: opacity 0.2s; }
-    .theme-toggle:hover { opacity: 1; }
+    .theme-toggle { cursor: pointer; color: var(--text); opacity: 0.8; transition: all 0.4s var(--ease-out-expo); }
+    .theme-toggle:hover { opacity: 1; transform: rotate(15deg) scale(1.1); background: rgba(0,0,0,0.08); }
+    #masthead.is-scrolled { height: 80px; background: rgba(var(--surface-rgb), 0.95); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
 </style>
 <script>
     const toggle = document.getElementById('gp-theme-toggle');
     const sun = toggle.querySelector('.sun');
     const moon = toggle.querySelector('.moon');
 
-    // Check for saved theme
     if (localStorage.getItem('gp_theme') === 'dark') {
         document.body.classList.add('dark-theme');
         sun.style.display = 'none';
@@ -54,9 +54,14 @@
         document.body.classList.toggle('dark-theme');
         const isDark = document.body.classList.contains('dark-theme');
         localStorage.setItem('gp_theme', isDark ? 'dark' : 'light');
-
         sun.style.display = isDark ? 'none' : 'block';
         moon.style.display = isDark ? 'block' : 'none';
+    });
+
+    window.addEventListener('scroll', () => {
+        const header = document.getElementById('masthead');
+        if (window.scrollY > 50) { header.classList.add('is-scrolled'); }
+        else { header.classList.remove('is-scrolled'); }
     });
 </script>
 <div id="content" class="site-content grainy-bg">
