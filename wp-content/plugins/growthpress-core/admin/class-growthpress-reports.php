@@ -54,13 +54,27 @@ class GrowthPress_Reports {
         $stats = $this->get_live_stats();
         $conv_rate = $stats['Total Leads'] > 0 ? round(($stats['Confirmed Bookings'] / $stats['Total Leads']) * 100, 1) : 0;
 
-        // Funnel Performance
+        // Funnel Performance & ROI
         $funnels = get_posts(array('post_type' => 'gp_funnel', 'posts_per_page' => 5));
         $funnel_data = array();
         foreach($funnels as $f) {
             $hitsA = (int)get_post_meta($f->ID, '_hits_A', true);
             $hitsB = (int)get_post_meta($f->ID, '_hits_B', true);
-            $funnel_data[] = array('title' => $f->post_title, 'hits' => $hitsA + $hitsB);
+            $convA = (int)get_post_meta($f->ID, '_conv_A', true);
+            $convB = (int)get_post_meta($f->ID, '_conv_B', true);
+            $spend = (float)get_post_meta($f->ID, '_funnel_ad_spend', true);
+            $val_est = (float)get_post_meta($f->ID, '_lead_value_est', true);
+
+            $total_conv = $convA + $convB;
+            $pipeline_gen = $total_conv * $val_est;
+            $roi = $spend > 0 ? (($pipeline_gen - $spend) / $spend) * 100 : 0;
+
+            $funnel_data[] = array(
+                'title' => $f->post_title,
+                'hits' => $hitsA + $hitsB,
+                'roi' => $roi,
+                'pipeline' => $pipeline_gen
+            );
         }
 
         // Location Distribution
@@ -102,14 +116,17 @@ class GrowthPress_Reports {
 
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-top:40px;">
                 <div class="glass-card" style="padding:40px;">
-                    <h3 style="margin-top:0;">Funnel Conversion Node Performance</h3>
+                    <h3 style="margin-top:0;">Funnel ROI & Acquisition Velocity</h3>
                     <?php if($funnel_data): foreach($funnel_data as $fd): ?>
-                        <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:13px; font-weight:700;">
-                            <span><?php echo esc_html($fd['title']); ?></span>
-                            <span style="color:var(--primary);"><?php echo $fd['hits']; ?> Traffic Hits</span>
-                        </div>
-                        <div style="height:6px; background:#F1F5F9; border-radius:10px; overflow:hidden; margin-bottom:20px;">
-                            <div style="width:<?php echo min(100, $fd['hits'] / 20); ?>%; height:100%; background:var(--primary);"></div>
+                        <div style="margin-bottom:25px; padding-bottom:15px; border-bottom:1px solid #F1F5F9;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:13px; font-weight:700;">
+                                <span><?php echo esc_html($fd['title']); ?></span>
+                                <span style="color:var(--primary);"><?php echo $fd['hits']; ?> Hits / <?php echo round($fd['roi']); ?>% ROI</span>
+                            </div>
+                            <div style="height:6px; background:#F1F5F9; border-radius:10px; overflow:hidden;">
+                                <div style="width:<?php echo min(100, $fd['roi'] / 5); ?>%; height:100%; background:<?php echo $fd['roi'] > 0 ? '#10B981' : '#EF4444'; ?>;"></div>
+                            </div>
+                            <div style="font-size:10px; opacity:0.5; margin-top:8px; font-weight:800;">PIPELINE GENERATED: $<?php echo number_format($fd['pipeline']); ?></div>
                         </div>
                     <?php endforeach; else: echo "<p style='opacity:0.5;'>Calibrating conversion nodes...</p>"; endif; ?>
                 </div>
@@ -144,9 +161,13 @@ class GrowthPress_Reports {
                         if($transactions): foreach($transactions as $t):
                             $amount = get_post_meta($t->ID, '_amount', true);
                             $status = get_post_meta($t->ID, '_status', true);
+                            $type = get_post_meta($t->ID, '_transaction_type', true) ?: 'Revenue';
                             ?>
                             <tr>
-                                <td style="font-weight:700;"><?php echo esc_html($t->post_title); ?></td>
+                                <td style="font-weight:700;">
+                                    <?php echo esc_html($t->post_title); ?>
+                                    <div style="font-size:9px; color:<?php echo $type === 'Revenue' ? '#10b981' : '#ef4444'; ?>; font-weight:950; margin-top:4px;"><?php echo strtoupper($type); ?></div>
+                                </td>
                                 <td style="font-weight:900; color:var(--primary);">$<?php echo number_format($amount); ?></td>
                                 <td><span style="background:<?php echo $status === 'Paid' ? '#D1FAE5' : '#FEF3C7'; ?>; color:<?php echo $status === 'Paid' ? '#065F46' : '#92400E'; ?>; padding:5px 12px; border-radius:30px; font-size:10px; font-weight:900;"><?php echo strtoupper($status); ?></span></td>
                                 <td style="opacity:0.5; font-size:11px; font-weight:700;"><?php echo get_the_date('M j, Y', $t->ID); ?></td>

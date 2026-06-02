@@ -27,6 +27,22 @@ function growthpress_customize_register( $wp_customize ) {
         'priority' => 30,
     ) );
 
+    // Design Style Selector
+    $wp_customize->add_setting( 'gp_design_style', array(
+        'default' => 'unisex',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'gp_design_style', array(
+        'label' => 'System Design Set',
+        'section' => 'growthpress_branding',
+        'type' => 'select',
+        'choices' => array(
+            'unisex' => 'Minimalist Modern (Unisex)',
+            'male'   => 'Bold Executive (Male Focus)',
+            'female' => 'Elegant Professional (Female Focus)',
+        ),
+    ) );
+
     // Primary Color
     $wp_customize->add_setting( 'growthpress_primary_color', array(
         'default' => '#2563EB',
@@ -101,7 +117,9 @@ add_action( 'wp_enqueue_scripts', 'growthpress_scripts' );
 
 function growthpress_body_classes( $classes ) {
     $niche = get_option( 'growthpress_niche', 'business' );
+    $design = get_theme_mod( 'gp_design_style', 'unisex' );
     $classes[] = 'gp-niche-' . $niche;
+    $classes[] = 'gp-design-' . $design;
     return $classes;
 }
 add_filter( 'body_class', 'growthpress_body_classes' );

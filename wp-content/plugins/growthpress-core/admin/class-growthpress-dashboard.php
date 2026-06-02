@@ -427,11 +427,22 @@ class GrowthPress_Dashboard {
 </section>
 <!-- /wp:group -->";
 
-        $services_content = "<h1>{$copy['service_h1']}</h1><p>{$copy['service_p']}</p>[gp_booking_form]";
+        $services_content = "<h1>{$copy['service_h1']}</h1><p>{$copy['service_p']}</p>[gp_service_grid][gp_booking_form]";
+        $pricing_content = "<h1>Strategic Investment Plans</h1><p>Select the operational tier that aligns with your growth trajectory.</p>[gp_stats_bar][gp_trust_badges]";
+        $case_studies_content = "<h1>Results & Case Studies</h1><p>Proven ROI and digital transformation metrics from our elite client partners.</p>[gp_case_study_grid]";
+        $faq_content = "<h1>Intelligence Base</h1><p>Search our neural-indexed knowledge base for technical and strategic insights.</p>[gp_kb_search][gp_kb_grid]";
+        $mission_content = "<h1>Our Mission</h1><p>We are dedicated to engineering the world's most advanced business growth operating systems.</p>[gp_stats_bar]";
+        $book_now_content = "<h1>Secure Your Session</h1><p>Book a direct briefing with our specialist team.</p>[gp_booking_form]";
 
         $pages = array(
             'Home'         => array('content' => $home_content, 'desc' => "Transform your $niche_label business with our AI-powered operating system."),
             'Services'     => array('content' => $services_content, 'desc' => "Explore our elite $niche_label services designed for high-ticket growth."),
+            'Pricing'      => array('content' => $pricing_content, 'desc' => "Transparent investment tiers for enterprise scaling."),
+            'Case Studies' => array('content' => $case_studies_content, 'desc' => "Verified ROI profiles and success stories."),
+            'FAQ'          => array('content' => $faq_content, 'desc' => "Instant answers from our neural intelligence base."),
+            'Our Mission'  => array('content' => $mission_content, 'desc' => "The vision behind the GrowthPress ecosystem."),
+            'Book Now'     => array('content' => $book_now_content, 'desc' => "Direct uplink to our strategic specialists."),
+            'Client Portal' => array('content' => "[gp_client_portal]", 'desc' => "Secure access to project velocity and financial ledgers."),
             'Contact'      => array('content' => "[gp_lead_form]", 'desc' => "Connect with our $niche_label specialists today.")
         );
 

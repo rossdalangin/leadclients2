@@ -236,6 +236,7 @@ class GrowthPress_CRM {
         add_meta_box( 'gp_task_details', 'Task Context', array( $this, 'render_task_meta' ), 'gp_task', 'normal', 'high' );
         add_meta_box( 'gp_project_details', 'Success ROI Data', array( $this, 'render_project_meta' ), 'gp_project', 'normal', 'high' );
         add_meta_box( 'gp_service_details', 'Service Line Strategy', array( $this, 'render_service_meta' ), 'gp_service', 'normal', 'high' );
+        add_meta_box( 'gp_kb_details', 'Strategic Intelligence Calibration', array( $this, 'render_kb_meta' ), 'gp_kb', 'normal', 'high' );
     }
 
     public function render_lead_ecosystem_meta( $post ) {
@@ -347,6 +348,38 @@ class GrowthPress_CRM {
             <tr>
                 <th><label>AI Nurture Sequence</label><p class="description">Custom 5-day campaign generated for this lead. Use this as a script for manual outreach or review for automation.</p></th>
                 <td><textarea name="gp_lead_nurture" style="width:100%; height:150px;"><?php echo esc_textarea($nurture); ?></textarea></td>
+            </tr>
+        </table>
+        <?php
+    }
+
+    public function render_kb_meta( $post ) {
+        $level = get_post_meta( $post->ID, '_kb_intel_level', true ) ?: 'Basic';
+        $access = get_post_meta( $post->ID, '_kb_access_control', true ) ?: 'Public';
+        ?>
+        <div style="background: #fdf2f8; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #db2777;">
+            <p style="margin: 0; font-size: 13px; color: #9d174d;"><strong>Neural Hub Calibration:</strong> KB articles power the 'AI FAQ' and 'Content Studio'. Set the 'Intelligence Level' to dictate how the AI utilizes this article as context in strategic conversations.</p>
+        </div>
+        <table class="form-table">
+            <tr>
+                <th><label>Intelligence Level</label><p class="description">Defines depth of analysis. 'Executive' articles are prioritized for high-stakes AI responses.</p></th>
+                <td>
+                    <select name="gp_kb_level" style="width:100%;">
+                        <option value="Basic" <?php selected($level, 'Basic'); ?>>Basic - General Overview</option>
+                        <option value="Advanced" <?php selected($level, 'Advanced'); ?>>Advanced - Technical Implementation</option>
+                        <option value="Executive" <?php selected($level, 'Executive'); ?>>Executive - Strategic Strategy</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label>Access Control</label><p class="description">Determines visibility in the Client Portal and Intelligence search.</p></th>
+                <td>
+                    <select name="gp_kb_access" style="width:100%;">
+                        <option value="Public" <?php selected($access, 'Public'); ?>>Public - All Visitors</option>
+                        <option value="Client" <?php selected($access, 'Client'); ?>>Client - Authenticated Portal Only</option>
+                        <option value="Internal" <?php selected($access, 'Internal'); ?>>Internal - Team & AI Agent Only</option>
+                    </select>
+                </td>
             </tr>
         </table>
         <?php
@@ -501,6 +534,11 @@ class GrowthPress_CRM {
 
         if ( isset( $_POST['gp_service_icon'] ) ) {
             update_post_meta( $post_id, '_gp_service_icon', sanitize_text_field( $_POST['gp_service_icon'] ) );
+        }
+
+        if ( isset( $_POST['gp_kb_level'] ) ) {
+            update_post_meta( $post_id, '_kb_intel_level', sanitize_text_field( $_POST['gp_kb_level'] ) );
+            update_post_meta( $post_id, '_kb_access_control', sanitize_text_field( $_POST['gp_kb_access'] ) );
         }
     }
 

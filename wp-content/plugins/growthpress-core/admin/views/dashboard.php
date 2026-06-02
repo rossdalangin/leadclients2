@@ -228,17 +228,27 @@
             </div>
 
             <!-- Revenue ROI Hub -->
-            <div class="glass-card gp-reveal" style="margin-bottom:30px; background:var(--primary); color:white; border:none;">
+            <div class="glass-card gp-reveal" style="margin-bottom:30px; background:var(--primary); color:white; border:none; position:relative;">
+                <div style="position:absolute; top:20px; right:20px; cursor:help; opacity:0.5;" title="Calculated from 'Paid' Revenue transactions vs pending Pipeline Equity.">ⓘ</div>
                 <h3 style="color:white; font-size:14px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6; margin-bottom:25px; font-weight:950;">Revenue Analytics</h3>
                 <div style="display:grid; gap:20px;">
                     <div>
                         <div style="font-size:10px; font-weight:900; opacity:0.6; letter-spacing:1px; margin-bottom:5px;">EARNED EQUITY</div>
                         <div style="font-size:24px; font-weight:950;">$<?php
-                            $earned = 0;
-                            $paid_tx = get_posts(array('post_type'=>'gp_transaction', 'meta_key'=>'_status', 'meta_value'=>'Paid', 'posts_per_page'=>-1));
-                            foreach($paid_tx as $tx) $earned += (float)get_post_meta($tx->ID, '_amount', true);
-                            echo number_format($earned);
+                            $revenue = 0; $expenses = 0;
+                            $transactions = get_posts(array('post_type'=>'gp_transaction', 'meta_key'=>'_status', 'meta_value'=>'Paid', 'posts_per_page'=>-1));
+                            foreach($transactions as $tx) {
+                                $amt = (float)get_post_meta($tx->ID, '_amount', true);
+                                $type = get_post_meta($tx->ID, '_transaction_type', true) ?: 'Revenue';
+                                if($type === 'Revenue') $revenue += $amt; else $expenses += $amt;
+                            }
+                            echo number_format($revenue);
                         ?></div>
+                    </div>
+                    <div style="height:1px; background:rgba(255,255,255,0.1);"></div>
+                    <div>
+                        <div style="font-size:10px; font-weight:900; opacity:0.6; letter-spacing:1px; margin-bottom:5px;">OPERATING EXPENSES (OpEx)</div>
+                        <div style="font-size:24px; font-weight:950; color:#FFA4A4;">$<?php echo number_format($expenses); ?></div>
                     </div>
                     <div style="height:1px; background:rgba(255,255,255,0.1);"></div>
                     <div>
@@ -287,7 +297,8 @@
             </div>
 
             <!-- Conversion Command -->
-            <div class="glass-card" style="background: var(--secondary); color: white; border: none; border-radius:40px; padding:45px; margin-top:40px;">
+            <div class="glass-card" style="background: var(--secondary); color: white; border: none; border-radius:40px; padding:45px; margin-top:40px; position:relative;">
+                <div style="position:absolute; top:20px; right:20px; cursor:help; opacity:0.3;" title="Traffic share and conversion velocity across the entire ecosystem.">ⓘ</div>
                 <h3 style="color: white; font-size: 16px; letter-spacing:1px; font-weight:950;">Funnel Command</h3>
                 <div style="height:280px; display:flex; align-items:flex-end; gap:25px; padding: 40px 0;">
                     <div style="flex:1; height:100%; background:var(--primary); border-radius:15px; display:flex; align-items:center; justify-content:center; color:white; font-size:11px; font-weight:950; writing-mode:vertical-rl; box-shadow:0 0 25px var(--primary-glow);">INTAKE</div>

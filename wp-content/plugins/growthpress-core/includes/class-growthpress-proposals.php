@@ -35,6 +35,7 @@ class GrowthPress_Proposals {
         $cols['_email'] = 'Recipient';
         $cols['_status'] = 'Status';
         $cols['_val'] = 'Value';
+        $cols['_expires'] = 'Expires';
         return $cols;
     }
 
@@ -46,6 +47,15 @@ class GrowthPress_Proposals {
             echo "<span style='color:".($colors[$status] ?? '#000')."; font-weight:bold;'>$status</span>";
         }
         if ( $col === '_val' ) echo '$' . number_format(get_post_meta( $post_id, '_proposal_value', true ));
+        if ( $col === '_expires' ) {
+            $exp = get_post_meta( $post_id, '_proposal_expires', true );
+            if($exp) {
+                $is_expired = strtotime($exp) < time();
+                echo '<span style="'.($is_expired ? 'color:#ef4444; font-weight:bold;' : '').'">'.$exp.'</span>';
+            } else {
+                echo '-';
+            }
+        }
     }
 
     public function add_proposal_meta_boxes() {
@@ -61,6 +71,8 @@ class GrowthPress_Proposals {
         $email = get_post_meta( $post->ID, '_proposal_recipient', true );
         $value = get_post_meta( $post->ID, '_proposal_value', true );
         $expires = get_post_meta( $post->ID, '_proposal_expires', true );
+        $revision = get_post_meta( $post->ID, '_proposal_revision', true ) ?: 1;
+        $signed = get_post_meta( $post->ID, '_is_digitally_signed', true );
         $terms = get_post_meta( $post->ID, '_proposal_terms', true );
         $leads = get_posts( array( 'post_type' => 'gp_lead', 'posts_per_page' => -1 ) );
         $services = get_posts( array( 'post_type' => 'gp_service', 'posts_per_page' => -1 ) );
@@ -132,8 +144,16 @@ class GrowthPress_Proposals {
                 <td><input type="number" name="gp_proposal_value" value="<?php echo esc_attr($value); ?>" class="regular-text"></td>
             </tr>
             <tr>
+                <th><label>Proposal Revision</label><p class="description">Current version of the strategic architecture.</p></th>
+                <td><input type="number" name="gp_proposal_rev" value="<?php echo esc_attr($revision); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
                 <th><label>Expiration Date</label><p class="description">The date this strategic offer becomes void.</p></th>
                 <td><input type="date" name="gp_proposal_expires" value="<?php echo esc_attr($expires); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Signature Status</label><p class="description">Confirmation of digital execution via the client portal.</p></th>
+                <td><input type="checkbox" name="gp_proposal_signed" value="1" <?php checked($signed, '1'); ?>> Marked as Signed</td>
             </tr>
             <tr>
                 <th><label>Custom Client Terms</label><p class="description">Specific conditions or project-level nuances for this agreement.</p></th>
@@ -191,7 +211,9 @@ class GrowthPress_Proposals {
         update_post_meta( $post_id, '_proposal_type', sanitize_text_field( $_POST['gp_proposal_type'] ) );
         update_post_meta( $post_id, '_internal_approval', sanitize_text_field( $_POST['gp_internal_approval'] ) );
         update_post_meta( $post_id, '_proposal_value', floatval( $_POST['gp_proposal_value'] ) );
+        update_post_meta( $post_id, '_proposal_revision', intval( $_POST['gp_proposal_rev'] ) );
         update_post_meta( $post_id, '_proposal_expires', sanitize_text_field( $_POST['gp_proposal_expires'] ) );
+        update_post_meta( $post_id, '_is_digitally_signed', isset($_POST['gp_proposal_signed']) ? '1' : '0' );
         update_post_meta( $post_id, '_proposal_terms', wp_kses_post( $_POST['gp_proposal_terms'] ) );
     }
 

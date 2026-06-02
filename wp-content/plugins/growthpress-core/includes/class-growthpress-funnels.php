@@ -23,6 +23,7 @@ class GrowthPress_Funnels {
     public function funnel_columns( $cols ) {
         $cols['_hits'] = 'Total Traffic';
         $cols['_conv'] = 'Conv. Rate';
+        $cols['_roi'] = 'Funnel ROI';
         return $cols;
     }
 
@@ -37,6 +38,14 @@ class GrowthPress_Funnels {
             $total_hits = ($a + $b) ?: 1;
             $total_conv = ($ca + $cb);
             echo round(($total_conv / $total_hits) * 100, 2) . '%';
+        }
+        if ( $col === '_roi' ) {
+            $spend = (float)get_post_meta($post_id, '_funnel_ad_spend', true);
+            $val_est = (float)get_post_meta($post_id, '_lead_value_est', true);
+            $total_conv = ($ca + $cb);
+            $pipeline_gen = $total_conv * $val_est;
+            $roi = $spend > 0 ? (($pipeline_gen - $spend) / $spend) * 100 : 0;
+            echo '<span style="color:'.($roi > 0 ? '#10b981' : '#ef4444').'; font-weight:bold;">'.round($roi).'%</span>';
         }
     }
 
@@ -53,6 +62,8 @@ class GrowthPress_Funnels {
         $urlB = get_post_meta( $post->ID, '_url_B', true );
         $goal = get_post_meta( $post->ID, '_conversion_goal', true ) ?: 'Lead Capture';
         $strategy = get_post_meta( $post->ID, '_winning_strategy_note', true );
+        $cost = get_post_meta( $post->ID, '_funnel_ad_spend', true ) ?: 0;
+        $val = get_post_meta( $post->ID, '_lead_value_est', true ) ?: 500;
 
         $rateA = $hitsA > 0 ? round(($convA / $hitsA) * 100, 2) : 0;
         $rateB = $hitsB > 0 ? round(($convB / $hitsB) * 100, 2) : 0;
@@ -100,6 +111,14 @@ class GrowthPress_Funnels {
                 <td><input type="text" name="gp_conv_goal" value="<?php echo esc_attr($goal); ?>" class="regular-text"></td>
             </tr>
             <tr>
+                <th><label>Ad Spend / Acquisition Cost ($)</label><p class="description">Total investment in traffic for this funnel lifecycle.</p></th>
+                <td><input type="number" name="gp_funnel_cost" value="<?php echo esc_attr($cost); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
+                <th><label>Projected Lead Value ($)</label><p class="description">Average strategic value of a single lead captured here.</p></th>
+                <td><input type="number" name="gp_lead_val" value="<?php echo esc_attr($val); ?>" class="regular-text"></td>
+            </tr>
+            <tr>
                 <th><label>Winning Strategy Note</label><p class="description">Document why the winning variation outperformed the control for future funnel optimizations.</p></th>
                 <td><textarea name="gp_winning_strategy" style="width:100%; height:100px;"><?php echo esc_textarea($strategy); ?></textarea></td>
             </tr>
@@ -116,6 +135,8 @@ class GrowthPress_Funnels {
         update_post_meta( $post_id, '_conv_B', intval( $_POST['gp_conv_b'] ) );
         update_post_meta( $post_id, '_url_A', esc_url_raw( $_POST['gp_url_a'] ) );
         update_post_meta( $post_id, '_url_B', esc_url_raw( $_POST['gp_url_b'] ) );
+        update_post_meta( $post_id, '_funnel_ad_spend', floatval( $_POST['gp_funnel_cost'] ) );
+        update_post_meta( $post_id, '_lead_value_est', floatval( $_POST['gp_lead_val'] ) );
         update_post_meta( $post_id, '_conversion_goal', sanitize_text_field( $_POST['gp_conv_goal'] ) );
         update_post_meta( $post_id, '_winning_strategy_note', sanitize_textarea_field( $_POST['gp_winning_strategy'] ) );
     }

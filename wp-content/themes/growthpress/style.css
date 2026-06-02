@@ -8,7 +8,7 @@ Text Domain: growthpress
 */
 
 :root {
-    /* v4.0 Ultra Elite Design System */
+    /* Default / Unisex Design System */
     --primary: #2563EB;
     --primary-alt: #1D4ED8;
     --primary-glow: rgba(37, 99, 235, 0.28);
@@ -18,8 +18,60 @@ Text Domain: growthpress
     --surface: #FFFFFF;
     --text: #1E293B;
     --border: #E2E8F0;
+    --radius: 30px;
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
     --transition: 0.7s var(--ease-out-expo);
+}
+
+/* Male Owner: Bold, Sharp, Deep Slates */
+body.gp-design-male {
+    --primary: #1E293B;
+    --primary-alt: #0F172A;
+    --primary-glow: rgba(15, 23, 42, 0.2);
+    --secondary: #2563EB;
+    --accent: #38BDF8;
+    --bg: #0F172A;
+    --surface: #1E293B;
+    --surface-rgb: 30, 41, 59;
+    --text: #F1F5F9;
+    --border: #334155;
+    --radius: 8px;
+    --font-heading: 'Inter', sans-serif;
+    --weight-heading: 950;
+}
+
+/* Female Owner: Soft, Elegant, Rose & Gold */
+body.gp-design-female {
+    --primary: #BE185D;
+    --primary-alt: #9D174D;
+    --primary-glow: rgba(190, 24, 93, 0.15);
+    --secondary: #92400E; /* Gold touch */
+    --accent: #F472B6;
+    --bg: #FFF1F2;
+    --surface: #FFFFFF;
+    --surface-rgb: 255, 255, 255;
+    --text: #4C0519;
+    --border: #FFE4E6;
+    --radius: 60px;
+    --font-heading: 'Inter', sans-serif;
+    --weight-heading: 800;
+}
+
+/* Unisex: Minimalist, Modern, Indigo */
+body.gp-design-unisex {
+    --primary: #4F46E5;
+    --primary-alt: #4338CA;
+    --primary-glow: rgba(79, 70, 229, 0.2);
+    --secondary: #1E1B4B;
+    --accent: #818CF8;
+    --bg: #F9FAFB;
+    --surface: #FFFFFF;
+    --surface-rgb: 255, 255, 255;
+    --text: #111827;
+    --border: #F3F4F6;
+    --radius: 30px;
+    --font-heading: 'Inter', sans-serif;
+    --weight-heading: 900;
 }
 
 body.dark-theme {
@@ -32,11 +84,11 @@ body.dark-theme {
 
 /* Glassmorphism v4.0 Ultimate */
 .glass-card, .gp-estimator, .gp-solar-calc, .gp-symptom-checker, .gp-ai-faq, .gp-insurance-optimizer, .gp-legal-intake {
-    background: rgba(255, 255, 255, 0.88);
+    background: rgba(var(--surface-rgb, 255, 255, 255), 0.88);
     backdrop-filter: blur(50px) saturate(200%);
     -webkit-backdrop-filter: blur(50px) saturate(200%);
     border: 1px solid rgba(255, 255, 255, 0.7);
-    border-radius: 50px;
+    border-radius: var(--radius);
     padding: 6rem;
     box-shadow:
         0 15px 30px rgba(0,0,0,0.03),
@@ -63,8 +115,8 @@ body.dark-theme {
 }
 
 /* Elite Typography Scale v4.0 */
-h1 { font-size: clamp(5rem, 16vw, 10rem); line-height: 0.8; font-weight: 950; letter-spacing: -0.09em; }
-h2 { font-size: clamp(3.5rem, 12vw, 6rem); font-weight: 900; letter-spacing: -0.07em; line-height: 0.95; }
+h1 { font-family: var(--font-heading); font-size: clamp(5rem, 16vw, 10rem); line-height: 0.8; font-weight: var(--weight-heading); letter-spacing: -0.09em; }
+h2 { font-family: var(--font-heading); font-size: clamp(3.5rem, 12vw, 6rem); font-weight: var(--weight-heading); letter-spacing: -0.07em; line-height: 0.95; }
 
 .text-gradient {
     background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
@@ -75,7 +127,7 @@ h2 { font-size: clamp(3.5rem, 12vw, 6rem); font-weight: 900; letter-spacing: -0.
 /* Ultra Magnetic Button v4.0 */
 .gp-btn, .wp-block-button__link {
     background: var(--primary); color: white !important;
-    padding: 1.8rem 4.5rem; border-radius: 100px; font-weight: 950;
+    padding: 1.8rem 4.5rem; border-radius: var(--radius); font-weight: 950;
     text-transform: uppercase; letter-spacing: 0.2em; cursor: pointer;
     border: none; box-shadow: 0 30px 60px -10px var(--primary-glow);
     transition: 0.5s var(--ease-out-expo);

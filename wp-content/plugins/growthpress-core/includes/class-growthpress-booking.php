@@ -242,7 +242,7 @@ class GrowthPress_Booking {
             update_post_meta( $id, '_client_email', $email );
 
             // Link to Lead if exists
-            $leads = get_posts( array( 'post_type' => 'gp_lead', 'meta_key' => '_lead_email', 'meta_value' => $email, 'number' => 1 ) );
+            $leads = get_posts( array( 'post_type' => 'gp_lead', 'meta_key' => '_lead_email', 'meta_value' => $email, 'posts_per_page' => 1 ) );
             if ( ! empty($leads) ) {
                 $lead_id = $leads[0]->ID;
                 update_post_meta( $id, '_related_lead', $lead_id );
