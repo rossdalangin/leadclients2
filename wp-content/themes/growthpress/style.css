@@ -163,7 +163,7 @@ h2 { font-family: var(--font-heading, 'Inter'); font-size: var(--step-4); font-w
 h3 { font-size: var(--step-2); font-weight: 800; letter-spacing: -0.03em; }
 
 .text-gradient {
-    background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+    background: var(--elite-gradient, linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }

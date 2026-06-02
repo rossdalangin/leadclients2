@@ -224,6 +224,8 @@ class GrowthPress_Dashboard {
         $suggested = get_post_meta($lead_id, '_gp_ai_suggested_reply', true) ?: 'Drafting personalized response...';
         $nudge = get_post_meta($lead_id, '_gp_behavioral_nudge', true);
         $nurture = get_post_meta($lead_id, '_gp_nurture_sequence', true);
+        $ai = GrowthPress_AI::get_instance();
+        $next_step = $ai->call_ai("Based on this lead data: \"{$lead->post_content}\" and probability of $prob%, what is the single most important strategic next step? Return ONE short sentence.", "Senior Strategist");
         $loc_id = get_post_meta($lead_id, '_assigned_location', true);
         $location = $loc_id ? get_post($loc_id) : null;
 
@@ -270,6 +272,10 @@ class GrowthPress_Dashboard {
                 </div>
                 <div class="brief-main">
                     <h3 style="margin-top:0;"><?php echo esc_html($lead->post_title); ?></h3>
+                    <div style="background:#F0FDF4; border:1px solid #DCFCE7; padding:20px; border-radius:15px; margin-bottom:25px;">
+                        <div style="font-size:10px; font-weight:950; color:#166534; letter-spacing:1px; margin-bottom:8px;">STRATEGIC RECOMMENDATION</div>
+                        <div style="font-size:14px; font-weight:700; color:#166534; line-height:1.4;"><?php echo esc_html($next_step); ?></div>
+                    </div>
                     <div style="font-size:13px; background:#FFFBEB; padding:20px; border-radius:15px; border:1px solid #FEF3C7; color:#92400E; margin-bottom:25px;">
                         <strong>AI Discovery Strategy:</strong><br>
                         <?php echo nl2br(esc_html($discovery)); ?>

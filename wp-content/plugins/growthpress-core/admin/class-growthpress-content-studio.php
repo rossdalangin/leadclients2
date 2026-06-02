@@ -73,6 +73,7 @@ class GrowthPress_Content_Studio {
             case 'project': $result = $ai->call_ai("Generate a high-ticket Case Study for \"$topic\". $context", "Success Storywriter"); break;
             case 'inventory': $result = $ai->call_ai("Generate a luxury Portfolio listing for \"$topic\". $context", "Elite Marketer"); break;
             case 'kb': $result = $ai->call_ai("Generate a technical Knowledge Base article for \"$topic\". $context", "Knowledge Specialist"); break;
+            case 'treatment': $result = $ai->call_ai("Generate a specialized Clinical Treatment Protocol for \"$topic\". Include duration, complexity, and clinical outcomes. $context", "Medical Director AI"); break;
             default: $result = 'Invalid selection.';
         }
 
@@ -110,6 +111,7 @@ class GrowthPress_Content_Studio {
                             <option value="service">Service Line Description</option>
                             <option value="project">High-Ticket Case Study</option>
                             <option value="kb">Technical KB Article</option>
+                            <option value="treatment">Clinical Treatment Protocol</option>
                         </select>
                     </div>
 
@@ -169,6 +171,7 @@ class GrowthPress_Content_Studio {
                         <button class="sync-btn" onclick="syncAsset('gp_service')" style="--sync-color: #0F172A;">Sync to Service Lines</button>
                         <button class="sync-btn" onclick="syncAsset('gp_project')" style="--sync-color: #10B981;">Sync to Case Studies</button>
                         <button class="sync-btn" onclick="syncAsset('gp_property')" style="--sync-color: #F59E0B;">Sync to Inventory</button>
+                        <button class="sync-btn" onclick="syncAsset('gp_treatment')" style="--sync-color: #EF4444;">Sync to Treatments</button>
                     </div>
 
                     <hr style="margin:40px 0; opacity:0.1;">

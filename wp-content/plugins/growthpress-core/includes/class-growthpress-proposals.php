@@ -241,10 +241,16 @@ class GrowthPress_Proposals {
         $niche = get_option('growthpress_niche', 'business');
         $ai = GrowthPress_AI::get_instance();
 
+        $sentiment = get_post_meta($lead_id, '_gp_ai_sentiment_json', true);
+        $prob = get_post_meta($lead_id, '_gp_ai_probability', true) ?: 50;
+
         $proposal_content = $ai->generate_proposal(array(
-            'title'   => $lead->post_title,
-            'service' => "Advanced $niche Solutions",
-            'niche'   => $niche
+            'title'     => $lead->post_title,
+            'service'   => "Advanced $niche Solutions",
+            'niche'     => $niche,
+            'inquiry'   => $lead->post_content,
+            'sentiment' => $sentiment,
+            'prob'      => $prob
         ));
 
         $proposal_id = wp_insert_post(array(

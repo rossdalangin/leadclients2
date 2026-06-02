@@ -36,6 +36,17 @@ function growthpress_customize_register( $wp_customize ) {
     $wp_customize->add_setting( 'growthpress_primary_color', array( 'default' => '#4F46E5', 'sanitize_callback' => 'sanitize_hex_color' ) );
     $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'growthpress_primary_color', array( 'label' => 'Primary Brand Color', 'section' => 'growthpress_branding' ) ) );
 
+    $wp_customize->add_setting( 'gp_elite_gradient', array( 'default' => 'linear-gradient(135deg, #1E1B4B 0%, #4F46E5 100%)', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_elite_gradient', array(
+        'label' => 'Elite Aesthetic Gradient', 'section' => 'growthpress_branding', 'type' => 'select',
+        'choices' => array(
+            'linear-gradient(135deg, #1E1B4B 0%, #4F46E5 100%)' => 'Midnight Indigo (Unisex)',
+            'linear-gradient(135deg, #020617 0%, #2563EB 100%)' => 'Deep Blue Executive (Male)',
+            'linear-gradient(135deg, #4C0519 0%, #BE185D 100%)' => 'Royal Rose Luxe (Female)',
+            'linear-gradient(135deg, #064E3B 0%, #10B981 100%)' => 'Emerald Growth (Green)'
+        ),
+    ) );
+
     // 2. Homepage Hero Engine
     $wp_customize->add_section( 'growthpress_homepage', array( 'title' => 'Homepage Hero Engine', 'priority' => 31 ) );
     $wp_customize->add_setting( 'gp_hero_headline', array( 'default' => 'Transform Your Business with AI Intelligence', 'sanitize_callback' => 'sanitize_text_field' ) );
@@ -81,7 +92,8 @@ function growthpress_scripts() {
     wp_enqueue_style( 'growthpress-mobile-cta', get_template_directory_uri() . '/mobile-cta.css' );
 
     $primary = get_theme_mod( 'growthpress_primary_color', '#4F46E5' );
-    wp_add_inline_style( 'growthpress-style', ":root { --primary: $primary; }" );
+    $gradient = get_theme_mod( 'gp_elite_gradient', 'linear-gradient(135deg, #1E1B4B 0%, #4F46E5 100%)' );
+    wp_add_inline_style( 'growthpress-style', ":root { --primary: $primary; --elite-gradient: $gradient; }" );
 
     if ( defined( 'GROWTHPRESS_CORE_URL' ) ) {
 	    wp_enqueue_script( 'growthpress-frontend-js', GROWTHPRESS_CORE_URL . 'assets/js/frontend.js', array('jquery'), '1.0.0', true );

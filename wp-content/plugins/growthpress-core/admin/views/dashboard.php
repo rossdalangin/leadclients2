@@ -138,9 +138,17 @@
 
                                         <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                                             <div>
-                                                <?php $tag = wp_get_object_terms($lead->ID, 'gp_lead_tag', array('fields' => 'names')); if($tag): ?>
-                                                    <div style="font-size:10px; background:var(--primary-glow); color:var(--primary); display:inline-block; padding:6px 15px; border-radius:30px; margin-bottom:20px; font-weight:900; text-transform: uppercase; letter-spacing:1px; border:1px solid rgba(37,99,235,0.08);"><?php echo esc_html($tag[0]); ?></div>
-                                                <?php endif; ?>
+                                                <?php
+                                                $sentiment_raw = get_post_meta($lead->ID, '_gp_ai_sentiment_json', true);
+                                                $sentiment_data = json_decode($sentiment_raw, true);
+                                                $urgency = $sentiment_data['urgency'] ?? 5;
+                                                ?>
+                                                <div style="display:flex; gap:5px; margin-bottom:15px;">
+                                                    <?php $tag = wp_get_object_terms($lead->ID, 'gp_lead_tag', array('fields' => 'names')); if($tag): ?>
+                                                        <div style="font-size:8px; background:var(--primary-glow); color:var(--primary); padding:4px 10px; border-radius:30px; font-weight:900; text-transform: uppercase; letter-spacing:1px; border:1px solid rgba(37,99,235,0.08);"><?php echo esc_html($tag[0]); ?></div>
+                                                    <?php endif; ?>
+                                                    <div style="font-size:8px; background:<?php echo $urgency > 7 ? '#FEF2F2' : '#F0FDF4'; ?>; color:<?php echo $urgency > 7 ? '#EF4444' : '#10B981'; ?>; padding:4px 10px; border-radius:30px; font-weight:900; text-transform: uppercase; letter-spacing:1px; border:1px solid <?php echo $urgency > 7 ? '#FEE2E2' : '#DCFCE7'; ?>;">URGENCY: <?php echo $urgency; ?></div>
+                                                </div>
                                                 <div style="font-size:12px; font-weight:950; color:#10B981; letter-spacing:0.5px;">PROBABILITY: <?php echo $prob; ?>%</div>
                                             </div>
 

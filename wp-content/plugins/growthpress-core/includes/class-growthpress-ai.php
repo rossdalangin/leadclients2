@@ -146,8 +146,18 @@ class GrowthPress_AI {
     }
 
     public function generate_proposal( $data ) {
-        $niche = isset($data['niche']) ? $data['niche'] : 'general';
-        return $this->call_ai( "Generate a professional business growth proposal for a {$niche} client.", "Proposal Architect" );
+        $niche = $data['niche'] ?? 'general';
+        $inquiry = $data['inquiry'] ?? 'No inquiry provided';
+        $sentiment = $data['sentiment'] ?? 'Neutral';
+        $prob = $data['prob'] ?? 50;
+
+        $prompt = "Generate a professional business growth proposal for a client in the $niche industry.\n";
+        $prompt .= "Client Inquiry: \"$inquiry\"\n";
+        $prompt .= "Sentiment Analysis: $sentiment\n";
+        $prompt .= "Closing Probability: $prob%\n";
+        $prompt .= "Structure: Executive Summary, Strategic Solution, Implementation Timeline, and ROI Forecast.";
+
+        return $this->call_ai( $prompt, "Proposal Architect Specialist" );
     }
 
     public function generate_missed_call_reply( $caller_number ) {
