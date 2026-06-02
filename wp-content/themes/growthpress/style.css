@@ -34,6 +34,13 @@ Text Domain: growthpress
     --step-5: clamp(3.05rem, 1.78rem + 6.36vw, 7.25rem);
 }
 
+/* Selection & Scrollbar Styling */
+::selection { background: var(--primary); color: white; }
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; border: 3px solid var(--bg); }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
 /* Personality Node: Male Focus - Bold, Sharp, High-Density */
 body.gp-design-male {
     --primary: #0F172A;
@@ -102,6 +109,7 @@ body {
     z-index: 1000;
     background: rgba(var(--surface-rgb), 0.8);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
     transition: var(--transition);
 }
@@ -215,6 +223,14 @@ input, select, textarea {
 input:focus, select:focus, textarea:focus {
     outline: none; border-color: var(--primary); background: rgba(var(--surface-rgb), 1);
     box-shadow: 0 0 0 4px var(--primary-glow);
+}
+
+/* Mobile CTA Bar Glass-Blur */
+.gp-mobile-cta-bar {
+    background: rgba(var(--surface-rgb), 0.7);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-top: 1px solid var(--border);
 }
 
 /* Mobile CTA Optimization */

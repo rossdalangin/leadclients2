@@ -183,7 +183,7 @@ class GrowthPress_Dashboard {
             wp_add_inline_style( 'growthpress-admin-css', $custom_css );
         }
 
-        if ( 'toplevel_page_growthpress-dashboard' === $hook || strpos($hook, 'growthpress-studio') !== false ) {
+        if ( 'toplevel_page_growthpress-dashboard' === $hook || strpos($hook, 'growthpress-studio') !== false || strpos($hook, 'growthpress-reports') !== false ) {
             wp_enqueue_script( 'chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', array(), '3.9.1', true );
             wp_enqueue_script( 'jquery-ui-draggable' );
             wp_enqueue_script( 'jquery-ui-droppable' );

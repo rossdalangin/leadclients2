@@ -77,20 +77,24 @@ jQuery(document).ready(function($) {
     window.generateContent = function() {
         var $out = $('#gp-studio-output');
         var $actions = $('#gp-studio-actions');
-        $out.html('AI Strategist is calculating...');
+        var tone = $('.tone-btn.active').data('tone');
+
+        $out.html('<span style="opacity:0.3;">// AI Strategist is calculating with ' + tone + ' tone...</span>');
         $actions.hide();
 
         $.post(ajaxurl, {
             action: 'gp_generate_content',
             content_type: $('#gp-content-type').val(),
             topic: $('#gp-content-topic').val(),
+            tone: tone,
             gp_nonce: gp_admin.nonce
         }, function(res) {
             if (res.success) {
                 $out.html('<div class="ai-response">' + res.data.replace(/\n/g, '<br>') + '</div>');
-                $actions.css('display', 'flex');
+                $('#preview-body').html(res.data.replace(/\n/g, '<br>'));
+                $actions.css('display', 'grid');
             } else {
-                $out.html('Error generating content.');
+                $out.html('Error generating content: ' + res.data);
             }
         });
     };
