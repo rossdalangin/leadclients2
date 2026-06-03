@@ -56,24 +56,26 @@ jQuery(document).ready(function($) {
         });
     }, { threshold: 0.12, rootMargin: "0px 0px -100px 0px" });
 
-    $('.glass-card, section, h1, h2, .gp-btn, .wp-block-column').each(function() {
-        $(this).addClass('gp-reveal');
+    $('.glass-card, section, h1, h2, .gp-btn, .wp-block-column').each(function(i) {
+        $(this).addClass('gp-reveal').attr('data-delay', i * 100);
         revealObserver.observe(this);
     });
 
-    // Ultra Magnetic Physics v4.0 (Custom Trailing Cursor Integration)
+    // Ultra Magnetic Physics v5.5 (Spring-based Interaction)
     $(document).on('mousemove', '.gp-btn, #gp-chat-launcher, .staff-avatar', function(e) {
         const rect = this.getBoundingClientRect();
-        const x = (e.clientX - rect.left - rect.width / 2) / 4.5;
-        const y = (e.clientY - rect.top - rect.height / 2) / 4.5;
+        const x = (e.clientX - rect.left - rect.width / 2) / 3.5;
+        const y = (e.clientY - rect.top - rect.height / 2) / 3.5;
         $(this).css({
-            'transform': `translate(${x}px, ${y}px) scale(1.1)`,
-            'box-shadow': '0 30px 60px rgba(0,0,0,0.15)'
+            'transform': `translate(${x}px, ${y}px) scale(1.08) rotate(${x/10}deg)`,
+            'box-shadow': '0 40px 80px rgba(0,0,0,0.18)',
+            'transition': 'transform 0.1s cubic-bezier(0.23, 1, 0.32, 1)'
         });
     }).on('mouseleave', '.gp-btn, #gp-chat-launcher, .staff-avatar', function() {
         $(this).css({
             'transform': '',
-            'box-shadow': ''
+            'box-shadow': '',
+            'transition': 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
         });
     });
 

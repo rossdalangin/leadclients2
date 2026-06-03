@@ -20,11 +20,16 @@ add_action( 'after_setup_theme', 'growthpress_setup' );
  * Register Customizer Settings
  */
 function growthpress_customize_register( $wp_customize ) {
+    // Panels for Organization
+    $wp_customize->add_panel( 'gp_design_architecture', array( 'title' => '1. Design Architecture', 'priority' => 30 ) );
+    $wp_customize->add_panel( 'gp_content_hubs', array( 'title' => '2. Content Hub Strategy', 'priority' => 31 ) );
+    $wp_customize->add_panel( 'gp_marketing_nodes', array( 'title' => '3. Marketing & ROI', 'priority' => 32 ) );
+
     // 1. Elite Branding & Geometry
     $wp_customize->add_section( 'growthpress_branding', array(
-        'title' => 'Elite Branding & Geometry',
-        'description' => 'Calibrate your system-wide visual personality nodes.',
-        'priority' => 30,
+        'title' => 'Global Identity & Geometry',
+        'panel' => 'gp_design_architecture',
+        'priority' => 10,
     ) );
 
     $wp_customize->add_setting( 'gp_design_style', array( 'default' => 'unisex', 'sanitize_callback' => 'sanitize_text_field' ) );
@@ -38,6 +43,11 @@ function growthpress_customize_register( $wp_customize ) {
 
     $wp_customize->add_setting( 'growthpress_primary_color', array( 'default' => '#4F46E5', 'sanitize_callback' => 'sanitize_hex_color' ) );
     $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'growthpress_primary_color', array( 'label' => 'Primary Brand Node', 'section' => 'growthpress_branding' ) ) );
+
+    $wp_customize->add_setting( 'gp_global_share_image', array( 'default' => '', 'sanitize_callback' => 'esc_url_raw' ) );
+    $wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'gp_global_share_image', array(
+        'label' => 'Global Social Share Image', 'section' => 'growthpress_branding'
+    ) ) );
 
     $wp_customize->add_setting( 'gp_elite_gradient', array( 'default' => 'linear-gradient(135deg, #1E1B4B 0%, #4F46E5 100%)', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_elite_gradient', array(
@@ -61,38 +71,38 @@ function growthpress_customize_register( $wp_customize ) {
     ) );
 
     // 2. Homepage Hero Engine
-    $wp_customize->add_section( 'growthpress_homepage', array( 'title' => 'Homepage Hero Engine', 'priority' => 31 ) );
+    $wp_customize->add_section( 'growthpress_homepage', array( 'title' => 'Homepage Hero Engine', 'panel' => 'gp_content_hubs', 'priority' => 10 ) );
     $wp_customize->add_setting( 'gp_hero_headline', array( 'default' => 'Transform Your Business with AI Intelligence', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_hero_headline', array( 'label' => 'Hero Headline', 'section' => 'growthpress_homepage', 'type' => 'text' ) );
     $wp_customize->add_setting( 'gp_hero_subheadline', array( 'default' => 'The unified operating system for high-ticket service firms. Scale faster, automate smarter.', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_hero_subheadline', array( 'label' => 'Hero Subheadline', 'section' => 'growthpress_homepage', 'type' => 'textarea' ) );
 
     // 3. Strategic Services Admin
-    $wp_customize->add_section( 'growthpress_services_admin', array( 'title' => 'Service Page Strategy', 'priority' => 32 ) );
+    $wp_customize->add_section( 'growthpress_services_admin', array( 'title' => 'Service Page Strategy', 'panel' => 'gp_content_hubs', 'priority' => 20 ) );
     $wp_customize->add_setting( 'gp_services_headline', array( 'default' => 'Elite Service Infrastructure', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_services_headline', array( 'label' => 'Services Headline', 'section' => 'growthpress_services_admin', 'type' => 'text' ) );
     $wp_customize->add_setting( 'gp_services_subheadline', array( 'default' => 'Proprietary methodologies engineered for market dominance and high-ticket returns.', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_services_subheadline', array( 'label' => 'Services Subheadline', 'section' => 'growthpress_services_admin', 'type' => 'textarea' ) );
 
     // 4. Case Studies & ROI Admin
-    $wp_customize->add_section( 'growthpress_results_admin', array( 'title' => 'Case Study Layouts', 'priority' => 33 ) );
+    $wp_customize->add_section( 'growthpress_results_admin', array( 'title' => 'Case Study Layouts', 'panel' => 'gp_content_hubs', 'priority' => 30 ) );
     $wp_customize->add_setting( 'gp_results_headline', array( 'default' => 'Verified Results & ROI Profiles', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_results_headline', array( 'label' => 'Results Headline', 'section' => 'growthpress_results_admin', 'type' => 'text' ) );
     $wp_customize->add_setting( 'gp_results_subheadline', array( 'default' => 'Visual confirmation of our precision engineering and client success trajectories.', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_results_subheadline', array( 'label' => 'Results Subheadline', 'section' => 'growthpress_results_admin', 'type' => 'textarea' ) );
 
     // 5. Pricing & Investment Strategy
-    $wp_customize->add_section( 'growthpress_pricing_admin', array( 'title' => 'Pricing Infrastructure', 'priority' => 34 ) );
+    $wp_customize->add_section( 'growthpress_pricing_admin', array( 'title' => 'Pricing Infrastructure', 'panel' => 'gp_marketing_nodes', 'priority' => 10 ) );
     $wp_customize->add_setting( 'gp_pricing_headline', array( 'default' => 'Strategic Investment Tiers', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_pricing_headline', array( 'label' => 'Pricing Headline', 'section' => 'growthpress_pricing_admin', 'type' => 'text' ) );
     $wp_customize->add_setting( 'gp_pricing_subheadline', array( 'default' => 'Select the operational tier that aligns with your enterprise growth goals.', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_pricing_subheadline', array( 'label' => 'Pricing Subheadline', 'section' => 'growthpress_pricing_admin', 'type' => 'textarea' ) );
 
     // 6. About & Mission Strategy
-    $wp_customize->add_section( 'growthpress_about_admin', array( 'title' => 'Mission Vision Strategy', 'priority' => 35 ) );
+    $wp_customize->add_section( 'growthpress_about_admin', array( 'title' => 'Mission Vision Strategy', 'panel' => 'gp_content_hubs', 'priority' => 40 ) );
 
     // 7. Team & Specialist Strategy
-    $wp_customize->add_section( 'growthpress_team_admin', array( 'title' => 'Team Node Strategy', 'priority' => 36 ) );
+    $wp_customize->add_section( 'growthpress_team_admin', array( 'title' => 'Team Node Strategy', 'panel' => 'gp_content_hubs', 'priority' => 50 ) );
     $wp_customize->add_setting( 'gp_team_headline', array( 'default' => 'Specialized Operational Team', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_team_headline', array( 'label' => 'Team Headline', 'section' => 'growthpress_team_admin', 'type' => 'text' ) );
     $wp_customize->add_setting( 'gp_team_subheadline', array( 'default' => 'Elite human capital nodes trained in high-stakes operational execution.', 'sanitize_callback' => 'sanitize_text_field' ) );
@@ -103,7 +113,7 @@ function growthpress_customize_register( $wp_customize ) {
     $wp_customize->add_control( 'gp_about_text', array( 'label' => 'Mission Statement', 'section' => 'growthpress_about_admin', 'type' => 'textarea' ) );
 
     // 7. Market Authority & Social Proof
-    $wp_customize->add_section( 'growthpress_authority_admin', array( 'title' => 'Market Authority Feed', 'priority' => 36 ) );
+    $wp_customize->add_section( 'growthpress_authority_admin', array( 'title' => 'Market Authority Feed', 'panel' => 'gp_marketing_nodes', 'priority' => 20 ) );
     $wp_customize->add_setting( 'gp_enable_authority_feed', array( 'default' => true, 'sanitize_callback' => 'absint' ) );
     $wp_customize->add_control( 'gp_enable_authority_feed', array( 'label' => 'Enable Real-time Feed', 'section' => 'growthpress_authority_admin', 'type' => 'checkbox' ) );
 
@@ -114,14 +124,14 @@ function growthpress_customize_register( $wp_customize ) {
     ) );
 
     // 8. Contact & Support Admin
-    $wp_customize->add_section( 'growthpress_contact_admin', array( 'title' => 'Contact Configuration', 'priority' => 37 ) );
+    $wp_customize->add_section( 'growthpress_contact_admin', array( 'title' => 'Contact Configuration', 'panel' => 'gp_marketing_nodes', 'priority' => 30 ) );
     $wp_customize->add_setting( 'gp_contact_headline', array( 'default' => 'Initiate Strategic Sequence', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_contact_headline', array( 'label' => 'Contact Headline', 'section' => 'growthpress_contact_admin', 'type' => 'text' ) );
     $wp_customize->add_setting( 'gp_contact_subheadline', array( 'default' => 'Uplink with our specialist team to calibrate your growth operating system.', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_contact_subheadline', array( 'label' => 'Contact Subheadline', 'section' => 'growthpress_contact_admin', 'type' => 'textarea' ) );
 
     // 8. Conversion UI & Global CTAs
-    $wp_customize->add_section( 'growthpress_conversion_admin', array( 'title' => 'Conversion UI Controls', 'priority' => 38 ) );
+    $wp_customize->add_section( 'growthpress_conversion_admin', array( 'title' => 'Conversion UI Controls', 'panel' => 'gp_design_architecture', 'priority' => 20 ) );
     $wp_customize->add_setting( 'gp_enable_sticky_cta', array( 'default' => true, 'sanitize_callback' => 'absint' ) );
     $wp_customize->add_control( 'gp_enable_sticky_cta', array( 'label' => 'Enable Global Sticky CTA', 'section' => 'growthpress_conversion_admin', 'type' => 'checkbox' ) );
 
