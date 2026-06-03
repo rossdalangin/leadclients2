@@ -451,10 +451,10 @@ class GrowthPress_Dashboard {
         $pages = array(
             'Home'         => array('content' => $home_content, 'desc' => "Transform your $niche_label business with our AI-powered operating system.", 'template' => ''),
             'Services'     => array('content' => '', 'desc' => "Explore our elite $niche_label services designed for high-ticket growth.", 'template' => 'template-services.php'),
-            'Pricing'      => array('content' => $pricing_content, 'desc' => "Transparent investment tiers for enterprise scaling.", 'template' => 'template-full-width-glass.php'),
+            'Pricing'      => array('content' => '', 'desc' => "Transparent investment tiers for enterprise scaling.", 'template' => 'template-pricing.php'),
             'Case Studies' => array('content' => '', 'desc' => "Verified ROI profiles and success stories.", 'template' => 'template-case-studies.php'),
             'FAQ'          => array('content' => $faq_content, 'desc' => "Instant answers from our neural intelligence base.", 'template' => 'template-full-width-glass.php'),
-            'Our Mission'  => array('content' => $mission_content, 'desc' => "The vision behind the GrowthPress ecosystem.", 'template' => 'template-full-width-glass.php'),
+            'Our Mission'  => array('content' => '', 'desc' => "The vision behind the GrowthPress ecosystem.", 'template' => 'template-about.php'),
             'Book Now'     => array('content' => $book_now_content, 'desc' => "Direct uplink to our strategic specialists.", 'template' => 'template-full-width-glass.php'),
             'Login'        => array('content' => '', 'desc' => "Portal authentication command node.", 'template' => 'template-portal-login.php'),
             'Client Portal'=> array('content' => "[gp_client_portal]", 'desc' => "Secure access to project velocity and financial ledgers.", 'template' => 'template-full-width-glass.php'),
