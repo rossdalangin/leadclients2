@@ -50,6 +50,16 @@ function growthpress_customize_register( $wp_customize ) {
         ),
     ) );
 
+    $wp_customize->add_setting( 'gp_header_layout', array( 'default' => 'space-between', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_header_layout', array(
+        'label' => 'Dynamic Header Architecture', 'section' => 'growthpress_branding', 'type' => 'select',
+        'choices' => array(
+            'space-between' => 'Logo Left / Nav Center / CTA Right',
+            'center'        => 'Logo & Nav Centered (Symmetric)',
+            'flex-start'    => 'Logo Left / Nav Left / CTA Right'
+        ),
+    ) );
+
     // 2. Homepage Hero Engine
     $wp_customize->add_section( 'growthpress_homepage', array( 'title' => 'Homepage Hero Engine', 'priority' => 31 ) );
     $wp_customize->add_setting( 'gp_hero_headline', array( 'default' => 'Transform Your Business with AI Intelligence', 'sanitize_callback' => 'sanitize_text_field' ) );

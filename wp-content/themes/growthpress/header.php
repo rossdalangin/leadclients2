@@ -11,8 +11,8 @@
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 <header id="masthead" class="site-header gp-reveal">
-	<div class="container" style="display:flex; justify-content:space-between; align-items:center; width: 100%;">
-		<div class="site-branding">
+	<div class="container" style="display:flex; justify-content:<?php echo get_theme_mod('gp_header_layout', 'space-between'); ?>; align-items:center; width: 100%;">
+		<div class="site-branding" style="<?php echo get_theme_mod('gp_header_layout') === 'center' ? 'flex:1;' : ''; ?>">
 			<?php if(has_custom_logo()) { the_custom_logo(); } else { echo '<h2 style="margin:0; font-weight:950; letter-spacing:-0.05em; font-family:var(--font-heading);">' . get_bloginfo('name') . '</h2>'; } ?>
 		</div>
 		<nav id="site-navigation" class="main-navigation">

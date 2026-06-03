@@ -17,6 +17,7 @@ class GrowthPress_Display {
         add_shortcode( 'gp_location_grid', array( $this, 'render_location_grid' ) );
         add_shortcode( 'gp_funnel_grid', array( $this, 'render_funnel_grid' ) );
         add_shortcode( 'gp_treatment_grid', array( $this, 'render_treatment_grid' ) );
+        add_shortcode( 'gp_market_chart', array( $this, 'render_market_chart' ) );
         add_shortcode( 'gp_kb_search', array( $this, 'render_kb_search' ) );
         add_shortcode( 'gp_treatment_search', array( $this, 'render_treatment_search' ) );
         add_action( 'wp_ajax_gp_kb_ai_search', array( $this, 'handle_ai_search' ) );
@@ -56,6 +57,36 @@ class GrowthPress_Display {
     public function render_treatment_grid() {
         $posts = get_posts( array( 'post_type' => 'gp_treatment', 'posts_per_page' => 6 ) );
         return $this->render_grid( $posts, 'Clinical Protocols' );
+    }
+
+    public function render_market_chart() {
+        ob_start(); ?>
+        <div class="gp-market-chart glass-card" style="padding:60px; margin:40px 0;">
+            <h3 class="text-gradient" style="margin-bottom:30px;">Strategic Sector Trajectory</h3>
+            <canvas id="gpMarketChart" height="200"></canvas>
+            <script>
+            jQuery(document).ready(function($) {
+                const ctx = document.getElementById('gpMarketChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                        datasets: [{
+                            label: 'Market Authority %',
+                            data: [65, 78, 82, 94],
+                            borderColor: '#4F46E5',
+                            tension: 0.4,
+                            fill: true,
+                            backgroundColor: 'rgba(79, 70, 229, 0.05)'
+                        }]
+                    },
+                    options: { plugins: { legend: { display: false } } }
+                });
+            });
+            </script>
+        </div>
+        <?php
+        return ob_get_clean();
     }
 
     public function render_treatment_search() {
