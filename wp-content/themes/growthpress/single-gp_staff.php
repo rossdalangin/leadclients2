@@ -1,0 +1,62 @@
+<?php
+/**
+ * Single Staff Dossier Template - GrowthPress Elite
+ */
+get_header(); ?>
+
+<main id="primary" class="site-main grainy-bg" style="padding-top:100px; padding-bottom:120px;">
+    <div class="container">
+        <?php while ( have_posts() ) : the_post();
+            $expertise = get_post_meta(get_the_ID(), '_staff_expertise', true);
+            $seniority = get_post_meta(get_the_ID(), '_staff_seniority', true);
+            ?>
+            <div class="wp-block-columns are-vertically-aligned-center gp-reveal" style="gap:80px; margin-bottom:100px;">
+                <div class="wp-block-column" style="flex-basis:40%;">
+                    <div class="glass-card" style="padding:10px; border-radius:50px; box-shadow: 0 50px 100px -20px var(--primary-glow);">
+                        <?php if(has_post_thumbnail()): ?>
+                            <?php the_post_thumbnail('full', array('style'=>'width:100%; height:auto; border-radius:40px; display:block;')); ?>
+                        <?php else: ?>
+                            <div style="height:600px; background:var(--secondary); border-radius:40px; display:flex; align-items:center; justify-content:center; font-size:10rem;">👤</div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="wp-block-column">
+                    <div style="font-size:12px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:4px; margin-bottom:25px;">SPECIALIST DOSSIER</div>
+                    <h1 class="text-gradient" style="margin-bottom:20px;"><?php the_title(); ?></h1>
+                    <div style="display:flex; gap:20px; align-items:center; margin-bottom:40px;">
+                        <div style="background:var(--primary-glow); color:var(--primary); padding:8px 20px; border-radius:10px; font-size:12px; font-weight:950; letter-spacing:1px;"><?php echo strtoupper($seniority); ?></div>
+                        <div style="font-weight:700; opacity:0.6; font-size:14px; letter-spacing:1px;"><?php echo strtoupper($expertise); ?></div>
+                    </div>
+                    <div class="entry-content" style="font-size:1.2rem; line-height:1.8; opacity:0.8; margin-bottom:50px;">
+                        <?php the_content(); ?>
+                    </div>
+                    <a href="/book-now" class="gp-btn">Secure Briefing with <?php echo explode(' ', get_the_title())[0]; ?></a>
+                </div>
+            </div>
+
+            <!-- Performance Stats -->
+            <div class="gp-reveal" style="margin-top:120px;">
+                <div class="glass-card" style="padding:60px; display:grid; grid-template-columns: repeat(4, 1fr); gap:40px; text-align:center;">
+                    <div>
+                        <div style="font-size:3rem; font-weight:950; color:var(--primary); line-height:1;">98%</div>
+                        <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:2px; margin-top:10px;">SUCCESS RATE</div>
+                    </div>
+                    <div>
+                        <div style="font-size:3rem; font-weight:950; color:var(--primary); line-height:1;">4.2m</div>
+                        <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:2px; margin-top:10px;">AVG RESPONSE</div>
+                    </div>
+                    <div>
+                        <div style="font-size:3rem; font-weight:950; color:var(--primary); line-height:1;">150+</div>
+                        <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:2px; margin-top:10px;">NODES DEPLOYED</div>
+                    </div>
+                    <div>
+                        <div style="font-size:3rem; font-weight:950; color:var(--primary); line-height:1;">Elite</div>
+                        <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:2px; margin-top:10px;">CERTIFICATION</div>
+                    </div>
+                </div>
+            </div>
+        <?php endwhile; ?>
+    </div>
+</main>
+
+<?php get_footer(); ?>

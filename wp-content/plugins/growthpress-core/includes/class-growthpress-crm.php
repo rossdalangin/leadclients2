@@ -73,6 +73,14 @@ class GrowthPress_CRM {
             'supports'    => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
         ) );
 
+        register_post_type( 'gp_staff', array(
+            'labels'      => array( 'name' => 'Team Specialists', 'singular_name' => 'Staff' ),
+            'public'      => true,
+            'show_ui'     => true,
+            'menu_icon'   => 'dashicons-groups',
+            'supports'    => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
+        ) );
+
         register_taxonomy( 'gp_lead_stage', 'gp_lead', array(
             'labels' => array( 'name' => 'Lead Stages' ),
             'hierarchical' => true,
@@ -253,6 +261,7 @@ class GrowthPress_CRM {
         add_meta_box( 'gp_project_details', 'Success ROI Data', array( $this, 'render_project_meta' ), 'gp_project', 'normal', 'high' );
         add_meta_box( 'gp_service_details', 'Service Line Strategy', array( $this, 'render_service_meta' ), 'gp_service', 'normal', 'high' );
         add_meta_box( 'gp_kb_details', 'Strategic Intelligence Calibration', array( $this, 'render_kb_meta' ), 'gp_kb', 'normal', 'high' );
+        add_meta_box( 'gp_staff_details', 'Specialist Expertise Profile', array( $this, 'render_staff_meta' ), 'gp_staff', 'normal', 'high' );
     }
 
     public function render_lead_ecosystem_meta( $post ) {
@@ -515,6 +524,33 @@ class GrowthPress_CRM {
         <?php
     }
 
+    public function render_staff_meta( $post ) {
+        $expertise = get_post_meta($post->ID, '_staff_expertise', true) ?: 'Strategic Operations';
+        $seniority = get_post_meta($post->ID, '_staff_seniority', true) ?: 'Senior Associate';
+        ?>
+        <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #10b981;">
+            <p style="margin: 0; font-size: 13px; color: #065f46;"><strong>Team Management:</strong> Define the specialized skillsets of your team nodes. This data informs the 'Staff Efficiency Hub' and allows the AI to recommend specific specialists for high-ticket triage.</p>
+        </div>
+        <table class="form-table">
+            <tr>
+                <th><label>Domain Expertise</label></th>
+                <td><input type="text" name="gp_staff_expertise" value="<?php echo esc_attr($expertise); ?>" class="regular-text" placeholder="e.g. Behavioral Psychology"></td>
+            </tr>
+            <tr>
+                <th><label>Strategic Seniority</label></th>
+                <td>
+                    <select name="gp_staff_seniority" style="width:100%;">
+                        <option value="Associate" <?php selected($seniority, 'Associate'); ?>>Associate Specialist</option>
+                        <option value="Senior Associate" <?php selected($seniority, 'Senior Associate'); ?>>Senior Associate</option>
+                        <option value="Principal" <?php selected($seniority, 'Principal'); ?>>Principal Strategist</option>
+                        <option value="Managing" <?php selected($seniority, 'Managing'); ?>>Managing Director</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <?php
+    }
+
     public function save_crm_meta( $post_id ) {
         if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
 
@@ -555,6 +591,11 @@ class GrowthPress_CRM {
         if ( isset( $_POST['gp_kb_level'] ) ) {
             update_post_meta( $post_id, '_kb_intel_level', sanitize_text_field( $_POST['gp_kb_level'] ) );
             update_post_meta( $post_id, '_kb_access_control', sanitize_text_field( $_POST['gp_kb_access'] ) );
+        }
+
+        if ( isset( $_POST['gp_staff_expertise'] ) ) {
+            update_post_meta( $post_id, '_staff_expertise', sanitize_text_field( $_POST['gp_staff_expertise'] ) );
+            update_post_meta( $post_id, '_staff_seniority', sanitize_text_field( $_POST['gp_staff_seniority'] ) );
         }
     }
 

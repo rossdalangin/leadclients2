@@ -90,6 +90,13 @@ function growthpress_customize_register( $wp_customize ) {
 
     // 6. About & Mission Strategy
     $wp_customize->add_section( 'growthpress_about_admin', array( 'title' => 'Mission Vision Strategy', 'priority' => 35 ) );
+
+    // 7. Team & Specialist Strategy
+    $wp_customize->add_section( 'growthpress_team_admin', array( 'title' => 'Team Node Strategy', 'priority' => 36 ) );
+    $wp_customize->add_setting( 'gp_team_headline', array( 'default' => 'Specialized Operational Team', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_team_headline', array( 'label' => 'Team Headline', 'section' => 'growthpress_team_admin', 'type' => 'text' ) );
+    $wp_customize->add_setting( 'gp_team_subheadline', array( 'default' => 'Elite human capital nodes trained in high-stakes operational execution.', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_team_subheadline', array( 'label' => 'Team Subheadline', 'section' => 'growthpress_team_admin', 'type' => 'textarea' ) );
     $wp_customize->add_setting( 'gp_about_headline', array( 'default' => 'Engineering Market Dominance', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_about_headline', array( 'label' => 'About Headline', 'section' => 'growthpress_about_admin', 'type' => 'text' ) );
     $wp_customize->add_setting( 'gp_about_text', array( 'default' => 'We are dedicated to building the worlds most advanced business growth operating systems, empowering high-ticket firms with autonomous intelligence.', 'sanitize_callback' => 'sanitize_textarea_field' ) );
@@ -113,7 +120,18 @@ function growthpress_customize_register( $wp_customize ) {
     $wp_customize->add_setting( 'gp_contact_subheadline', array( 'default' => 'Uplink with our specialist team to calibrate your growth operating system.', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_contact_subheadline', array( 'label' => 'Contact Subheadline', 'section' => 'growthpress_contact_admin', 'type' => 'textarea' ) );
 
-    // 8. Ecosystem Maintenance
+    // 8. Conversion UI & Global CTAs
+    $wp_customize->add_section( 'growthpress_conversion_admin', array( 'title' => 'Conversion UI Controls', 'priority' => 38 ) );
+    $wp_customize->add_setting( 'gp_enable_sticky_cta', array( 'default' => true, 'sanitize_callback' => 'absint' ) );
+    $wp_customize->add_control( 'gp_enable_sticky_cta', array( 'label' => 'Enable Global Sticky CTA', 'section' => 'growthpress_conversion_admin', 'type' => 'checkbox' ) );
+
+    $wp_customize->add_setting( 'gp_footer_style', array( 'default' => 'luxe', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_footer_style', array(
+        'label' => 'Footer Architecture', 'section' => 'growthpress_conversion_admin', 'type' => 'select',
+        'choices' => array( 'standard' => 'Standard Corporate', 'luxe' => 'High-Luxe Immersive', 'minimal' => 'Minimalist Technical' ),
+    ) );
+
+    // 9. Ecosystem Maintenance
     $wp_customize->add_section( 'growthpress_maintenance', array( 'title' => 'OS Maintenance & Sync', 'priority' => 100 ) );
     $wp_customize->add_setting( 'gp_regenerate_trigger', array( 'default' => '' ) );
     $wp_customize->add_control( new WP_Customize_Control( $wp_customize, 'gp_regenerate_trigger', array(

@@ -1,5 +1,8 @@
-<footer id="colophon" class="site-footer" style="background: var(--secondary); color: white; padding: 120px 0 60px; margin-top: 150px; position: relative; overflow: hidden;">
-    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.05; background: radial-gradient(circle at top right, var(--primary), transparent);"></div>
+<?php $footer_style = get_theme_mod('gp_footer_style', 'luxe'); ?>
+<footer id="colophon" class="site-footer footer-style-<?php echo $footer_style; ?>" style="background: var(--secondary); color: white; padding: <?php echo $footer_style === 'minimal' ? '60px 0' : '120px 0 60px'; ?>; margin-top: 150px; position: relative; overflow: hidden;">
+    <?php if($footer_style !== 'minimal'): ?>
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.05; background: radial-gradient(circle at top right, var(--primary), transparent);"></div>
+    <?php endif; ?>
 	<div class="container" style="position: relative; z-index: 2;">
         <div class="wp-block-columns" style="margin-bottom: 100px; gap: 60px;">
             <div class="wp-block-column" style="flex-basis: 45%;">
@@ -48,6 +51,7 @@
 	</div>
 </footer>
 
+<?php if(get_theme_mod('gp_enable_sticky_cta', true)): ?>
 <div class="gp-mobile-cta-bar gp-reveal" style="animation-delay: 1s;">
     <div class="price-info">
         <span class="price-val">FREE</span>
@@ -55,6 +59,7 @@
     </div>
     <a href="<?php echo home_url('/book-now'); ?>" class="gp-btn" style="padding: 12px 25px; font-size: 12px; border-radius: 12px;">SECURE NOW</a>
 </div>
+<?php endif; ?>
 
 <?php wp_footer(); ?>
 </body>

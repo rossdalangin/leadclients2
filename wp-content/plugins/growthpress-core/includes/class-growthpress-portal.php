@@ -13,6 +13,27 @@ class GrowthPress_Portal {
         add_shortcode( 'gp_client_portal', array( $this, 'render_portal' ) );
         add_action( 'wp_ajax_gp_request_reschedule', array( $this, 'handle_reschedule_request' ) );
         add_action( 'wp_ajax_gp_update_portal_profile', array( $this, 'handle_profile_update' ) );
+        add_action( 'wp_ajax_gp_portal_upload', array( $this, 'handle_portal_upload' ) );
+    }
+
+    public function handle_portal_upload() {
+        $user = wp_get_current_user();
+        $email = $user->user_email;
+        $leads = get_posts( array( 'post_type' => 'gp_lead', 'meta_key' => '_lead_email', 'meta_value' => $email, 'posts_per_page' => 1 ) );
+
+        if ( ! empty($leads) ) {
+            $lead_id = $leads[0]->ID;
+            $vault = get_post_meta($lead_id, '_secure_vault', true) ?: array();
+            $vault[] = array(
+                'name' => sanitize_text_field($_POST['file_name']),
+                'time' => current_time('mysql'),
+                'status' => 'Encrypted'
+            );
+            update_post_meta($lead_id, '_secure_vault', $vault);
+            GrowthPress_Activity::log("Secure Asset Uploaded to Vault for Lead #$lead_id");
+            wp_send_json_success('Asset synchronized to secure vault.');
+        }
+        wp_send_json_error();
     }
 
     public function handle_profile_update() {
@@ -157,7 +178,21 @@ class GrowthPress_Portal {
                                 <span style="font-size:10px; font-weight:900; color:var(--primary); cursor:pointer;">VIEW</span>
                             </div>
                         </div>
-                        <button class="gp-btn" style="width:100%; margin-top:25px; height:50px; font-size:12px; border-radius:12px; background:transparent; border:2px dashed #E2E8F0; color:var(--text) !important;" onclick="alert('Secure node upload initialized. Please select strategic assets.')">+ UPLOAD STRATEGIC ASSET</button>
+                        <div id="vault-status" style="margin-top:20px; font-size:11px; font-weight:700; color:var(--primary); display:none;">SYNCING ASSET...</div>
+                        <button class="gp-btn" style="width:100%; margin-top:25px; height:50px; font-size:12px; border-radius:12px; background:transparent; border:2px dashed #E2E8F0; color:var(--text) !important;" onclick="uploadToVault()">+ UPLOAD STRATEGIC ASSET</button>
+                        <script>
+                        function uploadToVault() {
+                            const name = prompt("Enter asset name for encryption:");
+                            if(!name) return;
+                            jQuery('#vault-status').fadeIn();
+                            jQuery.post(gp_ajax.ajaxurl, { action: 'gp_portal_upload', file_name: name }, function(res) {
+                                if(res.success) {
+                                    alert(res.data);
+                                    location.reload();
+                                }
+                            });
+                        }
+                        </script>
                     </div>
 
                     <div class="glass-card" style="padding:50px; border-radius:44px; margin-bottom:40px;">

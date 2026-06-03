@@ -307,6 +307,20 @@ class GrowthPress_Dashboard {
                         <h4 style="margin-top:0; font-size:11px; text-transform:uppercase; letter-spacing:2px; opacity:0.4;">Neural Interaction Summary</h4>
                         <div style="font-size:13px; line-height:1.7; opacity:0.8;"><?php echo nl2br(esc_html($chat_summary)); ?></div>
                     </div>
+
+                    <?php $vault = get_post_meta($lead_id, '_secure_vault', true); if($vault): ?>
+                        <div style="background:#F0FDF4; border:1px solid #DCFCE7; padding:25px; border-radius:20px; margin-bottom:30px;">
+                            <h4 style="margin-top:0; font-size:11px; text-transform:uppercase; letter-spacing:2px; color:#166534;">Secure Asset Vault</h4>
+                            <div style="display:grid; gap:10px; margin-top:15px;">
+                                <?php foreach($vault as $v): ?>
+                                    <div style="font-size:12px; font-weight:700; color:#166534; display:flex; justify-content:space-between;">
+                                        <span>📁 <?php echo esc_html($v['name']); ?></span>
+                                        <span style="opacity:0.5; font-size:9px;"><?php echo strtoupper($v['status']); ?></span>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                     <h4 style="margin-bottom:10px;">Neural Draft Response</h4>
                     <textarea style="width:100%; height:120px; border-radius:12px; padding:15px; font-size:13px; background:#F0FDF4; border:1px solid #DCFCE7;"><?php echo esc_textarea($suggested); ?></textarea>
 

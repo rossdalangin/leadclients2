@@ -12,6 +12,7 @@ class GrowthPress_Funnels {
     public function __construct() {
         add_action( 'init', array( $this, 'register_funnel_cpt' ) );
         add_shortcode( 'gp_funnel_step', array( $this, 'render_funnel_step' ) );
+        add_shortcode( 'gp_split_test', array( $this, 'render_split_test' ) );
         add_action( 'wp_ajax_gp_track_funnel', array( $this, 'handle_tracking' ) );
         add_action( 'wp_ajax_nopriv_gp_track_funnel', array( $this, 'handle_tracking' ) );
         add_action( 'add_meta_boxes', array( $this, 'add_funnel_meta_boxes' ) );
@@ -149,6 +150,28 @@ class GrowthPress_Funnels {
             'menu_icon'   => 'dashicons-filter',
             'supports'    => array( 'title', 'custom-fields' ),
         ) );
+    }
+
+    public function render_split_test( $atts ) {
+        $a = shortcode_atts( array( 'id' => 0 ), $atts );
+        if ( ! $a['id'] ) return '';
+
+        $hitsA = (int)get_post_meta($a['id'], '_hits_A', true);
+        $hitsB = (int)get_post_meta($a['id'], '_hits_B', true);
+        $convA = (int)get_post_meta($a['id'], '_conv_A', true);
+        $convB = (int)get_post_meta($a['id'], '_conv_B', true);
+
+        $rateA = $hitsA > 0 ? ($convA / $hitsA) : 0;
+        $rateB = $hitsB > 0 ? ($convB / $hitsB) : 0;
+
+        // Autonomous Winner Override Logic
+        $variation = ( $rateB > $rateA && $hitsB > 20 ) ? 'B' : 'A';
+
+        // Log the hit autonomously
+        $this->track_variation_hit($a['id'], $variation);
+
+        $content = get_post_meta($a['id'], "_content_$variation", true);
+        return do_shortcode($content ?: "<!-- Funnel node $variation active -->");
     }
 
     public function render_funnel_step( $atts ) {
