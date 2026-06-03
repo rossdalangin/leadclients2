@@ -81,6 +81,7 @@ class GrowthPress_Settings {
                     <a href="#tab-ai" class="nav-tab">AI Providers</a>
                     <a href="#tab-integrations" class="nav-tab">Integrations</a>
                     <a href="#tab-lab" class="nav-tab">AI Prompt Lab</a>
+                    <a href="#tab-automations" class="nav-tab">Strategic Automations</a>
                     <a href="#tab-white-label" class="nav-tab">White-Label & Agency</a>
                     <a href="#tab-tools" class="nav-tab">System Tools</a>
                     <a href="#tab-docs" class="nav-tab">Master Ops Manual</a>
@@ -232,6 +233,51 @@ class GrowthPress_Settings {
                     </script>
                     <?php submit_button('Save AI Intelligence Cluster'); ?>
                 </form>
+            </div>
+
+            <div id="tab-automations" class="tab-content" style="display:none;">
+                <div class="glass-card" style="max-width:1100px; background:#f0fdfa; border-left:5px solid #0d9488; margin-bottom:30px;">
+                    <p style="margin:0; font-size:14px; color:#0f766e;"><strong>Automation Protocol:</strong> Define high-stakes rules that trigger autonomously based on ecosystem events. These interactions reduce operational latency and ensure elite response times.</p>
+                </div>
+
+                <div class="glass-card" style="max-width:1100px;">
+                    <h3 class="text-gradient">Neural Workflow Rules</h3>
+                    <table class="wp-list-table widefat fixed striped" style="margin-top:30px; border:none; background:transparent;">
+                        <thead>
+                            <tr>
+                                <th style="font-weight:950; font-size:10px; opacity:0.4; letter-spacing:1px;">TRIGGER EVENT</th>
+                                <th style="font-weight:950; font-size:10px; opacity:0.4; letter-spacing:1px;">STRATEGIC ACTION</th>
+                                <th style="font-weight:950; font-size:10px; opacity:0.4; letter-spacing:1px;">STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Lead Urgency > 8</strong></td>
+                                <td>Instant SMS Dispatch & High-Priority Task</td>
+                                <td><span style="color:#10B981; font-weight:900;">ACTIVE</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Appointment Completed</strong></td>
+                                <td>Trigger Automated Review Request & Nurture</td>
+                                <td><span style="color:#10B981; font-weight:900;">ACTIVE</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Proposal Accepted</strong></td>
+                                <td>Initialize Project Node & Generate Ledger</td>
+                                <td><span style="color:#10B981; font-weight:900;">ACTIVE</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Exit Intent Detected</strong></td>
+                                <td>Inject Niche-Specific Lead Magnet Modal</td>
+                                <td><span style="color:#10B981; font-weight:900;">ACTIVE</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top:40px; padding:30px; background:rgba(0,0,0,0.02); border-radius:20px; border:1px dashed #E2E8F0; text-align:center;">
+                        <span style="font-size:12px; font-weight:800; opacity:0.4;">+ DEFINE CUSTOM NEURAL RULE (PRO FEATURE)</span>
+                    </div>
+                </div>
             </div>
 
             <div id="tab-lab" class="tab-content" style="display:none;">

@@ -16,7 +16,9 @@ class GrowthPress_Display {
         add_shortcode( 'gp_inventory_grid', array( $this, 'render_inventory_grid' ) );
         add_shortcode( 'gp_location_grid', array( $this, 'render_location_grid' ) );
         add_shortcode( 'gp_funnel_grid', array( $this, 'render_funnel_grid' ) );
+        add_shortcode( 'gp_treatment_grid', array( $this, 'render_treatment_grid' ) );
         add_shortcode( 'gp_kb_search', array( $this, 'render_kb_search' ) );
+        add_shortcode( 'gp_treatment_search', array( $this, 'render_treatment_search' ) );
         add_action( 'wp_ajax_gp_kb_ai_search', array( $this, 'handle_ai_search' ) );
         add_action( 'wp_ajax_nopriv_gp_kb_ai_search', array( $this, 'handle_ai_search' ) );
     }
@@ -49,6 +51,38 @@ class GrowthPress_Display {
     public function render_funnel_grid() {
         $posts = get_posts( array( 'post_type' => 'gp_funnel', 'posts_per_page' => 6 ) );
         return $this->render_grid( $posts, 'Conversion Funnels' );
+    }
+
+    public function render_treatment_grid() {
+        $posts = get_posts( array( 'post_type' => 'gp_treatment', 'posts_per_page' => 6 ) );
+        return $this->render_grid( $posts, 'Clinical Protocols' );
+    }
+
+    public function render_treatment_search() {
+        ob_start(); ?>
+        <div class="gp-treatment-ai-search glass-card" style="padding:60px; max-width:800px; margin:40px auto; border-top: 10px solid var(--primary);">
+            <h3 class="text-gradient" style="text-align:center; font-size:2.5rem; margin-bottom:30px;">Clinical Intel Search</h3>
+            <div style="position:relative;">
+                <input type="text" id="gp-treat-query" placeholder="Search specialized clinical protocols..." style="width:100%; height:70px; border-radius:18px; border:2px solid var(--border); padding:0 30px; font-size:16px;">
+                <button onclick="runTreatSearch()" class="gp-btn" style="position:absolute; right:10px; top:10px; height:50px; border-radius:12px; padding:0 25px;">SCAN</button>
+            </div>
+            <div id="treat-ai-results" style="margin-top:40px; display:none;">
+                <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:2px; margin-bottom:20px;">NEURAL PROTOCOL RECOMMENDATION</div>
+                <div id="treat-ai-output" style="line-height:1.7; font-size:15px; background:#F0F9FF; padding:30px; border-radius:20px; border:1px solid #BAE6FD; color:#0369A1;"></div>
+            </div>
+        </div>
+        <script>
+        function runTreatSearch() {
+            const q = jQuery('#gp-treat-query').val();
+            const out = jQuery('#treat-ai-results').fadeIn().find('#treat-ai-output');
+            out.text('CONSULTING CLINICAL REPOSITORY...').css('opacity', 0.5);
+            jQuery.post(gp_ajax.ajaxurl, { action: 'gp_kb_ai_search', query: q }, function(res) {
+                out.html(res.data).css('opacity', 1);
+            });
+        }
+        </script>
+        <?php
+        return ob_get_clean();
     }
 
     public function render_kb_search() {

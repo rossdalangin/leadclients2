@@ -350,13 +350,23 @@ document.addEventListener('DOMContentLoaded', function() {
             if(res.success) jQuery('#gp-search-results').show().html(res.data.html);
         });
     });
+    <?php
+    // Fetch Real Historical Data
+    $lead_data = array(); $booking_data = array(); $labels = array();
+    for($i=4; $i>=0; $i--) {
+        $date = date('Y-m-d', strtotime("-$i weeks"));
+        $labels[] = "Week " . (5-$i);
+        $lead_data[] = count(get_posts(array('post_type'=>'gp_lead', 'date_query'=>array(array('year'=>date('Y', strtotime($date)), 'week'=>date('W', strtotime($date)))), 'posts_per_page'=>-1)));
+        $booking_data[] = count(get_posts(array('post_type'=>'gp_appointment', 'date_query'=>array(array('year'=>date('Y', strtotime($date)), 'week'=>date('W', strtotime($date)))), 'posts_per_page'=>-1)));
+    }
+    ?>
     var ctxMain = document.getElementById('gp-main-chart').getContext('2d');
     new Chart(ctxMain, {
         type: 'line',
         data: {
-            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+            labels: <?php echo json_encode($labels); ?>,
             datasets: [{
-                data: [22, 48, 36, 75, 68],
+                data: <?php echo json_encode($lead_data); ?>,
                 borderColor: '#2563EB',
                 borderWidth: 8,
                 tension: 0.5,
@@ -375,15 +385,15 @@ document.addEventListener('DOMContentLoaded', function() {
     new Chart(ctxVel, {
         type: 'bar',
         data: {
-            labels: ['M', 'T', 'W', 'T', 'F'],
+            labels: <?php echo json_encode($labels); ?>,
             datasets: [{
-                label: 'Ad Spend',
-                data: [120, 190, 150, 250, 210],
+                label: 'Bookings',
+                data: <?php echo json_encode($booking_data); ?>,
                 backgroundColor: '#E2E8F0',
                 borderRadius: 10
             }, {
-                label: 'Pipeline Value',
-                data: [400, 650, 590, 900, 820],
+                label: 'Leads',
+                data: <?php echo json_encode($lead_data); ?>,
                 backgroundColor: '#2563EB',
                 borderRadius: 10
             }]

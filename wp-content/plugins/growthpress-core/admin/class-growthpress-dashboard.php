@@ -226,6 +226,9 @@ class GrowthPress_Dashboard {
         $nurture = get_post_meta($lead_id, '_gp_nurture_sequence', true);
         $ai = GrowthPress_AI::get_instance();
         $next_step = $ai->call_ai("Based on this lead data: \"{$lead->post_content}\" and probability of $prob%, what is the single most important strategic next step? Return ONE short sentence.", "Senior Strategist");
+
+        // Aggregate Neural Interactions
+        $chat_summary = $ai->call_ai("Summarize previous chat and KB search behavior for this lead based on behavioral logs.", "Interaction Analyst");
         $loc_id = get_post_meta($lead_id, '_assigned_location', true);
         $location = $loc_id ? get_post($loc_id) : null;
 
@@ -279,6 +282,10 @@ class GrowthPress_Dashboard {
                     <div style="font-size:13px; background:#FFFBEB; padding:20px; border-radius:15px; border:1px solid #FEF3C7; color:#92400E; margin-bottom:25px;">
                         <strong>AI Discovery Strategy:</strong><br>
                         <?php echo nl2br(esc_html($discovery)); ?>
+                    </div>
+                    <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:25px; border-radius:20px; margin-bottom:30px;">
+                        <h4 style="margin-top:0; font-size:11px; text-transform:uppercase; letter-spacing:2px; opacity:0.4;">Neural Interaction Summary</h4>
+                        <div style="font-size:13px; line-height:1.7; opacity:0.8;"><?php echo nl2br(esc_html($chat_summary)); ?></div>
                     </div>
                     <h4 style="margin-bottom:10px;">Neural Draft Response</h4>
                     <textarea style="width:100%; height:120px; border-radius:12px; padding:15px; font-size:13px; background:#F0FDF4; border:1px solid #DCFCE7;"><?php echo esc_textarea($suggested); ?></textarea>
