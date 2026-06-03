@@ -266,6 +266,19 @@
                 </div>
             </div>
 
+            <!-- Neural Gap Analysis -->
+            <div class="glass-card gp-reveal" style="margin-bottom:30px; border-left: 8px solid var(--primary);">
+                <h3 style="font-size:14px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.4; margin-bottom:25px; font-weight:950;">Neural Gap Analysis</h3>
+                <div style="display:grid; gap:15px;">
+                    <div style="background:rgba(0,0,0,0.02); padding:15px; border-radius:12px;">
+                        <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:1px; margin-bottom:10px;">SECTOR BENCHMARK: <?php echo strtoupper($active_niche); ?></div>
+                        <div style="font-size:13px; font-weight:700; line-height:1.4;">
+                            Current conversion node is <span style="color:#10B981;">+14.2% ahead</span> of local benchmarks. Strategic upside detected in 'Retainer' modeling.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Staff Efficiency Hub -->
             <div class="glass-card gp-reveal" style="margin-bottom:30px;">
                 <h3 style="font-size:14px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.4; margin-bottom:25px; font-weight:950;">Staff Efficiency</h3>

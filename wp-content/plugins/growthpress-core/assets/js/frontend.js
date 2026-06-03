@@ -80,4 +80,40 @@ jQuery(document).ready(function($) {
     // Mobile Navigation Slide-over
     $('#gp-mobile-trigger').on('click', function() { $('#gp-mobile-menu').addClass('active'); });
     $('#gp-mobile-close').on('click', function() { $('#gp-mobile-menu').removeClass('active'); });
+
+    // Real-time Authority Feed Engine
+    function initAuthorityFeed() {
+        if ($('body').hasClass('wp-admin')) return;
+
+        setInterval(function() {
+            $.post(gp_ajax.ajaxurl, { action: 'gp_get_authority_feed' }, function(res) {
+                if(res.success && res.data.length > 0) {
+                    const event = res.data[Math.floor(Math.random() * res.data.length)];
+                    showAuthorityToast(event);
+                }
+            });
+        }, 30000); // Pulse every 30s
+    }
+
+    function showAuthorityToast(event) {
+        const icon = event.type === 'conversion' ? '⚡' : (event.type === 'authority' ? '⭐' : '🗓️');
+        const $toast = $(`
+            <div class="gp-authority-toast glass-card" style="position:fixed; bottom:110px; left:30px; z-index:10000; padding:20px 25px; border-radius:20px; min-width:300px; display:flex; gap:15px; align-items:center; box-shadow:0 30px 60px rgba(0,0,0,0.1); border-left: 8px solid var(--primary); transform:translateY(100px); opacity:0; transition:all 0.6s cubic-bezier(0.16, 1, 0.3, 1);">
+                <div style="font-size:24px;">${icon}</div>
+                <div>
+                    <div style="font-size:11px; font-weight:950; letter-spacing:1px; opacity:0.4; text-transform:uppercase; margin-bottom:4px;">${event.title}</div>
+                    <div style="font-size:13px; font-weight:700; color:var(--secondary); line-height:1.3;">${event.msg}</div>
+                    <div style="font-size:9px; font-weight:800; opacity:0.3; margin-top:5px; text-transform:uppercase;">Uplink: ${event.time}</div>
+                </div>
+            </div>
+        `).appendTo('body');
+
+        setTimeout(() => $toast.css({'transform':'translateY(0)', 'opacity':'1'}), 100);
+        setTimeout(() => {
+            $toast.css({'transform':'translateY(100px)', 'opacity':'0'});
+            setTimeout(() => $toast.remove(), 600);
+        }, 6000);
+    }
+
+    initAuthorityFeed();
 });
