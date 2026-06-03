@@ -174,6 +174,22 @@ class GrowthPress_CRM {
 
     public function trigger_lead_automations( $lead_id ) {
         wp_schedule_single_event( time(), 'gp_async_lead_analysis', array($lead_id) );
+        $this->execute_neural_rules( $lead_id );
+    }
+
+    private function execute_neural_rules( $lead_id ) {
+        // Mock Automation Rule Engine v1.0
+        // In a production environment, this would fetch active rules from the database.
+        $lead = get_post($lead_id);
+        $prob = get_post_meta($lead_id, '_gp_ai_probability', true) ?: 75;
+
+        // Rule: Lead Probability > 90 -> Auto-assign Senior Specialist & Notify
+        if ($prob >= 90) {
+            $admin = get_users(array('role' => 'administrator', 'number' => 1))[0];
+            update_post_meta($lead_id, '_assigned_staff', $admin->ID);
+            $this->create_task("PRIORITY UPLINK: " . $lead->post_title, "High-probability lead ($prob%). Strategic outreach required.", $lead_id);
+            GrowthPress_Activity::log("Automation Node: Rule 'Lead Probability > 90' executed for Lead #$lead_id.");
+        }
     }
 
     public function process_async_analysis( $lead_id ) {
