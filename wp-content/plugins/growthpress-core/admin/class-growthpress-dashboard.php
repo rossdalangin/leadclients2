@@ -12,11 +12,31 @@ class GrowthPress_Dashboard {
     public function __construct() {
         add_action( 'admin_menu', array( $this, 'add_dashboard_menu' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_dashboard_assets' ) );
+        add_action( 'admin_notices', array( $this, 'render_strategic_notifications' ) );
         add_action( 'wp_ajax_gp_setup_niche', array( $this, 'handle_niche_setup' ) );
         add_action( 'wp_ajax_gp_regenerate_pages', array( $this, 'handle_page_regeneration' ) );
         add_action( 'wp_ajax_gp_update_lead_stage', array( $this, 'handle_lead_stage_update' ) );
         add_action( 'wp_ajax_gp_get_lead_brief', array( $this, 'handle_get_lead_brief' ) );
         add_action( 'wp_ajax_gp_strategic_search', array( $this, 'handle_strategic_search' ) );
+    }
+
+    public function render_strategic_notifications() {
+        $screen = get_current_screen();
+        if ( strpos($screen->id, 'growthpress') === false ) return;
+
+        $high_urgency_leads = get_posts(array(
+            'post_type' => 'gp_lead',
+            'posts_per_page' => 1,
+            'meta_query' => array(
+                array('key' => '_gp_ai_probability', 'value' => '90', 'compare' => '>=')
+            )
+        ));
+
+        if ( !empty($high_urgency_leads) ) {
+            echo '<div class="notice notice-warning is-dismissible" style="border-left-color: #EF4444; background:#FFF5F5;">';
+            echo '<p style="font-weight:900; color:#B91C1C; letter-spacing:0.5px;">🚨 STRATEGIC ALERT: High-Probability Lead Detected (#'. $high_urgency_leads[0]->ID .'). Immediate outreach recommended to secure pipeline equity.</p>';
+            echo '</div>';
+        }
     }
 
     public function add_dashboard_menu() {

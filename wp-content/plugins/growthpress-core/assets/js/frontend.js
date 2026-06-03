@@ -83,7 +83,7 @@ jQuery(document).ready(function($) {
 
     // Real-time Authority Feed Engine
     function initAuthorityFeed() {
-        if ($('body').hasClass('wp-admin')) return;
+        if ($('body').hasClass('wp-admin') || !gp_ajax.authority_enabled) return;
 
         setInterval(function() {
             $.post(gp_ajax.ajaxurl, { action: 'gp_get_authority_feed' }, function(res) {
@@ -92,7 +92,7 @@ jQuery(document).ready(function($) {
                     showAuthorityToast(event);
                 }
             });
-        }, 30000); // Pulse every 30s
+        }, parseInt(gp_ajax.authority_interval));
     }
 
     function showAuthorityToast(event) {

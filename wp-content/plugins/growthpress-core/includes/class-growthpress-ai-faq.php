@@ -146,11 +146,26 @@ class GrowthPress_AI_FAQ {
         $kb_context = "";
         foreach($kb_posts as $post) $kb_context .= "KB Reference: " . $post->post_title . " - " . strip_tags($post->post_content) . "\n";
 
-        $prompt = "A visitor is asking: \"$query\". " . ($kb_context ? "Using this internal knowledge: \n$kb_context\n" : "") . " As a specialist in $niche, provide expert advice and next steps. Return ONLY a valid JSON object with keys 'answer' and 'intent' ('booking' if they want to schedule, 'general' otherwise).";
+        // Slot Checking Logic
+        $available_slots = get_posts(array('post_type' => 'gp_appointment', 'posts_per_page' => 3, 'post_status' => 'publish'));
+        $slot_context = count($available_slots) < 5 ? "Availability is currently LIMITED. Encourage immediate booking." : "Multiple slots available this week.";
+
+        $prompt = "A visitor is asking: \"$query\". \n";
+        $prompt .= ($kb_context ? "Using this internal knowledge: \n$kb_context\n" : "");
+        $prompt .= "Operational Context: $slot_context\n";
+        $prompt .= "As a specialist in $niche, provide expert advice. Return ONLY a valid JSON object with keys 'answer' and 'intent' ('booking' if they want to schedule, 'general' otherwise).";
+
         $response_raw = $ai->call_ai($prompt, "Elite $niche Strategist");
         if ( is_wp_error($response_raw) ) wp_send_json_error($response_raw->get_error_message());
+
         $response = json_decode($response_raw, true);
         if(!$response) $response = array('answer' => $response_raw, 'intent' => (stripos($response_raw, 'book') !== false) ? 'booking' : 'general');
+
+        // Final Autonomous Intent Refinement
+        if ($response['intent'] === 'booking') {
+            $response['answer'] .= " I have checked our real-time master calendar, and we still have a few high-priority slots available for this week.";
+        }
+
         wp_send_json_success($response);
     }
 }

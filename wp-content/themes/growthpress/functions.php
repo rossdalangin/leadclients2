@@ -85,8 +85,19 @@ function growthpress_customize_register( $wp_customize ) {
     $wp_customize->add_setting( 'gp_about_text', array( 'default' => 'We are dedicated to building the worlds most advanced business growth operating systems, empowering high-ticket firms with autonomous intelligence.', 'sanitize_callback' => 'sanitize_textarea_field' ) );
     $wp_customize->add_control( 'gp_about_text', array( 'label' => 'Mission Statement', 'section' => 'growthpress_about_admin', 'type' => 'textarea' ) );
 
-    // 7. Contact & Support Admin
-    $wp_customize->add_section( 'growthpress_contact_admin', array( 'title' => 'Contact Configuration', 'priority' => 36 ) );
+    // 7. Market Authority & Social Proof
+    $wp_customize->add_section( 'growthpress_authority_admin', array( 'title' => 'Market Authority Feed', 'priority' => 36 ) );
+    $wp_customize->add_setting( 'gp_enable_authority_feed', array( 'default' => true, 'sanitize_callback' => 'absint' ) );
+    $wp_customize->add_control( 'gp_enable_authority_feed', array( 'label' => 'Enable Real-time Feed', 'section' => 'growthpress_authority_admin', 'type' => 'checkbox' ) );
+
+    $wp_customize->add_setting( 'gp_authority_interval', array( 'default' => '30000', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_authority_interval', array(
+        'label' => 'Feed Pulse Frequency (ms)', 'section' => 'growthpress_authority_admin', 'type' => 'select',
+        'choices' => array( '15000' => 'Fast (15s)', '30000' => 'Standard (30s)', '60000' => 'Conservative (1m)' ),
+    ) );
+
+    // 8. Contact & Support Admin
+    $wp_customize->add_section( 'growthpress_contact_admin', array( 'title' => 'Contact Configuration', 'priority' => 37 ) );
     $wp_customize->add_setting( 'gp_contact_headline', array( 'default' => 'Initiate Strategic Sequence', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_contact_headline', array( 'label' => 'Contact Headline', 'section' => 'growthpress_contact_admin', 'type' => 'text' ) );
     $wp_customize->add_setting( 'gp_contact_subheadline', array( 'default' => 'Uplink with our specialist team to calibrate your growth operating system.', 'sanitize_callback' => 'sanitize_text_field' ) );
@@ -115,7 +126,11 @@ function growthpress_scripts() {
 
     if ( defined( 'GROWTHPRESS_CORE_URL' ) ) {
 	    wp_enqueue_script( 'growthpress-frontend-js', GROWTHPRESS_CORE_URL . 'assets/js/frontend.js', array('jquery'), '1.0.0', true );
-	    wp_localize_script( 'growthpress-frontend-js', 'gp_ajax', array( 'ajaxurl' => admin_url('admin-ajax.php') ) );
+	    wp_localize_script( 'growthpress-frontend-js', 'gp_ajax', array(
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'authority_enabled' => get_theme_mod('gp_enable_authority_feed', true),
+            'authority_interval' => get_theme_mod('gp_authority_interval', '30000')
+        ) );
     }
 }
 add_action( 'wp_enqueue_scripts', 'growthpress_scripts' );
