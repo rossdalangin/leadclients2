@@ -141,7 +141,33 @@ function growthpress_customize_register( $wp_customize ) {
         'choices' => array( 'standard' => 'Standard Corporate', 'luxe' => 'High-Luxe Immersive', 'minimal' => 'Minimalist Technical' ),
     ) );
 
-    // 9. Ecosystem Maintenance
+    $wp_customize->add_setting( 'gp_header_cta_text', array( 'default' => 'Secure My Slot', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_header_cta_text', array( 'label' => 'Header CTA Text', 'section' => 'growthpress_conversion_admin', 'type' => 'text' ) );
+    $wp_customize->add_setting( 'gp_header_cta_link', array( 'default' => '/book-now', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_header_cta_link', array( 'label' => 'Header CTA Link', 'section' => 'growthpress_conversion_admin', 'type' => 'text' ) );
+
+    $wp_customize->add_setting( 'gp_enable_announcement', array( 'default' => false, 'sanitize_callback' => 'absint' ) );
+    $wp_customize->add_control( 'gp_enable_announcement', array( 'label' => 'Enable Announcement Bar', 'section' => 'growthpress_conversion_admin', 'type' => 'checkbox' ) );
+    $wp_customize->add_setting( 'gp_announcement_text', array( 'default' => 'New High-Ticket ROI Profiles just added to the Results Gallery.', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_announcement_text', array( 'label' => 'Announcement Text', 'section' => 'growthpress_conversion_admin', 'type' => 'text' ) );
+
+    // Social Authority Profiles
+    $wp_customize->add_section( 'growthpress_social_admin', array( 'title' => 'Social Uplink Profiles', 'panel' => 'gp_marketing_nodes', 'priority' => 25 ) );
+    $socials = array('linkedin' => 'LinkedIn', 'twitter' => 'Twitter/X', 'instagram' => 'Instagram', 'facebook' => 'Facebook');
+    foreach($socials as $id => $label) {
+        $wp_customize->add_setting( "gp_social_$id", array( 'default' => '', 'sanitize_callback' => 'esc_url_raw' ) );
+        $wp_customize->add_control( "gp_social_$id", array( 'label' => $label . ' URL', 'section' => 'growthpress_social_admin', 'type' => 'text' ) );
+    }
+
+    // 9. Automated Page Generation Nodes
+    $wp_customize->add_section( 'growthpress_generation_admin', array( 'title' => 'Page Generation Nodes', 'priority' => 90 ) );
+    $gen_pages = array('home'=>'Home', 'services'=>'Services', 'pricing'=>'Pricing', 'case_studies'=>'Case Studies', 'faq'=>'FAQ', 'about'=>'Our Mission', 'booking'=>'Book Now', 'portal'=>'Client Portal', 'contact'=>'Contact');
+    foreach($gen_pages as $id => $label) {
+        $wp_customize->add_setting( "gp_gen_$id", array( 'default' => true, 'sanitize_callback' => 'absint' ) );
+        $wp_customize->add_control( "gp_gen_$id", array( 'label' => 'Generate ' . $label, 'section' => 'growthpress_generation_admin', 'type' => 'checkbox' ) );
+    }
+
+    // 10. Ecosystem Maintenance
     $wp_customize->add_section( 'growthpress_maintenance', array( 'title' => 'OS Maintenance & Sync', 'priority' => 100 ) );
     $wp_customize->add_setting( 'gp_regenerate_trigger', array( 'default' => '' ) );
     $wp_customize->add_control( new WP_Customize_Control( $wp_customize, 'gp_regenerate_trigger', array(

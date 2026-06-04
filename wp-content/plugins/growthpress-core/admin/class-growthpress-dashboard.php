@@ -483,19 +483,20 @@ class GrowthPress_Dashboard {
         $book_now_content = "<h1>Secure Your Session</h1><p>Book a direct briefing with our specialist team.</p>[gp_booking_form]";
 
         $pages = array(
-            'Home'         => array('content' => $home_content, 'desc' => "Transform your $niche_label business with our AI-powered operating system.", 'template' => ''),
-            'Services'     => array('content' => '', 'desc' => "Explore our elite $niche_label services designed for high-ticket growth.", 'template' => 'template-services.php'),
-            'Pricing'      => array('content' => '', 'desc' => "Transparent investment tiers for enterprise scaling.", 'template' => 'template-pricing.php'),
-            'Case Studies' => array('content' => '', 'desc' => "Verified ROI profiles and success stories.", 'template' => 'template-case-studies.php'),
-            'FAQ'          => array('content' => $faq_content, 'desc' => "Instant answers from our neural intelligence base.", 'template' => 'template-full-width-glass.php'),
-            'Our Mission'  => array('content' => '', 'desc' => "The vision behind the GrowthPress ecosystem.", 'template' => 'template-about.php'),
-            'Book Now'     => array('content' => $book_now_content, 'desc' => "Direct uplink to our strategic specialists.", 'template' => 'template-full-width-glass.php'),
-            'Login'        => array('content' => '', 'desc' => "Portal authentication command node.", 'template' => 'template-portal-login.php'),
-            'Client Portal'=> array('content' => "[gp_client_portal]", 'desc' => "Secure access to project velocity and financial ledgers.", 'template' => 'template-full-width-glass.php'),
-            'Contact'      => array('content' => $this->get_contact_content(), 'desc' => "Connect with our $niche_label specialists today.", 'template' => 'template-full-width-glass.php')
+            'Home'         => array('id' => 'home', 'content' => $home_content, 'desc' => "Transform your $niche_label business with our AI-powered operating system.", 'template' => ''),
+            'Services'     => array('id' => 'services', 'content' => '', 'desc' => "Explore our elite $niche_label services designed for high-ticket growth.", 'template' => 'template-services.php'),
+            'Pricing'      => array('id' => 'pricing', 'content' => '', 'desc' => "Transparent investment tiers for enterprise scaling.", 'template' => 'template-pricing.php'),
+            'Case Studies' => array('id' => 'case_studies', 'content' => '', 'desc' => "Verified ROI profiles and success stories.", 'template' => 'template-case-studies.php'),
+            'FAQ'          => array('id' => 'faq', 'content' => $faq_content, 'desc' => "Instant answers from our neural intelligence base.", 'template' => 'template-full-width-glass.php'),
+            'Our Mission'  => array('id' => 'about', 'content' => '', 'desc' => "The vision behind the GrowthPress ecosystem.", 'template' => 'template-about.php'),
+            'Book Now'     => array('id' => 'booking', 'content' => $book_now_content, 'desc' => "Direct uplink to our strategic specialists.", 'template' => 'template-full-width-glass.php'),
+            'Login'        => array('id' => 'portal', 'content' => '', 'desc' => "Portal authentication command node.", 'template' => 'template-portal-login.php'),
+            'Client Portal'=> array('id' => 'portal', 'content' => "[gp_client_portal]", 'desc' => "Secure access to project velocity and financial ledgers.", 'template' => 'template-full-width-glass.php'),
+            'Contact'      => array('id' => 'contact', 'content' => $this->get_contact_content(), 'desc' => "Connect with our $niche_label specialists today.", 'template' => 'template-full-width-glass.php')
         );
 
         foreach($pages as $t => $data) {
+            if ( ! get_theme_mod( 'gp_gen_' . $data['id'], true ) ) continue;
             $c = $data['content'];
             $query = new WP_Query(array( 'post_type' => 'page', 'title' => $t, 'post_status' => 'any', 'posts_per_page' => 1 ));
             if ( $query->have_posts() ) {

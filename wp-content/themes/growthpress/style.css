@@ -196,6 +196,20 @@ h3 { font-size: var(--step-2); font-weight: 800; letter-spacing: -0.03em; }
     100% { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
 
+/* Elite Geometric Overlays v5.6 */
+.magnetic-grid {
+    background-size: 50px 50px;
+    background-image:
+        linear-gradient(to right, var(--border) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+}
+
+.floating-nav {
+    margin: 20px 40px;
+    border-radius: 100px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+}
+
 /* Grainy Cinematic Atmosphere */
 .grainy-bg {
     position: relative;

@@ -13,9 +13,16 @@
                 <div style="margin-top: 40px; display: flex; gap: 30px; align-items: center;">
                     <div style="font-size: 10px; font-weight: 950; letter-spacing: 2px; opacity: 0.4;">UPLINK CHANNELS</div>
                     <div style="display: flex; gap: 15px;">
-                        <div style="width: 32px; height: 32px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;"></div>
-                        <div style="width: 32px; height: 32px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;"></div>
-                        <div style="width: 32px; height: 32px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;"></div>
+                        <?php
+                        $socials = array('linkedin', 'twitter', 'instagram', 'facebook');
+                        foreach($socials as $s):
+                            $url = get_theme_mod("gp_social_$s");
+                            if($url): ?>
+                                <a href="<?php echo esc_url($url); ?>" target="_blank" style="width: 36px; height: 36px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; display:flex; align-items:center; justify-content:center; text-decoration:none; color:white; transition:0.3s;">
+                                    <span class="dashicons dashicons-<?php echo $s === 'twitter' ? 'twitter' : $s; ?>" style="font-size:16px;"></span>
+                                </a>
+                            <?php endif;
+                        endforeach; ?>
                     </div>
                 </div>
             </div>

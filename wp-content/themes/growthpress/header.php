@@ -10,7 +10,12 @@
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
-<header id="masthead" class="site-header gp-reveal">
+<?php if(get_theme_mod('gp_enable_announcement')): ?>
+    <div class="gp-announcement-bar" style="background:var(--primary); color:white; padding:12px; text-align:center; font-size:11px; font-weight:950; letter-spacing:1px; text-transform:uppercase;">
+        <?php echo esc_html(get_theme_mod('gp_announcement_text')); ?>
+    </div>
+<?php endif; ?>
+<header id="masthead" class="site-header gp-reveal floating-nav">
 	<div class="container" style="display:flex; justify-content:<?php echo get_theme_mod('gp_header_layout', 'space-between'); ?>; align-items:center; width: 100%;">
 		<div class="site-branding" style="<?php echo get_theme_mod('gp_header_layout') === 'center' ? 'flex:1;' : ''; ?>">
 			<?php if(has_custom_logo()) { the_custom_logo(); } else { echo '<h2 style="margin:0; font-weight:950; letter-spacing:-0.05em; font-family:var(--font-heading);">' . get_bloginfo('name') . '</h2>'; } ?>
@@ -30,7 +35,9 @@
                 <svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
                 <svg class="moon" style="display:none;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
             </div>
-            <a href="<?php echo home_url('/book-now'); ?>" class="gp-btn" style="padding: 1rem 2.5rem; font-size: 11px; border-radius:100px;">Secure My Slot</a>
+            <a href="<?php echo esc_url(get_theme_mod('gp_header_cta_link', '/book-now')); ?>" class="gp-btn" style="padding: 1rem 2.5rem; font-size: 11px; border-radius:100px;">
+                <?php echo esc_html(get_theme_mod('gp_header_cta_text', 'Secure My Slot')); ?>
+            </a>
         </div>
 	</div>
 </header>
