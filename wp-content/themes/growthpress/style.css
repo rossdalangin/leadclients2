@@ -22,8 +22,10 @@ Text Domain: growthpress
     --border: rgba(0,0,0,0.05);
     --glass-border: rgba(255,255,255,0.7);
     --radius: 32px;
+    --blur: 40px;
+    --speed: 0.8s;
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-    --transition: 0.8s var(--ease-out-expo);
+    --transition: var(--speed) var(--ease-out-expo);
 
     /* Fluid Typography Engine */
     --step-0: clamp(1rem, 0.92rem + 0.39vw, 1.25rem);
@@ -88,6 +90,13 @@ body.dark-theme {
 
 /* Reset & Foundation */
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --section-spacing: clamp(5rem, 12vw, 12rem);
+}
+
+section, .site-main > div { padding-top: var(--section-spacing); padding-bottom: var(--section-spacing); }
+
 body {
     font-family: 'Inter', sans-serif;
     background: var(--bg);
@@ -127,11 +136,11 @@ body {
 }
 .main-navigation a:hover { opacity: 1; }
 
-/* Ultimate Glassmorphism Engine v4.6 */
+/* Ultimate Glassmorphism Engine v5.7 */
 .glass-card, .gp-estimator, .gp-solar-calc, .gp-symptom-checker, .gp-ai-faq, .gp-insurance-optimizer, .gp-legal-intake {
     background: linear-gradient(135deg, rgba(var(--surface-rgb), 0.9) 0%, rgba(var(--surface-rgb), 0.7) 100%);
-    backdrop-filter: blur(40px) saturate(180%);
-    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    backdrop-filter: blur(var(--blur)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     padding: clamp(3rem, 8vw, 6rem);
@@ -157,10 +166,14 @@ body {
         0 10px 20px -5px rgba(0,0,0,0.04);
 }
 
-/* Fluid Typography Scaled */
-h1 { font-family: var(--font-heading, 'Inter'); font-size: var(--step-5); line-height: 0.85; font-weight: 950; letter-spacing: -0.07em; }
-h2 { font-family: var(--font-heading, 'Inter'); font-size: var(--step-4); font-weight: 900; letter-spacing: -0.05em; line-height: 0.95; }
-h3 { font-size: var(--step-2); font-weight: 800; letter-spacing: -0.03em; }
+/* Fluid Typography Scaled v5.7 */
+h1 { font-family: var(--font-heading, 'Inter'); font-size: var(--step-5); line-height: 0.82; font-weight: 950; letter-spacing: -0.08em; text-wrap: balance; }
+h2 { font-family: var(--font-heading, 'Inter'); font-size: var(--step-4); font-weight: 900; letter-spacing: -0.06em; line-height: 0.92; text-wrap: balance; }
+h3 { font-size: var(--step-2); font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; }
+h4, h5, h6 { font-weight: 800; letter-spacing: -0.02em; }
+
+body.gp-design-male h1, body.gp-design-male h2 { text-transform: uppercase; letter-spacing: -0.05em; }
+body.gp-design-female h1, body.gp-design-female h2 { letter-spacing: -0.02em; font-weight: 800; }
 
 .text-gradient {
     background: var(--elite-gradient, linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%));

@@ -65,10 +65,20 @@
         moon.style.display = isDark ? 'block' : 'none';
     });
 
+    let lastScroll = 0;
     window.addEventListener('scroll', () => {
         const header = document.getElementById('masthead');
-        if (window.scrollY > 50) { header.classList.add('is-scrolled'); }
+        const currentScroll = window.pageYOffset;
+
+        if (currentScroll > 50) { header.classList.add('is-scrolled'); }
         else { header.classList.remove('is-scrolled'); }
+
+        if (currentScroll > lastScroll && currentScroll > 200) {
+            header.style.transform = 'translateY(-120%)';
+        } else {
+            header.style.transform = 'translateY(0)';
+        }
+        lastScroll = currentScroll;
     });
 </script>
 <div id="content" class="site-content grainy-bg">

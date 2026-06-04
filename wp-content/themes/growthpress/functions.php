@@ -41,6 +41,12 @@ function growthpress_customize_register( $wp_customize ) {
     $wp_customize->add_setting( 'gp_global_radius', array( 'default' => '32px', 'sanitize_callback' => 'sanitize_text_field' ) );
     $wp_customize->add_control( 'gp_global_radius', array( 'label' => 'Global Corner Geometry', 'section' => 'growthpress_branding', 'type' => 'text' ) );
 
+    $wp_customize->add_setting( 'gp_blur_intensity', array( 'default' => '40px', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_blur_intensity', array( 'label' => 'Glass Blur Intensity', 'section' => 'growthpress_branding', 'type' => 'text' ) );
+
+    $wp_customize->add_setting( 'gp_animation_speed', array( 'default' => '0.8s', 'sanitize_callback' => 'sanitize_text_field' ) );
+    $wp_customize->add_control( 'gp_animation_speed', array( 'label' => 'Interaction Animation Speed', 'section' => 'growthpress_branding', 'type' => 'text' ) );
+
     $wp_customize->add_setting( 'growthpress_primary_color', array( 'default' => '#4F46E5', 'sanitize_callback' => 'sanitize_hex_color' ) );
     $wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'growthpress_primary_color', array( 'label' => 'Primary Brand Node', 'section' => 'growthpress_branding' ) ) );
 
@@ -186,7 +192,9 @@ function growthpress_scripts() {
     $primary = get_theme_mod( 'growthpress_primary_color', '#4F46E5' );
     $gradient = get_theme_mod( 'gp_elite_gradient', 'linear-gradient(135deg, #1E1B4B 0%, #4F46E5 100%)' );
     $radius = get_theme_mod( 'gp_global_radius', '32px' );
-    wp_add_inline_style( 'growthpress-style', ":root { --primary: $primary; --elite-gradient: $gradient; --radius: $radius; }" );
+    $blur = get_theme_mod( 'gp_blur_intensity', '40px' );
+    $speed = get_theme_mod( 'gp_animation_speed', '0.8s' );
+    wp_add_inline_style( 'growthpress-style', ":root { --primary: $primary; --elite-gradient: $gradient; --radius: $radius; --blur: $blur; --speed: $speed; }" );
 
     if ( defined( 'GROWTHPRESS_CORE_URL' ) ) {
 	    wp_enqueue_script( 'growthpress-frontend-js', GROWTHPRESS_CORE_URL . 'assets/js/frontend.js', array('jquery'), '1.0.0', true );
