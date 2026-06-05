@@ -24,7 +24,7 @@ class GrowthPress_Sample_Data {
         self::generate_tasks($lead_ids);
         self::generate_kb();
         self::generate_inventory();
-        self::generate_staff();
+        self::generate_staff($lead_ids);
         self::generate_reviews($project_ids);
 
         // 2. Call niche-specific sample data
@@ -111,6 +111,13 @@ class GrowthPress_Sample_Data {
                 $ids[] = $id;
                 update_post_meta($id, '_gp_is_sample', '1');
                 update_post_meta($id, '_lead_email', $l['email']);
+
+                // Seed Secure Vault
+                $vault = array(
+                    array('name' => 'Strategic_Growth_Blueprint.pdf', 'time' => date('Y-m-d H:i'), 'status' => 'Encrypted'),
+                    array('name' => 'Financial_Modeling_V1.xlsx', 'time' => date('Y-m-d H:i'), 'status' => 'Encrypted')
+                );
+                update_post_meta($id, '_secure_vault', $vault);
                 update_post_meta($id, '_lead_phone', $l['phone']);
                 update_post_meta($id, '_lead_zip', $l['zip']);
                 update_post_meta($id, '_lead_source', $l['source']);
@@ -402,7 +409,7 @@ class GrowthPress_Sample_Data {
         return $ids;
     }
 
-    private static function generate_staff() {
+    private static function generate_staff($lead_ids = array()) {
         $specialists = array(
             'Marcus Thorne' => array('Behavioral Sales Psychology', 'Senior Associate'),
             'Elena Vance' => array('Operational Automation', 'Principal Strategist'),
@@ -417,6 +424,9 @@ class GrowthPress_Sample_Data {
             ));
             if ($id) {
                 update_post_meta($id, '_gp_is_sample', '1');
+                if (!empty($lead_ids)) {
+                    update_post_meta($id, '_related_lead', $lead_ids[rand(0, count($lead_ids)-1)]);
+                }
                 update_post_meta($id, '_staff_expertise', $data[0]);
                 update_post_meta($id, '_staff_seniority', $data[1]);
                 update_post_meta($id, '_staff_performance_json', json_encode([

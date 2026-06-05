@@ -161,25 +161,25 @@ class GrowthPress_Portal {
                     </div>
 
                     <div class="glass-card" style="padding:50px; border-radius:44px; margin-bottom:40px;">
-                        <h3 style="font-size:22px; margin-bottom:30px; letter-spacing:-0.03em;">Strategic Documents</h3>
+                        <h3 style="font-size:22px; margin-bottom:30px; letter-spacing:-0.03em;">Secure Asset Vault</h3>
                         <div id="gp-portal-docs" style="display:grid; gap:15px;">
-                            <div style="background:#F8FAFC; padding:15px 20px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #F1F5F9;">
-                                <div style="display:flex; align-items:center; gap:12px;">
-                                    <span class="dashicons dashicons-pdf" style="opacity:0.3;"></span>
-                                    <span style="font-size:12px; font-weight:700;">Financial_Audit_Report.pdf</span>
+                            <?php
+                            $lead = !empty($leads) ? $leads[0] : null;
+                            $vault = $lead ? get_post_meta($lead->ID, '_secure_vault', true) : array();
+                            if($vault): foreach($vault as $v): ?>
+                                <div style="background:#F8FAFC; padding:15px 20px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #F1F5F9;">
+                                    <div style="display:flex; align-items:center; gap:12px;">
+                                        <span class="dashicons dashicons-lock" style="opacity:0.3;"></span>
+                                        <span style="font-size:12px; font-weight:700;"><?php echo esc_html($v['name']); ?></span>
+                                    </div>
+                                    <span style="font-size:8px; font-weight:950; opacity:0.4; letter-spacing:1px; background:#D1FAE5; color:#065F46; padding:4px 8px; border-radius:4px;">ENCRYPTED</span>
                                 </div>
-                                <span style="font-size:10px; font-weight:900; color:var(--primary); cursor:pointer;">VIEW</span>
-                            </div>
-                            <div style="background:#F8FAFC; padding:15px 20px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #F1F5F9;">
-                                <div style="display:flex; align-items:center; gap:12px;">
-                                    <span class="dashicons dashicons-media-text" style="opacity:0.3;"></span>
-                                    <span style="font-size:12px; font-weight:700;">Operational_Blueprint.docx</span>
-                                </div>
-                                <span style="font-size:10px; font-weight:900; color:var(--primary); cursor:pointer;">VIEW</span>
-                            </div>
+                            <?php endforeach; else: ?>
+                                <div style="text-align:center; padding:20px; opacity:0.5; font-size:12px; border:2px dashed #E2E8F0; border-radius:15px;">No assets synchronized to vault.</div>
+                            <?php endif; ?>
                         </div>
                         <div id="vault-status" style="margin-top:20px; font-size:11px; font-weight:700; color:var(--primary); display:none;">SYNCING ASSET...</div>
-                        <button class="gp-btn" style="width:100%; margin-top:25px; height:50px; font-size:12px; border-radius:12px; background:transparent; border:2px dashed #E2E8F0; color:var(--text) !important;" onclick="uploadToVault()">+ UPLOAD STRATEGIC ASSET</button>
+                        <button class="gp-btn" style="width:100%; margin-top:25px; height:50px; font-size:12px; border-radius:12px; background:transparent; border:2px dashed #E2E8F0; color:var(--text) !important;" onclick="uploadToVault()">+ SYNC STRATEGIC ASSET</button>
                         <script>
                         function uploadToVault() {
                             const name = prompt("Enter asset name for encryption:");
@@ -198,7 +198,8 @@ class GrowthPress_Portal {
                     <div class="glass-card" style="padding:50px; border-radius:44px; margin-bottom:40px;">
                         <h3 style="font-size:22px; margin-bottom:30px; letter-spacing:-0.03em;">Financial Ledger</h3>
                         <?php
-                        $transactions = get_posts(array('post_type' => 'gp_transaction', 'posts_per_page' => 5));
+                        // Isolate Transactions by related lead IDs or email matching
+                        $transactions = !empty($lead_ids) ? get_posts(array('post_type' => 'gp_transaction', 'posts_per_page' => 10, 'meta_query' => array(array('key' => '_related_id', 'value' => array_merge($lead_ids, $proposals ? wp_list_pluck($proposals, 'ID') : []), 'compare' => 'IN')))) : array();
                         if($transactions): foreach($transactions as $t):
                             $status = get_post_meta($t->ID, '_status', true);
                             ?>

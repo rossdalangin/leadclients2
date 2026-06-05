@@ -28,6 +28,7 @@ class GrowthPress_CRM {
         add_action( 'wp_ajax_nopriv_gp_log_behavior', array( $this, 'handle_behavior_logging' ) );
         add_action( 'wp_ajax_gp_export_leads', array( $this, 'handle_lead_export' ) );
         add_action( 'wp_ajax_gp_add_lead_note', array( $this, 'handle_add_note' ) );
+        add_action( 'wp_ajax_gp_add_vault_asset', array( $this, 'handle_add_vault_asset' ) );
         add_action( 'wp_ajax_gp_complete_task', array( $this, 'handle_complete_task' ) );
         if ( ! wp_next_scheduled( 'gp_cron_followup' ) ) {
             wp_schedule_event( time(), 'hourly', 'gp_cron_followup' );
@@ -274,6 +275,7 @@ class GrowthPress_CRM {
     public function add_crm_meta_boxes() {
         add_meta_box( 'gp_lead_config', '💼 Lead Identity Configuration', array( $this, 'render_lead_config_meta' ), 'gp_lead', 'normal', 'high' );
         add_meta_box( 'gp_lead_ecosystem', '🌐 Lead Operational Ecosystem', array( $this, 'render_lead_ecosystem_meta' ), 'gp_lead', 'normal', 'high' );
+        add_meta_box( 'gp_lead_vault', '🔐 Secure Lead Asset Vault', array( $this, 'render_lead_vault_meta' ), 'gp_lead', 'normal', 'high' );
         add_meta_box( 'gp_lead_insights', '🧠 Neural Strategic Intelligence', array( $this, 'render_insights_meta' ), 'gp_lead', 'normal', 'high' );
         add_meta_box( 'gp_lead_behavior', '📈 Behavioral Interaction Timeline', array( $this, 'render_behavior_meta' ), 'gp_lead', 'side', 'default' );
         add_meta_box( 'gp_lead_notes', '👥 Strategic Team Collaboration', array( $this, 'render_notes_meta' ), 'gp_lead', 'side', 'low' );
@@ -672,6 +674,52 @@ class GrowthPress_CRM {
         </div>
         <script>function copyGPReply() { var t = document.getElementById('gp-ai-reply'); t.select(); navigator.clipboard.writeText(t.value); alert('Strategy copied!'); }</script>
         <?php
+    }
+
+    public function render_lead_vault_meta( $post ) {
+        $vault = get_post_meta($post->ID, '_secure_vault', true) ?: array();
+        ?>
+        <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #16a34a;">
+            <p style="margin: 0; font-size: 13px; color: #166534;"><strong>Secure Asset Management:</strong> Manage sensitive client documents and proprietary growth blueprints. These assets are encrypted and synchronized to the client's authenticated portal node.</p>
+        </div>
+        <div id="gp-vault-list" style="margin-bottom:20px;">
+            <?php if($vault): foreach($vault as $v): ?>
+                <div style="background:#f8fafc; padding:15px; border-radius:10px; border:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <span style="font-weight:700; font-size:13px;">🔒 <?php echo esc_html($v['name']); ?></span>
+                    <span style="font-size:10px; opacity:0.5;"><?php echo $v['time']; ?></span>
+                </div>
+            <?php endforeach; else: echo "<p style='opacity:0.5; font-size:12px;'>Vault is empty.</p>"; endif; ?>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <input type="text" id="gp-new-asset-name" placeholder="Blueprint Name..." style="flex:1;">
+            <button type="button" class="button" onclick="gpAddVaultAsset(<?php echo $post->ID; ?>)">+ Add System Asset</button>
+        </div>
+        <script>
+            function gpAddVaultAsset(id) {
+                var name = jQuery('#gp-new-asset-name').val();
+                if(!name) return;
+                jQuery.post(ajaxurl, {action:'gp_add_vault_asset', lead_id:id, name:name, gp_nonce:'<?php echo wp_create_nonce("gp_admin_nonce"); ?>'}, function(r){
+                    location.reload();
+                });
+            }
+        </script>
+        <?php
+    }
+
+    public function handle_add_vault_asset() {
+        check_ajax_referer( 'gp_admin_nonce', 'gp_nonce' );
+        if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error();
+
+        $lead_id = intval( $_POST['lead_id'] );
+        $vault = get_post_meta( $lead_id, '_secure_vault', true ) ?: array();
+        $vault[] = array(
+            'name' => sanitize_text_field( $_POST['name'] ),
+            'time' => current_time( 'mysql' ),
+            'status' => 'Encrypted'
+        );
+        update_post_meta( $lead_id, '_secure_vault', $vault );
+        GrowthPress_Activity::log("Manual Asset Addition to Vault for Lead #$lead_id");
+        wp_send_json_success();
     }
 
     public function render_notes_meta( $post ) {

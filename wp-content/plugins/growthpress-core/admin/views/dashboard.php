@@ -329,7 +329,7 @@
                 </div>
                 <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; display: flex; justify-content: space-between; font-size: 13px; font-weight: 900;">
                     <span style="opacity:0.5;">CONV. VELOCITY</span>
-                    <span style="color:var(--accent);">10.8 DAYS</span>
+                    <span style="color:var(--accent);"><?php echo $velocity_days; ?> DAYS</span>
                 </div>
             </div>
         </div>

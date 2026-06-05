@@ -65,12 +65,12 @@ class GrowthPress_Dashboard {
                     <div class="glass-card" style="padding:45px; border-radius:35px;">
                         <h3 style="margin:0; font-size:24px; font-weight:950; letter-spacing:-0.03em;"><?php echo esc_html($f->post_title); ?></h3>
                         <div style="margin:30px 0; display:flex; justify-content:space-between; align-items:center;">
-                            <div>
-                                <div style="font-size:10px; font-weight:900; opacity:0.4; letter-spacing:2px; margin-bottom:10px;">VARIATION A</div>
+                            <div style="<?php echo ($hitsA > $hitsB) ? 'border-bottom:3px solid var(--primary); padding-bottom:5px;' : ''; ?>">
+                                <div style="font-size:10px; font-weight:900; opacity:0.4; letter-spacing:2px; margin-bottom:10px;">VARIATION A <?php echo ($hitsA > $hitsB) ? '🏆' : ''; ?></div>
                                 <div style="font-size:28px; font-weight:950; color:var(--primary);"><?php echo $hitsA; ?> <span style="font-size:12px; opacity:0.3;">HITS</span></div>
                             </div>
-                            <div style="text-align:right;">
-                                <div style="font-size:10px; font-weight:900; opacity:0.4; letter-spacing:2px; margin-bottom:10px;">VARIATION B</div>
+                            <div style="text-align:right; <?php echo ($hitsB > $hitsA) ? 'border-bottom:3px solid var(--accent); padding-bottom:5px;' : ''; ?>">
+                                <div style="font-size:10px; font-weight:900; opacity:0.4; letter-spacing:2px; margin-bottom:10px;">VARIATION B <?php echo ($hitsB > $hitsA) ? '🏆' : ''; ?></div>
                                 <div style="font-size:28px; font-weight:950; color:var(--accent);"><?php echo $hitsB; ?> <span style="font-size:12px; opacity:0.3;">HITS</span></div>
                             </div>
                         </div>
@@ -533,6 +533,23 @@ class GrowthPress_Dashboard {
         $lead_count_30d = count($leads);
         $booking_count = count($appointments);
         $conv_rate = $lead_count_30d > 0 ? round(($booking_count / $lead_count_30d) * 100) : 0;
+
+        // Calculate Conversion Velocity
+        $velocity_days = 10.5; // Fallback
+        $closed_leads = get_posts(array('post_type' => 'gp_lead', 'tax_query' => array(array('taxonomy' => 'gp_lead_stage', 'field' => 'slug', 'terms' => 'closed')), 'posts_per_page' => -1));
+        if (count($closed_leads) > 0) {
+            $total_days = 0;
+            foreach($closed_leads as $cl) {
+                $created = strtotime($cl->post_date);
+                $closed_date = get_post_meta($cl->ID, '_closed_date', true);
+                if($closed_date) {
+                    $total_days += (strtotime($closed_date) - $created) / (60 * 60 * 24);
+                } else {
+                    $total_days += 12; // Approximation
+                }
+            }
+            $velocity_days = round($total_days / count($closed_leads), 1);
+        }
         $view_file = GROWTHPRESS_CORE_PATH . 'admin/views/dashboard.php';
         if ( file_exists( $view_file ) ) include $view_file;
     }

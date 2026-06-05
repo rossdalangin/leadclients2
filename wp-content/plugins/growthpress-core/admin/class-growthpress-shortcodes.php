@@ -137,6 +137,13 @@ class GrowthPress_Shortcode_Ref {
                 'desc'  => 'Secure corporate tax optimization intake form.',
                 'usage' => 'Specific to Accounting niche.',
                 'example' => '[gp_tax_audit]'
+            ),
+            array(
+                'tag'   => '[gp_law_conflict_check]',
+                'title' => 'Litigation Clearance Node',
+                'desc'  => 'Secure conflict of interest verification form.',
+                'usage' => 'Specific to Law niche.',
+                'example' => '[gp_law_conflict_check]'
             )
         );
         ?>

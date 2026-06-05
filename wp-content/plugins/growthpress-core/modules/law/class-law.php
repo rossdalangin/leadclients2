@@ -5,7 +5,29 @@
 class GrowthPress_Law {
     public function __construct() {
         add_shortcode('gp_legal_intake', array($this, 'render_legal_intake'));
+        add_shortcode('gp_law_conflict_check', array($this, 'render_conflict_check'));
         add_action('gp_niche_lead_analysis', array($this, 'analyze_law_lead'));
+    }
+
+    public function render_conflict_check() {
+        $nonce = wp_create_nonce('gp_lead_nonce');
+        return '<div class="gp-law-conflict glass-card gp-reveal" style="border-right: 20px solid #1E293B; padding:100px 80px; background: linear-gradient(135deg, var(--surface), #F1F5F9);">
+            <div style="text-align:center; margin-bottom:70px;">
+                <div style="font-size:12px; font-weight:950; color:#1E293B; text-transform:uppercase; letter-spacing:4px; margin-bottom:20px;">LITIGATION CLEARANCE NODE v5.9</div>
+                <h3 class="text-gradient" style="font-size:3.5rem; line-height:1.0;">Secure Conflict Verification</h3>
+                <p style="font-size:1.25rem; opacity:0.7; max-width:700px; margin:25px auto 0;">Submit adverse party identities for real-time conflict clearance and litigation eligibility.</p>
+            </div>
+            <form class="gp-form" data-action="gp_submit_lead">
+                <input type="hidden" name="nonce" value="'.$nonce.'">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:30px;">
+                    <div><label style="font-size:12px; font-weight:950; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:12px;">POTENTIAL ADVERSE PARTY</label><input type="text" name="adverse_party" placeholder="Entity or Person Name" required style="height:75px; border-radius:20px; border:2px solid #F1F5F9; padding:0 25px; font-size:16px;"></div>
+                    <div><label style="font-size:12px; font-weight:950; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:12px;">YOUR SECURE EMAIL</label><input type="email" name="lead_email" placeholder="Direct Email" required style="height:75px; border-radius:20px; border:2px solid #F1F5F9; padding:0 25px; font-size:16px;"></div>
+                </div>
+                <textarea name="lead_msg" placeholder="Summarize the nature of the dispute and any other related entities..." style="height:180px; margin-bottom:40px; border-radius:28px; padding:30px; font-size:16px; border:2px solid #F1F5F9; line-height:1.7;"></textarea>
+                <button type="submit" class="gp-btn" style="width:100%; height:90px; font-size:22px; background:#1E293B;">Execute Clearance Sequence</button>
+            </form>
+            <div style="margin-top:40px; font-size:11px; opacity:0.4; text-align:center;">ENCRYPTION: AES-256-GCM. Clearance does not constitute engagement.</div>
+        </div>';
     }
 
     public function analyze_law_lead($lead_id) {
