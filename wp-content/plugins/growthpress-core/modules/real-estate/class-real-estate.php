@@ -25,7 +25,7 @@ class GrowthPress_RealEstate {
     }
 
     public function add_property_meta_boxes() {
-        add_meta_box('gp_property_details', 'Asset Inventory Data', array($this, 'render_property_meta'), 'gp_property', 'normal', 'high');
+        add_meta_box('gp_property_details', '🏠 High-Yield Asset Inventory Data', array($this, 'render_property_meta'), 'gp_property', 'normal', 'high');
     }
 
     public function render_property_meta($post) {

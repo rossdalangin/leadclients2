@@ -24,7 +24,7 @@ class GrowthPress_Dental {
     }
 
     public function add_dental_meta_boxes() {
-        add_meta_box('gp_treatment_details', 'Clinical Treatment Protocol', array($this, 'render_treatment_meta'), 'gp_treatment', 'normal', 'high');
+        add_meta_box('gp_treatment_details', '🩺 Clinical Treatment Execution Protocol', array($this, 'render_treatment_meta'), 'gp_treatment', 'normal', 'high');
     }
 
     public function render_treatment_meta($post) {

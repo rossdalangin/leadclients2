@@ -41,7 +41,7 @@ class GrowthPress_Payments {
     }
 
     public function add_payment_meta_boxes() {
-        add_meta_box( 'gp_payment_details', 'Transaction Data Ledger', array( $this, 'render_payment_meta' ), 'gp_transaction', 'normal', 'high' );
+        add_meta_box( 'gp_payment_details', '💰 Strategic Transaction Data Ledger', array( $this, 'render_payment_meta' ), 'gp_transaction', 'normal', 'high' );
     }
 
     public function render_payment_meta( $post ) {

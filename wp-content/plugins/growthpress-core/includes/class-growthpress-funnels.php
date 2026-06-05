@@ -51,7 +51,7 @@ class GrowthPress_Funnels {
     }
 
     public function add_funnel_meta_boxes() {
-        add_meta_box( 'gp_funnel_details', 'A/B Analytics Metrics', array( $this, 'render_funnel_meta' ), 'gp_funnel', 'normal', 'high' );
+        add_meta_box( 'gp_funnel_details', '🎯 Neural Funnel A/B Performance Metrics', array( $this, 'render_funnel_meta' ), 'gp_funnel', 'normal', 'high' );
     }
 
     public function render_funnel_meta( $post ) {

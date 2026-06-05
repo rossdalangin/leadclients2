@@ -33,7 +33,7 @@ class GrowthPress_Reputation {
     }
 
     public function add_review_meta_boxes() {
-        add_meta_box( 'gp_review_details', 'Testimonial Authority Data', array( $this, 'render_review_meta' ), 'gp_review', 'normal', 'high' );
+        add_meta_box( 'gp_review_details', '⭐ Testimonial Market Authority Data', array( $this, 'render_review_meta' ), 'gp_review', 'normal', 'high' );
     }
 
     public function render_review_meta( $post ) {

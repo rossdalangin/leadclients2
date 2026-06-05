@@ -34,27 +34,71 @@ get_header(); ?>
                 </div>
             </div>
 
-            <!-- Performance Stats -->
+            <!-- Performance Stats & Analytics -->
             <div class="gp-reveal" style="margin-top:120px;">
-                <div class="glass-card" style="padding:60px; display:grid; grid-template-columns: repeat(4, 1fr); gap:40px; text-align:center;">
-                    <div>
-                        <div style="font-size:3rem; font-weight:950; color:var(--primary); line-height:1;">98%</div>
-                        <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:2px; margin-top:10px;">SUCCESS RATE</div>
+                <div style="display:grid; grid-template-columns: 1fr 2fr; gap:40px;">
+                    <div class="glass-card" style="padding:50px;">
+                        <h3 style="margin-top:0;">Performance Radar</h3>
+                        <canvas id="staffRadar" height="300"></canvas>
                     </div>
-                    <div>
-                        <div style="font-size:3rem; font-weight:950; color:var(--primary); line-height:1;">4.2m</div>
-                        <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:2px; margin-top:10px;">AVG RESPONSE</div>
-                    </div>
-                    <div>
-                        <div style="font-size:3rem; font-weight:950; color:var(--primary); line-height:1;">150+</div>
-                        <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:2px; margin-top:10px;">NODES DEPLOYED</div>
-                    </div>
-                    <div>
-                        <div style="font-size:3rem; font-weight:950; color:var(--primary); line-height:1;">Elite</div>
-                        <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:2px; margin-top:10px;">CERTIFICATION</div>
+                    <div class="glass-card" style="padding:50px; display:grid; grid-template-columns: repeat(2, 1fr); gap:40px; text-align:center;">
+                        <div>
+                            <div style="font-size:3.5rem; font-weight:950; color:var(--primary); line-height:1;">98%</div>
+                            <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:2px; margin-top:15px;">SUCCESS RATE</div>
+                        </div>
+                        <div>
+                            <div style="font-size:3.5rem; font-weight:950; color:var(--primary); line-height:1;">4.2m</div>
+                            <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:2px; margin-top:15px;">AVG RESPONSE</div>
+                        </div>
+                        <div>
+                            <div style="font-size:3.5rem; font-weight:950; color:var(--primary); line-height:1;">150+</div>
+                            <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:2px; margin-top:15px;">NODES DEPLOYED</div>
+                        </div>
+                        <div>
+                            <div style="font-size:3.5rem; font-weight:950; color:var(--primary); line-height:1;">Elite</div>
+                            <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:2px; margin-top:15px;">CERTIFICATION</div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <?php
+            $perf_json = get_post_meta(get_the_ID(), '_staff_performance_json', true);
+            $perf = json_decode($perf_json, true) ?: ['efficiency'=>90, 'conversion'=>85, 'technical'=>95, 'speed'=>92, 'strategy'=>88];
+            ?>
+            <script>
+            jQuery(document).ready(function($) {
+                const ctx = document.getElementById('staffRadar').getContext('2d');
+                new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Efficiency', 'Conversion', 'Technical', 'Speed', 'Strategy'],
+                        datasets: [{
+                            data: [
+                                <?php echo (int)$perf['efficiency']; ?>,
+                                <?php echo (int)$perf['conversion']; ?>,
+                                <?php echo (int)$perf['technical']; ?>,
+                                <?php echo (int)$perf['speed']; ?>,
+                                <?php echo (int)$perf['strategy']; ?>
+                            ],
+                            backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                            borderColor: '#4F46E5',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                grid: { color: 'rgba(0,0,0,0.05)' },
+                                pointLabels: { font: { size: 10, weight: 'bold' } }
+                            }
+                        },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            });
+            </script>
         <?php endwhile; ?>
     </div>
 </main>

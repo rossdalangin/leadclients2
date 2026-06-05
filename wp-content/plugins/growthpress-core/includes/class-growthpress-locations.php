@@ -33,7 +33,7 @@ class GrowthPress_Locations {
     }
 
     public function add_location_meta_boxes() {
-        add_meta_box( 'gp_location_details', 'Regional Node Configuration', array( $this, 'render_location_meta' ), 'gp_location', 'normal', 'high' );
+        add_meta_box( 'gp_location_details', '📍 Regional Infrastructure Node Configuration', array( $this, 'render_location_meta' ), 'gp_location', 'normal', 'high' );
     }
 
     public function render_location_meta( $post ) {

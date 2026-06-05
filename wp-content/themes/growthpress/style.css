@@ -27,6 +27,12 @@ Text Domain: growthpress
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
     --transition: var(--speed) var(--ease-out-expo);
 
+    /* Fluid Shadows System */
+    --shadow-sm: 0 10px 20px rgba(0,0,0,0.02);
+    --shadow-md: 0 20px 40px rgba(0,0,0,0.04);
+    --shadow-lg: 0 40px 80px rgba(0,0,0,0.08);
+    --shadow-xl: 0 60px 120px rgba(0,0,0,0.12);
+
     /* Fluid Typography Engine */
     --step-0: clamp(1rem, 0.92rem + 0.39vw, 1.25rem);
     --step-1: clamp(1.25rem, 1.08rem + 0.87vw, 1.8rem);
@@ -161,9 +167,7 @@ body {
 
 .glass-card:hover {
     transform: translateY(-20px) scale(1.01);
-    box-shadow:
-        0 40px 80px -10px rgba(0,0,0,0.12),
-        0 10px 20px -5px rgba(0,0,0,0.04);
+    box-shadow: var(--shadow-xl), inset 0 1px 1px rgba(255,255,255,0.8);
 }
 
 /* Fluid Typography Scaled v5.7 */

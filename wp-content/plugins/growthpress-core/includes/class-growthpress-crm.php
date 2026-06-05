@@ -252,16 +252,16 @@ class GrowthPress_CRM {
     }
 
     public function add_crm_meta_boxes() {
-        add_meta_box( 'gp_lead_config', 'Lead Configuration', array( $this, 'render_lead_config_meta' ), 'gp_lead', 'normal', 'high' );
-        add_meta_box( 'gp_lead_ecosystem', '💼 Lead 360 Ecosystem', array( $this, 'render_lead_ecosystem_meta' ), 'gp_lead', 'normal', 'high' );
-        add_meta_box( 'gp_lead_insights', '🧠 AI Strategic Intelligence', array( $this, 'render_insights_meta' ), 'gp_lead', 'normal', 'high' );
-        add_meta_box( 'gp_lead_behavior', '📈 Behavioral Timeline', array( $this, 'render_behavior_meta' ), 'gp_lead', 'side', 'default' );
-        add_meta_box( 'gp_lead_notes', 'Team Collaboration', array( $this, 'render_notes_meta' ), 'gp_lead', 'side', 'low' );
-        add_meta_box( 'gp_task_details', 'Task Context', array( $this, 'render_task_meta' ), 'gp_task', 'normal', 'high' );
-        add_meta_box( 'gp_project_details', 'Success ROI Data', array( $this, 'render_project_meta' ), 'gp_project', 'normal', 'high' );
-        add_meta_box( 'gp_service_details', 'Service Line Strategy', array( $this, 'render_service_meta' ), 'gp_service', 'normal', 'high' );
-        add_meta_box( 'gp_kb_details', 'Strategic Intelligence Calibration', array( $this, 'render_kb_meta' ), 'gp_kb', 'normal', 'high' );
-        add_meta_box( 'gp_staff_details', 'Specialist Expertise Profile', array( $this, 'render_staff_meta' ), 'gp_staff', 'normal', 'high' );
+        add_meta_box( 'gp_lead_config', '💼 Lead Identity Configuration', array( $this, 'render_lead_config_meta' ), 'gp_lead', 'normal', 'high' );
+        add_meta_box( 'gp_lead_ecosystem', '🌐 Lead Operational Ecosystem', array( $this, 'render_lead_ecosystem_meta' ), 'gp_lead', 'normal', 'high' );
+        add_meta_box( 'gp_lead_insights', '🧠 Neural Strategic Intelligence', array( $this, 'render_insights_meta' ), 'gp_lead', 'normal', 'high' );
+        add_meta_box( 'gp_lead_behavior', '📈 Behavioral Interaction Timeline', array( $this, 'render_behavior_meta' ), 'gp_lead', 'side', 'default' );
+        add_meta_box( 'gp_lead_notes', '👥 Strategic Team Collaboration', array( $this, 'render_notes_meta' ), 'gp_lead', 'side', 'low' );
+        add_meta_box( 'gp_task_details', '✅ Strategic Task Execution Context', array( $this, 'render_task_meta' ), 'gp_task', 'normal', 'high' );
+        add_meta_box( 'gp_project_details', '📊 Success ROI Performance Data', array( $this, 'render_project_meta' ), 'gp_project', 'normal', 'high' );
+        add_meta_box( 'gp_service_details', '🛠️ Service Infrastructure Strategy', array( $this, 'render_service_meta' ), 'gp_service', 'normal', 'high' );
+        add_meta_box( 'gp_kb_details', '📚 Intelligence Node Calibration', array( $this, 'render_kb_meta' ), 'gp_kb', 'normal', 'high' );
+        add_meta_box( 'gp_staff_details', '👤 Specialist Human Capital Profile', array( $this, 'render_staff_meta' ), 'gp_staff', 'normal', 'high' );
     }
 
     public function render_lead_ecosystem_meta( $post ) {

@@ -59,7 +59,7 @@ class GrowthPress_Proposals {
     }
 
     public function add_proposal_meta_boxes() {
-        add_meta_box( 'gp_proposal_details', 'Strategic Proposal Intel', array( $this, 'render_proposal_meta' ), 'gp_proposal', 'normal', 'high' );
+        add_meta_box( 'gp_proposal_details', '📜 Strategic Architecture Proposal Intel', array( $this, 'render_proposal_meta' ), 'gp_proposal', 'normal', 'high' );
     }
 
     public function render_proposal_meta( $post ) {

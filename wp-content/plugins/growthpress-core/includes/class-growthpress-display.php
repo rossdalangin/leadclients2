@@ -12,6 +12,7 @@ class GrowthPress_Display {
     public function __construct() {
         add_shortcode( 'gp_kb_grid', array( $this, 'render_kb_grid' ) );
         add_shortcode( 'gp_case_study_grid', array( $this, 'render_case_study_grid' ) );
+        add_shortcode( 'gp_staff_grid', array( $this, 'render_staff_grid' ) );
         add_shortcode( 'gp_service_grid', array( $this, 'render_service_grid' ) );
         add_shortcode( 'gp_inventory_grid', array( $this, 'render_inventory_grid' ) );
         add_shortcode( 'gp_location_grid', array( $this, 'render_location_grid' ) );
@@ -31,7 +32,12 @@ class GrowthPress_Display {
 
     public function render_case_study_grid() {
         $posts = get_posts( array( 'post_type' => 'gp_project', 'posts_per_page' => 6 ) );
-        return $this->render_grid( $posts, 'Success Stories' );
+        return $this->render_grid( $posts, 'Success Stories', 'gp_project' );
+    }
+
+    public function render_staff_grid() {
+        $posts = get_posts( array( 'post_type' => 'gp_staff', 'posts_per_page' => -1 ) );
+        return $this->render_grid( $posts, 'Strategic Team Nodes', 'gp_staff' );
     }
 
     public function render_service_grid() {
@@ -157,23 +163,51 @@ class GrowthPress_Display {
         wp_send_json_success(nl2br($response));
     }
 
-    private function render_grid( $posts, $title ) {
+    private function render_grid( $posts, $title, $type = '' ) {
         if ( empty( $posts ) ) return '';
         ob_start(); ?>
         <div class="gp-content-grid-wrapper" style="margin: 60px 0;">
             <h2 class="text-gradient" style="font-size: 2.5rem; margin-bottom: 40px; text-align: center;"><?php echo esc_html( $title ); ?></h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
                 <?php foreach ( $posts as $p ) : ?>
-                    <div class="glass-card gp-reveal" style="padding: 40px; border-radius: 30px; display: flex; flex-direction: column;">
+                    <div class="glass-card gp-reveal" style="padding: 40px; border-radius: 30px; display: flex; flex-direction: column; position: relative; overflow: hidden;">
+
+                        <?php if ( $type === 'gp_project' ) :
+                            $roi = get_post_meta($p->ID, '_gp_growth_roi', true);
+                            if ($roi) : ?>
+                                <div style="position: absolute; top: 20px; right: 20px; background: var(--primary); color: white; padding: 5px 12px; border-radius: 10px; font-size: 10px; font-weight: 950; z-index: 10;"><?php echo esc_html($roi); ?> ROI</div>
+                            <?php endif;
+                        endif; ?>
+
                         <?php if ( has_post_thumbnail( $p->ID ) ) : ?>
                             <div style="margin: -40px -40px 30px -40px; height: 200px; overflow: hidden; border-radius: 30px 30px 0 0;">
                                 <?php echo get_the_post_thumbnail( $p->ID, 'medium_large', array( 'style' => 'width: 100%; height: 100%; object-fit: cover;' ) ); ?>
                             </div>
                         <?php endif; ?>
-                        <h3 style="margin: 0 0 15px 0; font-size: 20px; font-weight: 900;"><?php echo esc_html( $p->post_title ); ?></h3>
+
+                        <h3 style="margin: 0 0 10px 0; font-size: 20px; font-weight: 900;"><?php echo esc_html( $p->post_title ); ?></h3>
+
+                        <?php if ( $type === 'gp_staff' ) :
+                            $exp = get_post_meta($p->ID, '_staff_expertise', true);
+                            if ($exp) : ?>
+                                <div style="font-size: 10px; font-weight: 950; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;"><?php echo esc_html($exp); ?></div>
+                            <?php endif;
+                        endif; ?>
+
                         <div style="font-size: 14px; opacity: 0.7; line-height: 1.6; margin-bottom: 25px; flex: 1;">
-                            <?php echo wp_trim_words( $p->post_content, 25 ); ?>
+                            <?php echo wp_trim_words( $p->post_content, 20 ); ?>
                         </div>
+
+                        <?php if ( $type === 'gp_project' ) :
+                            $val = get_post_meta($p->ID, '_gp_pipeline_value', true);
+                            if ($val) : ?>
+                                <div style="margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.03); border-radius: 15px; display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 10px; font-weight: 950; opacity: 0.5;">PIPELINE VALUE</span>
+                                    <span style="font-size: 14px; font-weight: 950; color: var(--secondary);"><?php echo esc_html($val); ?></span>
+                                </div>
+                            <?php endif;
+                        endif; ?>
+
                         <a href="<?php echo get_permalink( $p->ID ); ?>" class="gp-btn" style="text-align: center; padding: 12px; font-size: 12px; border-radius: 12px; background: var(--secondary); color: white !important;">EXPLORE INTEL</a>
                     </div>
                 <?php endforeach; ?>

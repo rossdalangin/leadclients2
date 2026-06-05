@@ -47,7 +47,7 @@ class GrowthPress_Booking {
     }
 
     public function add_booking_meta_boxes() {
-        add_meta_box( 'gp_booking_details', 'Strategic Session Details', array( $this, 'render_booking_meta' ), 'gp_appointment', 'normal', 'high' );
+        add_meta_box( 'gp_booking_details', '🗓️ Strategic Session Execution Details', array( $this, 'render_booking_meta' ), 'gp_appointment', 'normal', 'high' );
     }
 
     public function render_booking_meta( $post ) {

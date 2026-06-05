@@ -24,6 +24,7 @@ class GrowthPress_Sample_Data {
         self::generate_tasks($lead_ids);
         self::generate_kb();
         self::generate_inventory();
+        self::generate_staff();
         self::generate_reviews($project_ids);
 
         // 2. Call niche-specific sample data
@@ -49,7 +50,7 @@ class GrowthPress_Sample_Data {
 
     public static function remove_all_sample_data() {
         $args = array(
-            'post_type'      => array('gp_lead', 'gp_appointment', 'gp_property', 'gp_review', 'gp_proposal', 'gp_transaction', 'gp_funnel', 'gp_location', 'gp_task', 'gp_kb', 'gp_project', 'gp_service', 'gp_treatment'),
+            'post_type'      => array('gp_lead', 'gp_appointment', 'gp_property', 'gp_review', 'gp_proposal', 'gp_transaction', 'gp_funnel', 'gp_location', 'gp_task', 'gp_kb', 'gp_project', 'gp_service', 'gp_treatment', 'gp_staff', 'gp_inventory'),
             'posts_per_page' => -1,
             'meta_query'     => array(
                 array(
@@ -390,11 +391,42 @@ class GrowthPress_Sample_Data {
                 $ids[] = $id;
                 update_post_meta($id, '_gp_is_sample', '1');
                 update_post_meta($id, '_gp_growth_roi', $data[0]);
+                update_post_meta($id, '_gp_roi_value', (int)str_replace(['$', 'M', '+'], '', $data[2]) * 1000000);
+                update_post_meta($id, '_gp_niche_benchmark', '+15%');
+                update_post_meta($id, '_gp_ai_score', rand(85, 98));
                 update_post_meta($id, '_gp_efficiency_gain', $data[1]);
                 update_post_meta($id, '_gp_pipeline_value', $data[2]);
             }
         }
         return $ids;
+    }
+
+    private static function generate_staff() {
+        $specialists = array(
+            'Marcus Thorne' => array('Behavioral Sales Psychology', 'Senior Associate'),
+            'Elena Vance' => array('Operational Automation', 'Principal Strategist'),
+            'David Chen' => array('High-Ticket Triage', 'Managing Director')
+        );
+        foreach ($specialists as $name => $data) {
+            $id = wp_insert_post(array(
+                'post_title'   => $name,
+                'post_content' => 'Elite human capital node specialized in ' . strtolower($data[0]) . '. Proven track record of system-wide ROI optimization.',
+                'post_type'    => 'gp_staff',
+                'post_status'  => 'publish'
+            ));
+            if ($id) {
+                update_post_meta($id, '_gp_is_sample', '1');
+                update_post_meta($id, '_staff_expertise', $data[0]);
+                update_post_meta($id, '_staff_seniority', $data[1]);
+                update_post_meta($id, '_staff_performance_json', json_encode([
+                    'efficiency' => rand(85, 98),
+                    'conversion' => rand(80, 95),
+                    'technical' => rand(90, 99),
+                    'speed' => rand(88, 97),
+                    'strategy' => rand(85, 96)
+                ]));
+            }
+        }
     }
 
     private static function generate_inventory() {
