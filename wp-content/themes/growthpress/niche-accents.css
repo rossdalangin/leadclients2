@@ -22,6 +22,9 @@ body.gp-niche-consultants { --primary: #2563EB; }
 .gp-niche-solar .gp-solar-calc { border-top: 10px solid #F59E0B; }
 .gp-niche-law .gp-legal-intake { border-right: 15px solid #1E293B; }
 .gp-niche-medical .gp-symptom-checker { box-shadow: 0 0 50px rgba(16, 185, 129, 0.1); }
+.gp-niche-dental .gp-insurance-optimizer { border-left: 15px solid #0EA5E9; }
+.gp-niche-real-estate .gp-property-matcher { border-bottom: 10px solid #2563EB; }
+.gp-niche-accounting .gp-tax-estimator { border-top: 10px solid #7C3AED; }
 
 /* Pricing Elite Cards */
 .glass-card.pricing-featured::after {

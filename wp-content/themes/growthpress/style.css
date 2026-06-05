@@ -142,32 +142,82 @@ body {
 }
 .main-navigation a:hover { opacity: 1; }
 
-/* Ultimate Glassmorphism Engine v5.7 */
+/* Ultimate Glassmorphism Engine v5.8 - Hyper-Cinematic */
 .glass-card, .gp-estimator, .gp-solar-calc, .gp-symptom-checker, .gp-ai-faq, .gp-insurance-optimizer, .gp-legal-intake {
-    background: linear-gradient(135deg, rgba(var(--surface-rgb), 0.9) 0%, rgba(var(--surface-rgb), 0.7) 100%);
-    backdrop-filter: blur(var(--blur)) saturate(180%);
-    -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+    background: linear-gradient(135deg, rgba(var(--surface-rgb), 0.85) 0%, rgba(var(--surface-rgb), 0.65) 100%);
+    backdrop-filter: blur(var(--blur)) saturate(190%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(190%);
     border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     padding: clamp(3rem, 8vw, 6rem);
     box-shadow:
         0 4px 6px -1px rgba(0,0,0,0.02),
         0 20px 40px -4px rgba(0,0,0,0.04),
-        inset 0 1px 1px rgba(255,255,255,0.4);
+        inset 0 2px 2px rgba(255,255,255,0.6),
+        inset 0 -2px 2px rgba(0,0,0,0.02);
     transition: var(--transition);
     position: relative;
     overflow: hidden;
+    isolation: isolate;
 }
 
 .glass-card::before {
     content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background: radial-gradient(circle at top right, var(--primary-glow), transparent 70%);
     pointer-events: none;
+    z-index: -1;
+    transition: var(--transition);
+}
+
+/* Glass Shimmer Animation */
+.glass-card::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0) 40%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0) 60%,
+        transparent
+    );
+    transform: rotate(25deg);
+    transition: none;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+}
+
+.glass-card:hover::after {
+    animation: glass-shimmer 1.5s var(--ease-out-expo) forwards;
+}
+
+@keyframes glass-shimmer {
+    0% { transform: rotate(25deg) translate(-100%, -100%); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: rotate(25deg) translate(100%, 100%); opacity: 0; }
 }
 
 .glass-card:hover {
-    transform: translateY(-20px) scale(1.01);
-    box-shadow: var(--shadow-xl), inset 0 1px 1px rgba(255,255,255,0.8);
+    transform: translateY(-25px) scale(1.02);
+    box-shadow: var(--shadow-xl),
+                0 0 100px var(--primary-glow),
+                inset 0 2px 2px rgba(255,255,255,1);
+    border-color: rgba(var(--surface-rgb), 1);
+}
+
+body.gp-design-male .glass-card {
+    border-width: 2px;
+    background: linear-gradient(135deg, rgba(var(--surface-rgb), 0.95) 0%, rgba(var(--surface-rgb), 0.85) 100%);
+}
+
+body.gp-design-female .glass-card {
+    border-width: 1px;
+    box-shadow: var(--shadow-lg), 0 0 40px var(--primary-glow);
 }
 
 /* Fluid Typography Scaled v5.7 */
@@ -258,10 +308,43 @@ input:focus, select:focus, textarea:focus {
 
 /* Mobile CTA Bar Glass-Blur */
 .gp-mobile-cta-bar {
-    background: rgba(var(--surface-rgb), 0.7);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+    background: rgba(var(--surface-rgb), 0.75);
+    backdrop-filter: blur(30px) saturate(160%);
+    -webkit-backdrop-filter: blur(30px) saturate(160%);
     border-top: 1px solid var(--border);
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.05);
+}
+
+/* Personality Accent Nodes */
+body.gp-design-male .text-gradient {
+    --elite-gradient: linear-gradient(90deg, #FFFFFF 0%, #94A3B8 100%);
+}
+
+body.gp-design-female .text-gradient {
+    --elite-gradient: linear-gradient(135deg, #BE185D 0%, #B45309 100%);
+}
+
+/* Improved Layout Accents */
+.container {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width: 1440px) {
+    .container { max-width: 1320px; }
+}
+
+.site-main > div {
+    position: relative;
+}
+
+.site-main > div::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 50%; width: 1px; height: 100px;
+    background: linear-gradient(to bottom, var(--primary), transparent);
+    opacity: 0.2;
 }
 
 /* Mobile CTA Optimization */
