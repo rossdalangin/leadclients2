@@ -121,6 +121,7 @@ class GrowthPress_Sample_Data {
                 update_post_meta($id, '_gp_ai_suggested_reply', "Hello " . explode(' ', $l['title'])[0] . ", I saw your inquiry about automation...");
                 update_post_meta($id, '_gp_behavioral_nudge', "Based on your interest in " . $l['tag'] . " solutions, we have a specialized team ready.");
                 update_post_meta($id, '_gp_nurture_sequence', "Day 1: Welcome\nDay 2: Value Proposition\nDay 3: Case Study\nDay 4: Demo Invitation\nDay 5: Final Follow-up");
+                update_post_meta($id, '_gp_growth_roadmap', "## Phase 1: Foundation\n- Implement AI Triage\n- Standardize intake nodes\n\n## Phase 2: Acceleration\n- Deploy multi-node nurture\n- Optimize ROI modeling");
                 update_post_meta($id, '_assigned_staff', $staff_id);
 
                 $notes = array(

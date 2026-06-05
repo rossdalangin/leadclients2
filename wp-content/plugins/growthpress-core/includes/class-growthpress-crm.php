@@ -186,17 +186,37 @@ class GrowthPress_CRM {
     }
 
     private function execute_neural_rules( $lead_id ) {
-        // Mock Automation Rule Engine v1.0
-        // In a production environment, this would fetch active rules from the database.
+        // Mock Automation Rule Engine v1.2 - Advanced Neural Logic
         $lead = get_post($lead_id);
         $prob = get_post_meta($lead_id, '_gp_ai_probability', true) ?: 75;
+        $zip = get_post_meta($lead_id, '_lead_zip', true);
 
-        // Rule: Lead Probability > 90 -> Auto-assign Senior Specialist & Notify
+        // Rule 1: High-Probability Lead Escalation
         if ($prob >= 90) {
             $admin = get_users(array('role' => 'administrator', 'number' => 1))[0];
             update_post_meta($lead_id, '_assigned_staff', $admin->ID);
             $this->create_task("PRIORITY UPLINK: " . $lead->post_title, "High-probability lead ($prob%). Strategic outreach required.", $lead_id);
-            GrowthPress_Activity::log("Automation Node: Rule 'Lead Probability > 90' executed for Lead #$lead_id.");
+            GrowthPress_Activity::log("Neural Node: Priority Escalation for Lead #$lead_id.");
+        }
+
+        // Rule 2: Regional Intelligence Tagging (ZIP-based Triage)
+        if ($zip) {
+            $east_coast = array('100', '101', '102', '021', '068');
+            $prefix = substr($zip, 0, 3);
+            if (in_array($prefix, $east_coast)) {
+                wp_set_object_terms($lead_id, 'Regional-East', 'gp_lead_tag', true);
+            }
+        }
+
+        // Rule 3: High-ROI Signal Detection (Mock NLP Analysis)
+        $content = strtolower($lead->post_content);
+        $high_value_signals = array('million', 'enterprise', 'global', 'synergy', 'acquisition');
+        foreach ($high_value_signals as $signal) {
+            if (strpos($content, $signal) !== false) {
+                wp_set_object_terms($lead_id, 'High-ROI-Signal', 'gp_lead_tag', true);
+                $this->create_task("Enterprise Strategy Brief: " . $lead->post_title, "High-value keyword detected: '$signal'. Prepare enterprise deck.", $lead_id);
+                break;
+            }
         }
     }
 
@@ -812,11 +832,21 @@ class GrowthPress_CRM {
     }
 
     public function handle_abandoned_inquiry_followup() {
-        $new_leads = get_posts( array( 'post_type' => 'gp_lead', 'posts_per_page' => 20, 'tax_query' => array( array( 'taxonomy' => 'gp_lead_stage', 'field' => 'slug', 'terms' => 'new' ) ), 'date_query' => array( array( 'before' => '24 hours ago' ) ) ) );
-        foreach ( $new_leads as $lead ) {
+        // Nurture Sequence Trigger (24h)
+        $nurture_leads = get_posts( array( 'post_type' => 'gp_lead', 'posts_per_page' => 10, 'tax_query' => array( array( 'taxonomy' => 'gp_lead_stage', 'field' => 'slug', 'terms' => 'new' ) ), 'date_query' => array( array( 'before' => '24 hours ago' ) ) ) );
+        foreach ( $nurture_leads as $lead ) {
             if ( get_post_meta( $lead->ID, '_followup_sent', true ) ) continue;
             update_post_meta( $lead->ID, '_followup_sent', 'true' );
             GrowthPress_Activity::log( "AI Reactivation: Nurture sequence triggered for dormant lead #{$lead->ID}." );
+        }
+
+        // Stagnant Lead Warning (72h)
+        $stagnant_leads = get_posts( array( 'post_type' => 'gp_lead', 'posts_per_page' => 10, 'tax_query' => array( array( 'taxonomy' => 'gp_lead_stage', 'field' => 'slug', 'terms' => 'new' ) ), 'date_query' => array( array( 'before' => '72 hours ago' ) ) ) );
+        foreach ( $stagnant_leads as $lead ) {
+            if ( get_post_meta( $lead->ID, '_stagnant_ping_sent', true ) ) continue;
+            update_post_meta( $lead->ID, '_stagnant_ping_sent', 'true' );
+            GrowthPress_Activity::log( "Operational Alert: Lead #{$lead->ID} is stagnant (>72h). Strategic outreach required." );
+            $this->create_task("STAGNANT LEAD ALERT: " . $lead->post_title, "No engagement detected for 72 hours. Attempt manual uplink.", $lead->ID);
         }
     }
 }

@@ -123,6 +123,20 @@ class GrowthPress_Shortcode_Ref {
                 'desc'  => 'Displays a grid of active conversion funnels.',
                 'usage' => 'Mainly for internal landing page management.',
                 'example' => '[gp_funnel_grid]'
+            ),
+            array(
+                'tag'   => '[gp_medical_intake]',
+                'title' => 'Clinical Intake Node',
+                'desc'  => 'HIPAA-compliant patient onboarding form with neural triage.',
+                'usage' => 'Specific to Medical niche.',
+                'example' => '[gp_medical_intake]'
+            ),
+            array(
+                'tag'   => '[gp_tax_audit]',
+                'title' => 'Fiscal Strategy Audit',
+                'desc'  => 'Secure corporate tax optimization intake form.',
+                'usage' => 'Specific to Accounting niche.',
+                'example' => '[gp_tax_audit]'
             )
         );
         ?>

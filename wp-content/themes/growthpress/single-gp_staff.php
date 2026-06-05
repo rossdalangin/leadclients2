@@ -30,7 +30,12 @@ get_header(); ?>
                     <div class="entry-content" style="font-size:1.2rem; line-height:1.8; opacity:0.8; margin-bottom:50px;">
                         <?php the_content(); ?>
                     </div>
-                    <a href="/book-now" class="gp-btn">Secure Briefing with <?php echo explode(' ', get_the_title())[0]; ?></a>
+                    <div style="background:var(--secondary); color:white; padding:60px; border-radius:40px; margin-top:50px; position:relative; overflow:hidden;">
+                        <div style="position:absolute; top:0; right:0; width:200px; height:200px; background:var(--primary); filter:blur(100px); opacity:0.3; transform:translate(50px, -50px);"></div>
+                        <h3 style="color:white; margin:0 0 10px 0;">Schedule Strategic Briefing</h3>
+                        <p style="opacity:0.7; margin-bottom:40px;">Direct uplink to <?php echo explode(' ', get_the_title())[0]; ?> for a 1-on-1 operational audit.</p>
+                        <?php echo do_shortcode('[gp_booking_form]'); ?>
+                    </div>
                 </div>
             </div>
 

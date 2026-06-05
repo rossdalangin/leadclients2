@@ -19,6 +19,11 @@ get_header(); ?>
                             <a href="#booking" class="gp-btn">Secure My Appointment</a>
                             <a href="/pricing" class="gp-btn" style="background:transparent; border:2px solid var(--primary); color:var(--primary) !important;">View Plans</a>
                         </div>
+
+                        <div style="margin-top:50px; background:var(--primary-glow); padding:30px; border-radius:24px; border:1px solid rgba(37,99,235,0.1); display:flex; align-items:center; gap:25px;">
+                            <div style="font-size:32px; font-weight:950; color:var(--primary); line-height:1;">+315%</div>
+                            <div style="font-size:11px; font-weight:900; opacity:0.6; letter-spacing:1px; line-height:1.4;">AVERAGE HISTORICAL ROI<br>FOR THIS SERVICE LINE</div>
+                        </div>
                     </div>
                     <div class="wp-block-column">
                         <?php if ( has_post_thumbnail() ) : ?>

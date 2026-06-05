@@ -24,17 +24,22 @@ class GrowthPress_Content_Studio {
         $content = wp_kses_post( $_POST['content'] );
         $type = sanitize_text_field( $_POST['type'] ?? 'gp_kb' );
 
-        $post_id = wp_insert_post( array(
-            'post_title'   => $title,
-            'post_content' => $content,
-            'post_type'    => $type,
-            'post_status'  => 'publish'
-        ) );
+        $types_to_sync = ($type === 'sync_all') ? array('gp_kb', 'gp_service', 'gp_project') : array($type);
+        $synced_ids = array();
 
-        if ( $post_id ) {
-            $type_label = str_replace('gp_', '', $type);
-            GrowthPress_Activity::log( "Intelligence Asset synced to " . strtoupper($type_label) . ": $title" );
-            wp_send_json_success( "Synced to " . ucfirst($type_label) . "! ID: $post_id" );
+        foreach($types_to_sync as $node_type) {
+            $post_id = wp_insert_post( array(
+                'post_title'   => $title,
+                'post_content' => $content,
+                'post_type'    => $node_type,
+                'post_status'  => 'publish'
+            ) );
+            if($post_id) $synced_ids[] = $post_id;
+        }
+
+        if ( ! empty($synced_ids) ) {
+            GrowthPress_Activity::log( "Intelligence Asset propagated across ecosystem: $title" );
+            wp_send_json_success( "Synced to " . count($synced_ids) . " system nodes." );
         }
         wp_send_json_error( "Failed to sync." );
     }
@@ -172,6 +177,7 @@ class GrowthPress_Content_Studio {
                         <button class="sync-btn" onclick="syncAsset('gp_project')" style="--sync-color: #10B981;">Sync to Case Studies</button>
                         <button class="sync-btn" onclick="syncAsset('gp_property')" style="--sync-color: #F59E0B;">Sync to Inventory</button>
                         <button class="sync-btn" onclick="syncAsset('gp_treatment')" style="--sync-color: #EF4444;">Sync to Treatments</button>
+                        <button class="sync-btn" onclick="syncAsset('sync_all')" style="--sync-color: var(--primary); background:var(--primary-glow); border-style:dashed;">Propagate to All Nodes</button>
                     </div>
 
                     <hr style="margin:40px 0; opacity:0.1;">
@@ -200,9 +206,9 @@ class GrowthPress_Content_Studio {
             .quick-prompt { padding:15px; background:#F8FAFC; border-radius:12px; font-size:12px; font-weight:700; cursor:pointer; transition:0.3s; }
             .quick-prompt:hover { background:white; box-shadow:0 10px 20px rgba(0,0,0,0.05); transform:translateX(5px); }
 
-            .preview-male { background:#0F172A; color:white; border-radius:8px !important; }
-            .preview-female { background:#FFF1F2; color:#4C0519; border-radius:60px !important; }
-            .preview-unisex { background:#F9FAFB; color:#111827; border-radius:30px !important; }
+            .preview-male { background:#0F172A; color:white; border-radius:8px !important; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 40px 100px rgba(0,0,0,0.5); }
+            .preview-female { background:rgba(255,255,255,0.8); backdrop-filter:blur(40px); color:#4C0519; border-radius:60px !important; border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 40px 100px rgba(255,100,150,0.1); }
+            .preview-unisex { background:rgba(255,255,255,0.7); backdrop-filter:blur(40px); color:#111827; border-radius:30px !important; border: 1px solid rgba(0,0,0,0.05); }
         </style>
 
         <script>
