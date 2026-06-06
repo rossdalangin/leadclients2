@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="wp-content/themes/growthpress/style.css">
+    <style>
+        body { padding: 50px; background: #f0f2f5; }
+        .test-section { margin-bottom: 100px; border: 1px dashed #ccc; padding: 20px; }
+        .label { font-weight: bold; margin-bottom: 20px; display: block; color: #333; }
+    </style>
+</head>
+<body class="gp-design-unisex">
+
+    <div class="test-section">
+        <span class="label">SINGLE COLUMN (Should be 100% width)</span>
+        <div class="wp-block-columns">
+            <div class="wp-block-column">
+                <div class="glass-card">
+                    <h3>Single Column Node</h3>
+                    <p>This card should span the full container width.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <span class="label">TWO COLUMNS (Should be ~50% each)</span>
+        <div class="wp-block-columns has-2-columns">
+            <div class="wp-block-column">
+                <div class="glass-card">
+                    <h3>Column A</h3>
+                    <p>Should be roughly half width.</p>
+                </div>
+            </div>
+            <div class="wp-block-column">
+                <div class="glass-card">
+                    <h3>Column B</h3>
+                    <p>Should be roughly half width.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

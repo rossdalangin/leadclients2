@@ -20,6 +20,8 @@ class GrowthPress_CRM {
 
     private function __construct() {
         add_action( 'init', array( $this, 'register_cpts' ) );
+        add_filter( 'bulk_actions-edit-gp_lead', array( $this, 'register_lead_bulk_actions' ) );
+        add_filter( 'handle_bulk_actions-edit-gp_lead', array( $this, 'handle_lead_bulk_actions' ), 10, 3 );
         add_action( 'gp_lead_captured', array( $this, 'trigger_lead_automations' ) );
         add_action( 'gp_cron_followup', array( $this, 'handle_abandoned_inquiry_followup' ) );
         add_action( 'add_meta_boxes', array( $this, 'add_crm_meta_boxes' ) );
@@ -526,11 +528,24 @@ class GrowthPress_CRM {
         $growth = get_post_meta( $post->ID, '_gp_growth_roi', true );
         $efficiency = get_post_meta( $post->ID, '_gp_efficiency_gain', true );
         $pipe = get_post_meta( $post->ID, '_gp_pipeline_value', true );
+        $lead_id = get_post_meta( $post->ID, '_related_lead', true );
+        $leads = get_posts( array( 'post_type' => 'gp_lead', 'posts_per_page' => -1 ) );
         ?>
         <div style="background: #fdf4ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #a855f7;">
             <p style="margin: 0; font-size: 13px; color: #7e22ce;"><strong>Success Result Data:</strong> Case studies provide the 'Reason to Believe' for high-ticket prospects. Input measurable outcomes here to power the 'Ecosystem ROI Hub' and automated sales briefs.</p>
         </div>
         <table class="form-table">
+            <tr>
+                <th><label>Related Business Lead</label><p class="description">Link this project to a lead node for strict portal isolation.</p></th>
+                <td>
+                    <select name="gp_project_lead" style="width:100%;">
+                        <option value="0">Global (Public Portfolio)</option>
+                        <?php foreach($leads as $l): ?>
+                            <option value="<?php echo $l->ID; ?>" <?php selected($lead_id, $l->ID); ?>><?php echo esc_html($l->post_title); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
             <tr>
                 <th><label>Growth Increase (%)</label><p class="description">Quantifiable revenue or traffic growth (e.g. +320%).</p></th>
                 <td><input type="text" name="gp_growth_roi" value="<?php echo esc_attr($growth); ?>" placeholder="+320%" class="regular-text"></td>
@@ -605,6 +620,7 @@ class GrowthPress_CRM {
             update_post_meta( $post_id, '_gp_growth_roi', sanitize_text_field( $_POST['gp_growth_roi'] ) );
             update_post_meta( $post_id, '_gp_efficiency_gain', sanitize_text_field( $_POST['gp_efficiency_gain'] ) );
             update_post_meta( $post_id, '_gp_pipeline_value', sanitize_text_field( $_POST['gp_pipeline_value'] ) );
+            update_post_meta( $post_id, '_related_lead', intval( $_POST['gp_project_lead'] ) );
         }
 
         if ( isset( $_POST['gp_service_icon'] ) ) {
@@ -793,6 +809,23 @@ class GrowthPress_CRM {
         $task_id = wp_insert_post( array( 'post_title' => $title, 'post_content' => $desc, 'post_type' => 'gp_task', 'post_status' => 'publish' ) );
         if ( $lead_id ) update_post_meta( $task_id, '_related_lead', $lead_id );
         return $task_id;
+    }
+
+    public function register_lead_bulk_actions( $bulk_actions ) {
+        $bulk_actions['gp_run_ai_analysis'] = 'Run Neural AI Analysis';
+        return $bulk_actions;
+    }
+
+    public function handle_lead_bulk_actions( $redirect_to, $action, $post_ids ) {
+        if ( $action !== 'gp_run_ai_analysis' ) return $redirect_to;
+
+        foreach ( $post_ids as $post_id ) {
+            // Trigger the same analysis used during capture
+            $this->process_async_analysis( $post_id );
+        }
+
+        $redirect_to = add_query_arg( 'gp_ai_processed', count( $post_ids ), $redirect_to );
+        return $redirect_to;
     }
 
     public function handle_lead_export() {

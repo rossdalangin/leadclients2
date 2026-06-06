@@ -28,6 +28,27 @@
         </div>
     </div>
 
+    <!-- System Node Health -->
+    <div class="glass-card gp-reveal" style="margin-bottom:40px; padding:30px; background:linear-gradient(90deg, var(--surface) 0%, rgba(var(--surface-rgb), 0.5) 100%);">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="display:flex; gap:40px; align-items:center;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div class="status-ping active"></div>
+                    <span style="font-size:11px; font-weight:900; letter-spacing:1px; opacity:0.6;">NEURAL ENGINE: ONLINE</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div class="status-ping active"></div>
+                    <span style="font-size:11px; font-weight:900; letter-spacing:1px; opacity:0.6;">CRM DATA SYNC: ACTIVE</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div class="status-ping warning"></div>
+                    <span style="font-size:11px; font-weight:900; letter-spacing:1px; opacity:0.6;">EXTERNAL API: LATENCY</span>
+                </div>
+            </div>
+            <div style="font-size:10px; font-weight:950; opacity:0.3; letter-spacing:2px;">ECOSYSTEM v6.1 DEFINITIVE</div>
+        </div>
+    </div>
+
     <!-- System Health Grid -->
     <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:20px; margin-bottom:40px;">
         <div class="glass-card" style="padding:20px; display:flex; align-items:center; gap:15px;">

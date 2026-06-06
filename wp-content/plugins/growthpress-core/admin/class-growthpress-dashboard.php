@@ -22,7 +22,14 @@ class GrowthPress_Dashboard {
 
     public function render_strategic_notifications() {
         $screen = get_current_screen();
-        if ( strpos($screen->id, 'growthpress') === false ) return;
+        if ( strpos($screen->id, 'growthpress') === false && $screen->id !== 'edit-gp_lead' ) return;
+
+        if ( isset($_GET['gp_ai_processed']) ) {
+            $count = intval($_GET['gp_ai_processed']);
+            echo '<div class="notice notice-success is-dismissible" style="border-left-color: #10B981;">';
+            echo '<p style="font-weight:900; color:#065F46;">🧠 NEURAL UPDATE: Artificial Intelligence analysis successfully executed on ' . $count . ' strategic lead nodes.</p>';
+            echo '</div>';
+        }
 
         $high_urgency_leads = get_posts(array(
             'post_type' => 'gp_lead',

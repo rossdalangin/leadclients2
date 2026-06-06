@@ -21,6 +21,8 @@ jQuery(document).ready(function($) {
 
     // Kanban Drag & Drop
     if ($('.kanban-cards').length > 0) {
+        $('.kanban-card').css('transition', 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)');
+
         $('.kanban-card').on('click', function(e) {
             if($(e.target).closest('a, button').length) return;
             const leadId = $(this).data('id');

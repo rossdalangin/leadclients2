@@ -5,6 +5,39 @@
 class GrowthPress_Contractor {
     public function __construct() {
         add_shortcode('gp_contractor_estimator', array($this, 'render_estimator'));
+        add_shortcode('gp_project_roi_tracker', array($this, 'render_roi_tracker'));
+    }
+
+    public function render_roi_tracker() {
+        $projects = get_posts(array('post_type' => 'gp_project', 'posts_per_page' => 3, 'meta_key' => '_gp_is_sample', 'meta_value' => '1'));
+        ob_start(); ?>
+        <div class="gp-project-roi-tracker glass-card gp-reveal" style="padding:60px;">
+            <h3 style="margin-top:0; margin-bottom:40px;">Structural ROI Performance</h3>
+            <div style="display:grid; gap:30px;">
+                <?php foreach($projects as $p):
+                    $roi = get_post_meta($p->ID, '_gp_growth_roi', true) ?: '+15%';
+                    $value = get_post_meta($p->ID, '_gp_pipeline_value', true) ?: '$250k';
+                    ?>
+                    <div style="background:rgba(255,255,255,0.5); padding:30px; border-radius:25px; border:1px solid rgba(0,0,0,0.03);">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <h4 style="margin:0; font-size:18px;"><?php echo esc_html($p->post_title); ?></h4>
+                                <div style="font-size:11px; opacity:0.5; margin-top:5px;">VALUATION: <?php echo $value; ?></div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="font-size:24px; font-weight:950; color:var(--primary);"><?php echo $roi; ?></div>
+                                <div style="font-size:10px; font-weight:900; opacity:0.4;">EQUITY GAIN</div>
+                            </div>
+                        </div>
+                        <div style="margin-top:20px; height:8px; background:#F1F5F9; border-radius:10px; overflow:hidden;">
+                            <div style="width:<?php echo rand(60, 95); ?>%; height:100%; background:var(--primary);"></div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php
+        return ob_get_clean();
     }
 
     public function render_estimator() {

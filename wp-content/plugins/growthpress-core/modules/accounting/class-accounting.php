@@ -6,6 +6,41 @@ class GrowthPress_Accounting {
     public function __construct() {
         add_shortcode('gp_tax_estimator', array($this, 'render_tax_estimator'));
         add_shortcode('gp_tax_audit', array($this, 'render_tax_audit'));
+        add_shortcode('gp_tax_savings_ledger', array($this, 'render_savings_ledger'));
+    }
+
+    public function render_savings_ledger() {
+        $leads = get_posts(array('post_type' => 'gp_lead', 'posts_per_page' => 5, 'meta_key' => '_gp_is_sample', 'meta_value' => '1'));
+        ob_start(); ?>
+        <div class="gp-tax-ledger glass-card gp-reveal" style="padding:60px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
+                <h3 style="margin:0;">Tax Preservation Ledger</h3>
+                <div style="background:var(--primary-glow); color:var(--primary); padding:8px 15px; border-radius:30px; font-size:10px; font-weight:950;">FISCAL v5.9</div>
+            </div>
+            <table style="width:100%; border-collapse:collapse;">
+                <thead>
+                    <tr style="text-align:left; border-bottom:1px solid rgba(0,0,0,0.05);">
+                        <th style="padding:15px 0; font-size:11px; opacity:0.4;">ENTITY</th>
+                        <th style="padding:15px 0; font-size:11px; opacity:0.4;">STRATEGY</th>
+                        <th style="padding:15px 0; font-size:11px; opacity:0.4; text-align:right;">SAVINGS EST.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($leads as $l):
+                        $prob = get_post_meta($l->ID, '_gp_ai_probability', true);
+                        $savings = $prob * 1250;
+                        ?>
+                        <tr style="border-bottom:1px solid rgba(0,0,0,0.03);">
+                            <td style="padding:20px 0; font-weight:700;"><?php echo esc_html($l->post_title); ?></td>
+                            <td style="padding:20px 0; font-size:13px; opacity:0.7;">Corporate Restructuring</td>
+                            <td style="padding:20px 0; text-align:right; font-weight:900; color:#10B981;">$<?php echo number_format($savings); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+        <?php
+        return ob_get_clean();
     }
 
     public function render_tax_audit() {

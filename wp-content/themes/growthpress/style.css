@@ -365,15 +365,25 @@ body.gp-design-female .text-gradient {
     overflow-wrap: break-word;
 }
 
-/* Elite Layout Optimization: Full-width for single column entries */
-.wp-block-columns:not(.has-2-columns):not(.has-3-columns):not(.has-4-columns):not(.has-5-columns):not(.has-6-columns) > .wp-block-column {
-    flex: 0 0 100%;
-    max-width: 100%;
+/* Elite Layout Optimization v6.3: High-Fidelity Block Architecture */
+.wp-block-columns:not([class*="has-"]) > .wp-block-column,
+.wp-block-column:only-of-type {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
 }
 
-.wp-block-columns:not(.has-2-columns):not(.has-3-columns):not(.has-4-columns):not(.has-5-columns):not(.has-6-columns) > .wp-block-column .glass-card {
-    width: 100%;
+/* Fluid Expansion for Solitary Glass Cards */
+.wp-block-column:only-of-type .glass-card,
+.wp-block-columns:not([class*="has-"]) > .wp-block-column .glass-card {
+    width: 100% !important;
+    max-width: none !important;
+    flex: 1 1 100%;
 }
+
+/* Maintain Geometric Room for Sibling Nodes */
+.wp-block-columns.has-2-columns > .wp-block-column { flex: 0 0 calc(50% - 1.25rem); }
+.wp-block-columns.has-3-columns > .wp-block-column { flex: 0 0 calc(33.33% - 1.66rem); }
 
 /* Ensure room for sibling columns when multiple exist */
 .wp-block-columns.has-2-columns > .wp-block-column { flex-basis: calc(50% - 1.25rem); }

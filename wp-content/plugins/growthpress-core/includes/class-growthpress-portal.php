@@ -14,6 +14,7 @@ class GrowthPress_Portal {
         add_action( 'wp_ajax_gp_request_reschedule', array( $this, 'handle_reschedule_request' ) );
         add_action( 'wp_ajax_gp_update_portal_profile', array( $this, 'handle_profile_update' ) );
         add_action( 'wp_ajax_gp_portal_upload', array( $this, 'handle_portal_upload' ) );
+        add_action( 'wp_ajax_gp_mark_milestone', array( $this, 'handle_mark_milestone' ) );
     }
 
     public function handle_portal_upload() {
@@ -53,6 +54,19 @@ class GrowthPress_Portal {
     public function handle_reschedule_request() {
         update_post_meta(intval($_POST['appointment_id']), '_reschedule_requested', '1');
         wp_send_json_success();
+    }
+
+    public function handle_mark_milestone() {
+        $lead_id = intval($_POST['lead_id']);
+        $milestone_index = intval($_POST['index']);
+        $status = sanitize_text_field($_POST['status']);
+
+        $milestones = get_post_meta($lead_id, '_gp_roadmap_milestones', true) ?: array();
+        $milestones[$milestone_index] = $status;
+        update_post_meta($lead_id, '_gp_roadmap_milestones', $milestones);
+
+        GrowthPress_Activity::log("Milestone #$milestone_index marked as $status for Lead #$lead_id");
+        wp_send_json_success('Strategy node updated.');
     }
 
     public function render_portal() {
@@ -107,10 +121,53 @@ class GrowthPress_Portal {
                         </div>
                     </div>
 
+                    <!-- Roadmap Execution Checklist -->
+                    <div id="gp-portal-roadmap" style="margin-bottom:60px;">
+                        <h2 style="font-size:32px; margin-bottom:40px; letter-spacing:-0.05em; font-weight:950;">Strategy Execution Node</h2>
+                        <div class="glass-card" style="padding:50px; border-radius:40px;">
+                            <?php
+                            $lead = !empty($leads) ? $leads[0] : null;
+                            $roadmap_raw = $lead ? get_post_meta($lead->ID, '_gp_growth_roadmap', true) : '';
+                            $milestones = $lead ? (get_post_meta($lead->ID, '_gp_roadmap_milestones', true) ?: array()) : array();
+
+                            if($roadmap_raw):
+                                // Simple parser for AI roadmap items (lines starting with -)
+                                preg_match_all('/^-\s+(.*)$/m', $roadmap_raw, $matches);
+                                $items = $matches[1];
+                                if($items): ?>
+                                    <div style="display:grid; gap:20px;">
+                                        <?php foreach($items as $idx => $item):
+                                            $is_done = isset($milestones[$idx]) && $milestones[$idx] === 'complete';
+                                            ?>
+                                            <div style="display:flex; align-items:center; gap:20px; padding:20px; background:#F8FAFC; border-radius:15px; border:1px solid #F1F5F9; <?php echo $is_done ? 'opacity:0.5;' : ''; ?>">
+                                                <input type="checkbox" style="width:24px; height:24px; border-radius:6px; cursor:pointer;" <?php checked($is_done); ?> onclick="markMilestone(<?php echo $lead->ID; ?>, <?php echo $idx; ?>, this.checked)">
+                                                <span style="font-size:15px; font-weight:700; color:var(--secondary); <?php echo $is_done ? 'text-decoration:line-through;' : ''; ?>"><?php echo esc_html($item); ?></span>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                <?php else: echo "<p style='opacity:0.5;'>Analyzing strategy nodes...</p>"; endif; ?>
+                            <?php else: echo "<p style='opacity:0.5; text-align:center;'>Awaiting AI Strategic Roadmap generation.</p>"; endif; ?>
+                        </div>
+                        <script>
+                        function markMilestone(leadId, index, isChecked) {
+                            jQuery.post(gp_ajax.ajaxurl, {
+                                action: 'gp_mark_milestone',
+                                lead_id: leadId,
+                                index: index,
+                                status: isChecked ? 'complete' : 'pending'
+                            }, function() {
+                                // Real-time feedback via opacity if needed, but simple reload for fidelity
+                                location.reload();
+                            });
+                        }
+                        </script>
+                    </div>
+
                     <div id="gp-portal-projects" style="margin-bottom:60px;">
                         <h2 style="font-size:32px; margin-bottom:40px; letter-spacing:-0.05em; font-weight:950;">Active Growth Projects</h2>
                         <?php
-                        $projects = get_posts(array('post_type' => 'gp_project', 'posts_per_page' => 5, 's' => $user->display_name));
+                        // Query projects explicitly linked to this user's leads
+                        $projects = !empty($lead_ids) ? get_posts(array('post_type' => 'gp_project', 'posts_per_page' => 10, 'meta_query' => array(array('key' => '_related_lead', 'value' => $lead_ids, 'compare' => 'IN')))) : array();
                         if($projects): foreach($projects as $p): ?>
                             <div class="glass-card" style="margin-bottom:20px; padding:30px; border-radius:25px; display:flex; justify-content:space-between; align-items:center;">
                                 <div>

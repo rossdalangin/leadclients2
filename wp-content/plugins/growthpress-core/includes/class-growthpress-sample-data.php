@@ -17,7 +17,7 @@ class GrowthPress_Sample_Data {
         $appt_ids = self::generate_appointments($lead_ids);
         $service_ids = self::generate_services();
         $proposal_ids = self::generate_proposals($lead_ids, $service_ids);
-        $project_ids = self::generate_projects();
+        $project_ids = self::generate_projects($lead_ids);
         self::generate_transactions($proposal_ids, $appt_ids);
         self::generate_locations();
         self::generate_funnels();
@@ -392,13 +392,14 @@ class GrowthPress_Sample_Data {
         return $ids;
     }
 
-    private static function generate_projects() {
+    private static function generate_projects($lead_ids = array()) {
         $projects = array(
             'Global Enterprise Migration' => array('+420%', '15 HRS/WK', '$2.5M+'),
             'Sustainable Infrastructure Deployment' => array('+215%', '22 HRS/WK', '$1.8M+'),
             'Neural Triage Implementation' => array('+680%', '40 HRS/WK', '$3.2M+')
         );
         $ids = array();
+        $i = 0;
         foreach ($projects as $p => $data) {
             $id = wp_insert_post(array(
                 'post_title'   => $p . ' (Demo Case)',
@@ -409,6 +410,9 @@ class GrowthPress_Sample_Data {
             if ($id) {
                 $ids[] = $id;
                 update_post_meta($id, '_gp_is_sample', '1');
+                if (!empty($lead_ids)) {
+                    update_post_meta($id, '_related_lead', $lead_ids[$i % count($lead_ids)]);
+                }
                 update_post_meta($id, '_gp_growth_roi', $data[0]);
                 update_post_meta($id, '_gp_roi_value', (int)str_replace(['$', 'M', '+'], '', $data[2]) * 1000000);
                 update_post_meta($id, '_gp_niche_benchmark', '+15%');
