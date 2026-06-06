@@ -350,26 +350,34 @@ body.gp-design-female .text-gradient {
     opacity: 0.2;
 }
 
-/* WordPress Block Optimization */
+/* WordPress Block Optimization v6.0 */
 .wp-block-columns {
     display: flex;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
     flex-wrap: wrap;
-    gap: 2rem;
+    gap: 2.5rem;
 }
 
 .wp-block-column {
-    flex-grow: 1;
-    flex-basis: 0;
+    flex: 1 0 0%;
     min-width: 0;
     word-break: break-word;
     overflow-wrap: break-word;
 }
 
-/* Optimization: Make single column full-width if it's the only one */
-.wp-block-columns:not(.has-2-columns):not(.has-3-columns):not(.has-4-columns):not(.has-5-columns):not(.has-6-columns) .wp-block-column {
-    flex-basis: 100%;
+/* Elite Layout Optimization: Full-width for single column entries */
+.wp-block-columns:not(.has-2-columns):not(.has-3-columns):not(.has-4-columns):not(.has-5-columns):not(.has-6-columns) > .wp-block-column {
+    flex: 0 0 100%;
+    max-width: 100%;
 }
+
+.wp-block-columns:not(.has-2-columns):not(.has-3-columns):not(.has-4-columns):not(.has-5-columns):not(.has-6-columns) > .wp-block-column .glass-card {
+    width: 100%;
+}
+
+/* Ensure room for sibling columns when multiple exist */
+.wp-block-columns.has-2-columns > .wp-block-column { flex-basis: calc(50% - 1.25rem); }
+.wp-block-columns.has-3-columns > .wp-block-column { flex-basis: calc(33.33% - 1.66rem); }
 
 .wp-block-columns.is-not-stacked-on-mobile > .wp-block-column {
     flex-basis: 0;

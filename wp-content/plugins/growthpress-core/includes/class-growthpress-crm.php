@@ -211,11 +211,12 @@ class GrowthPress_CRM {
 
         // Rule 3: High-ROI Signal Detection (Mock NLP Analysis)
         $content = strtolower($lead->post_content);
-        $high_value_signals = array('million', 'enterprise', 'global', 'synergy', 'acquisition');
+        $high_value_signals = array('million', 'enterprise', 'global', 'synergy', 'acquisition', 'rebranding', 'restructuring', 'private equity');
         foreach ($high_value_signals as $signal) {
             if (strpos($content, $signal) !== false) {
                 wp_set_object_terms($lead_id, 'High-ROI-Signal', 'gp_lead_tag', true);
                 $this->create_task("Enterprise Strategy Brief: " . $lead->post_title, "High-value keyword detected: '$signal'. Prepare enterprise deck.", $lead_id);
+                GrowthPress_Activity::log("ROI Signal: High-value intent detected for Lead #$lead_id.");
                 break;
             }
         }

@@ -24,7 +24,7 @@ class GrowthPress_Content_Studio {
         $content = wp_kses_post( $_POST['content'] );
         $type = sanitize_text_field( $_POST['type'] ?? 'gp_kb' );
 
-        $types_to_sync = ($type === 'sync_all') ? array('gp_kb', 'gp_service', 'gp_project') : array($type);
+        $types_to_sync = ($type === 'sync_all') ? array('gp_kb', 'gp_service', 'gp_project', 'gp_property', 'gp_treatment') : array($type);
         $synced_ids = array();
 
         foreach($types_to_sync as $node_type) {
@@ -34,7 +34,10 @@ class GrowthPress_Content_Studio {
                 'post_type'    => $node_type,
                 'post_status'  => 'publish'
             ) );
-            if($post_id) $synced_ids[] = $post_id;
+            if($post_id) {
+                $synced_ids[] = $post_id;
+                update_post_meta($post_id, '_gp_is_sample', '1'); // For easy demo cleanup
+            }
         }
 
         if ( ! empty($synced_ids) ) {
