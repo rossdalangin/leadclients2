@@ -40,15 +40,42 @@ class GrowthPress_Settings {
     public function ajax_generate_sample_data() {
         if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error('Unauthorized');
         check_ajax_referer( 'gp_admin_nonce', 'gp_nonce' );
+
+        $before = $this->count_total_samples();
         GrowthPress_Sample_Data::generate_all_sample_data();
-        wp_send_json_success('Sample ecosystem successfully instantiated.');
+        $after = $this->count_total_samples();
+
+        $count = $after - $before;
+        wp_send_json_success("Sample ecosystem instantiated. Generated $count new strategic nodes across the OS.");
     }
 
     public function ajax_remove_sample_data() {
         if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error('Unauthorized');
         check_ajax_referer( 'gp_admin_nonce', 'gp_nonce' );
+
+        $before = $this->count_total_samples();
         GrowthPress_Sample_Data::remove_all_sample_data();
-        wp_send_json_success('Sample intelligence safely purged from ecosystem.');
+        $after = $this->count_total_samples();
+
+        $count = $before - $after;
+        wp_send_json_success("Sample intelligence purged. Safely removed $count demo nodes from the ecosystem.");
+    }
+
+    private function count_total_samples() {
+        $args = array(
+            'post_type'      => array('gp_lead', 'gp_appointment', 'gp_property', 'gp_review', 'gp_proposal', 'gp_transaction', 'gp_funnel', 'gp_location', 'gp_task', 'gp_kb', 'gp_project', 'gp_service', 'gp_treatment', 'gp_staff'),
+            'posts_per_page' => -1,
+            'meta_query'     => array(
+                array(
+                    'key'   => '_gp_is_sample',
+                    'value' => '1',
+                ),
+            ),
+            'post_status'    => 'any',
+            'fields'         => 'ids'
+        );
+        $query = new WP_Query($args);
+        return $query->found_posts;
     }
 
     public function test_connectivity() {

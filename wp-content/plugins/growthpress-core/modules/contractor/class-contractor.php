@@ -48,8 +48,28 @@ class GrowthPress_Contractor {
     }
 
     public function generate_sample_data() {
-        $id = wp_insert_post(array('post_title' => 'The Modern Build', 'post_content' => 'High-end residential construction project.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
-        if ($id) update_post_meta($id, '_gp_is_sample', '1');
+        $id = wp_insert_post(array(
+            'post_title'   => 'Modernist Estate Overhaul',
+            'post_content' => 'Full architectural renovation and structural engineering for a 15,000 sqft premium estate.',
+            'post_type'    => 'gp_project',
+            'post_status'  => 'publish'
+        ));
+        if ($id) {
+            update_post_meta($id, '_gp_is_sample', '1');
+            update_post_meta($id, '_gp_growth_roi', '+115%');
+            update_post_meta($id, '_gp_pipeline_value', '$3.8M');
+        }
+
+        $sid = wp_insert_post(array(
+            'post_title'   => 'Architectural Engineering',
+            'post_content' => 'Elite structural auditing and precision blueprinting for high-ticket residential builds.',
+            'post_type'    => 'gp_service',
+            'post_status'  => 'publish'
+        ));
+        if ($sid) {
+            update_post_meta($sid, '_gp_is_sample', '1');
+            update_post_meta($sid, '_gp_service_icon', '📐');
+        }
     }
 }
 new GrowthPress_Contractor();

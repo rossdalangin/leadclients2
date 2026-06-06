@@ -126,12 +126,28 @@ class GrowthPress_RealEstate {
     }
 
     public function generate_sample_data() {
-        $id = wp_insert_post(array('post_title' => 'The Horizon Penthouse', 'post_content' => 'High-stakes luxury with absolute skyline dominance.', 'post_type' => 'gp_property', 'post_status' => 'publish'));
+        $id = wp_insert_post(array(
+            'post_title'   => 'The Horizon Penthouse',
+            'post_content' => 'High-stakes luxury with absolute skyline dominance. This property features a neural-integrated lighting system and private glass-card foyer.',
+            'post_type'    => 'gp_property',
+            'post_status'  => 'publish'
+        ));
         if ($id) {
             update_post_meta($id, '_gp_is_sample', '1');
             update_post_meta($id, '_gp_price', '4500000');
             update_post_meta($id, '_gp_sqft', '3500');
             update_post_meta($id, '_gp_lifestyle_tags', 'Urban, Modernist, Elite');
+        }
+
+        $sid = wp_insert_post(array(
+            'post_title'   => 'High-Yield Portfolio Audit',
+            'post_content' => 'Strategic assessment of your real estate capital to identify off-market appreciation nodes and lifestyle alignment.',
+            'post_type'    => 'gp_service',
+            'post_status'  => 'publish'
+        ));
+        if ($sid) {
+            update_post_meta($sid, '_gp_is_sample', '1');
+            update_post_meta($sid, '_gp_service_icon', '🏢');
         }
     }
 }

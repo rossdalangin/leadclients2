@@ -98,4 +98,41 @@ jQuery(document).ready(function($) {
             }
         });
     };
+
+    // Ecosystem Sync
+    window.syncAsset = function(type) {
+        const title = $('#gp-content-topic').val();
+        const content = $('#gp-studio-output').find('.ai-response').text();
+
+        if (!title || !content) {
+            alert('Generate content first before syncing.');
+            return;
+        }
+
+        const btn = $(`.sync-btn[onclick="syncAsset('${type}')"]`);
+        const originalText = btn.text();
+        btn.text('SYNCING...').prop('disabled', true);
+
+        $.post(ajaxurl, {
+            action: 'gp_sync_to_kb',
+            title: title,
+            content: content,
+            type: type,
+            gp_nonce: gp_admin.nonce
+        }, function(res) {
+            if (res.success) {
+                alert(res.data);
+            } else {
+                alert('Sync failed.');
+            }
+            btn.text(originalText).prop('disabled', false);
+        });
+    };
+
+    window.copyStudioOutput = function() {
+        const text = $('#gp-studio-output').find('.ai-response').text();
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Intelligence copied to clipboard.');
+        });
+    };
 });

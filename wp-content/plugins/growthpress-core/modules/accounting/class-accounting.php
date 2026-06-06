@@ -71,8 +71,28 @@ class GrowthPress_Accounting {
     }
 
     public function generate_sample_data() {
-        $id = wp_insert_post(array('post_title' => 'The Tax Strategy Firm', 'post_content' => 'High-end tax optimization for corporate clients.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
-        if ($id) update_post_meta($id, '_gp_is_sample', '1');
+        $id = wp_insert_post(array(
+            'post_title'   => 'Fortune 500 Fiscal Audit',
+            'post_content' => 'Complete corporate tax restructuring and offshore capital optimization for a multi-national entity.',
+            'post_type'    => 'gp_project',
+            'post_status'  => 'publish'
+        ));
+        if ($id) {
+            update_post_meta($id, '_gp_is_sample', '1');
+            update_post_meta($id, '_gp_growth_roi', '+42%');
+            update_post_meta($id, '_gp_pipeline_value', '$12.5M');
+        }
+
+        $sid = wp_insert_post(array(
+            'post_title'   => 'Corporate Tax Shielding',
+            'post_content' => 'Elite fiscal strategy for asset protection and multi-jurisdictional tax optimization.',
+            'post_type'    => 'gp_service',
+            'post_status'  => 'publish'
+        ));
+        if ($sid) {
+            update_post_meta($sid, '_gp_is_sample', '1');
+            update_post_meta($sid, '_gp_service_icon', '🛡️');
+        }
     }
 }
 new GrowthPress_Accounting();

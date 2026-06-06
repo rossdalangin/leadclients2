@@ -68,8 +68,29 @@ class GrowthPress_Medical {
     }
 
     public function generate_sample_data() {
-        $id = wp_insert_post(array('post_title' => 'Dr. Smith\'s Surgical Center', 'post_content' => 'Full digital transformation for a high-volume outpatient facility.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
-        if ($id) update_post_meta($id, '_gp_is_sample', '1');
+        $id = wp_insert_post(array(
+            'post_title'   => 'Premier Surgical Hub',
+            'post_content' => 'Implementation of neural clinical triage and secure patient onboarding for an elite outpatient surgical center.',
+            'post_type'    => 'gp_project',
+            'post_status'  => 'publish'
+        ));
+        if ($id) {
+            update_post_meta($id, '_gp_is_sample', '1');
+            update_post_meta($id, '_gp_efficiency_gain', '25 HRS/WK');
+            update_post_meta($id, '_gp_ai_score', 98);
+        }
+
+        $tid = wp_insert_post(array(
+            'post_title'   => 'Clinical Merit Review',
+            'post_content' => 'HIPAA-compliant protocol for evaluating surgical eligibility through neural symptom analysis.',
+            'post_type'    => 'gp_kb',
+            'post_status'  => 'publish'
+        ));
+        if ($tid) {
+            update_post_meta($tid, '_gp_is_sample', '1');
+            update_post_meta($tid, '_kb_intel_level', 'Advanced');
+            update_post_meta($tid, '_kb_access_control', 'Client');
+        }
     }
 }
 new GrowthPress_Medical();

@@ -48,8 +48,28 @@ class GrowthPress_Roofing {
     }
 
     public function generate_sample_data() {
-        $id = wp_insert_post(array('post_title' => 'Industrial Complex Overhaul', 'post_content' => 'Large scale roofing replacement for corporate headquarters.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
-        if ($id) update_post_meta($id, '_gp_is_sample', '1');
+        $id = wp_insert_post(array(
+            'post_title'   => 'Industrial Complex Overhaul',
+            'post_content' => 'Large scale roofing replacement for a regional corporate headquarters. Features high-authority material selection and precision drone-assisted structural auditing.',
+            'post_type'    => 'gp_project',
+            'post_status'  => 'publish'
+        ));
+        if ($id) {
+            update_post_meta($id, '_gp_is_sample', '1');
+            update_post_meta($id, '_gp_growth_roi', '+85%');
+            update_post_meta($id, '_gp_pipeline_value', '$420k');
+        }
+
+        $sid = wp_insert_post(array(
+            'post_title'   => 'Precision Drone Survey',
+            'post_content' => 'High-fidelity structural audit using specialized drone hardware to identify micro-fractures and drainage bottlenecks.',
+            'post_type'    => 'gp_service',
+            'post_status'  => 'publish'
+        ));
+        if ($sid) {
+            update_post_meta($sid, '_gp_is_sample', '1');
+            update_post_meta($sid, '_gp_service_icon', '🚁');
+        }
     }
 }
 new GrowthPress_Roofing();

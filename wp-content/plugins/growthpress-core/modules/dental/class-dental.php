@@ -138,8 +138,17 @@ class GrowthPress_Dental {
     }
 
     public function generate_sample_data() {
-        $id = wp_insert_post(array('post_title' => 'Sarah V. (Supreme Transformation)', 'post_content' => 'High-authority smile reconstruction for a global leadership profile.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
-        if ($id) update_post_meta($id, '_gp_is_sample', '1');
+        $id = wp_insert_post(array(
+            'post_title'   => 'Sarah V. (Supreme Transformation)',
+            'post_content' => 'High-authority smile reconstruction for a global leadership profile. This project involved full-mouth restoration and neural-calibrated aesthetic mapping.',
+            'post_type'    => 'gp_project',
+            'post_status'  => 'publish'
+        ));
+        if ($id) {
+            update_post_meta($id, '_gp_is_sample', '1');
+            update_post_meta($id, '_gp_growth_roi', '+15%');
+            update_post_meta($id, '_gp_ai_score', 99);
+        }
 
         $treatments = array(
             'Invisalign Elite' => array('12 months', 'Advanced'),

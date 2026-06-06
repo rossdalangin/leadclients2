@@ -198,6 +198,7 @@ function growthpress_scripts() {
 
     if ( defined( 'GROWTHPRESS_CORE_URL' ) ) {
 	    wp_enqueue_script( 'growthpress-frontend-js', GROWTHPRESS_CORE_URL . 'assets/js/frontend.js', array('jquery'), '1.0.0', true );
+        wp_enqueue_script( 'chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', array(), '4.4.1', true );
 	    wp_localize_script( 'growthpress-frontend-js', 'gp_ajax', array(
             'ajaxurl' => admin_url('admin-ajax.php'),
             'authority_enabled' => get_theme_mod('gp_enable_authority_feed', true),

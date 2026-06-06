@@ -100,8 +100,29 @@ class GrowthPress_Solar {
     }
 
     public function generate_sample_data() {
-        $id = wp_insert_post(array('post_title' => 'Elite Residential Array', 'post_content' => 'Full-scale neural-optimized solar deployment for a premium estate.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
-        if ($id) update_post_meta($id, '_gp_is_sample', '1');
+        $id = wp_insert_post(array(
+            'post_title'   => 'Elite Residential Array',
+            'post_content' => 'Full-scale neural-optimized solar deployment for a premium estate. This project utilized high-efficiency panels and integrated battery storage.',
+            'post_type'    => 'gp_project',
+            'post_status'  => 'publish'
+        ));
+        if ($id) {
+            update_post_meta($id, '_gp_is_sample', '1');
+            update_post_meta($id, '_gp_growth_roi', '+320%');
+            update_post_meta($id, '_gp_pipeline_value', '$85k+');
+            update_post_meta($id, '_gp_ai_score', 96);
+        }
+
+        $sid = wp_insert_post(array(
+            'post_title'   => 'Grid Independence Audit',
+            'post_content' => 'Comprehensive energy audit to determine structural eligibility and ROI modeling for grid-independent solar deployment.',
+            'post_type'    => 'gp_service',
+            'post_status'  => 'publish'
+        ));
+        if ($sid) {
+            update_post_meta($sid, '_gp_is_sample', '1');
+            update_post_meta($sid, '_gp_service_icon', '☀️');
+        }
     }
 }
 new GrowthPress_Solar();

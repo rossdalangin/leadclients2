@@ -98,8 +98,31 @@ class GrowthPress_Law {
     }
 
     public function generate_sample_data() {
-        $id = wp_insert_post(array('post_title' => 'Sterling IP Matter', 'post_content' => 'High-stakes litigation inquiry regarding multi-national patent infringement.', 'post_type' => 'gp_lead', 'post_status' => 'publish'));
-        if ($id) update_post_meta($id, '_gp_is_sample', '1');
+        $id = wp_insert_post(array(
+            'post_title'   => 'Sterling IP Matter',
+            'post_content' => 'High-stakes litigation inquiry regarding multi-national patent infringement across multiple jurisdictions.',
+            'post_type'    => 'gp_lead',
+            'post_status'  => 'publish'
+        ));
+        if ($id) {
+            update_post_meta($id, '_gp_is_sample', '1');
+            update_post_meta($id, '_lead_email', 'counsel@sterling-ip.com');
+            update_post_meta($id, '_gp_ai_probability', 92);
+            update_post_meta($id, '_gp_ai_sentiment_json', json_encode(['urgency' => 9, 'sentiment' => 'positive', 'intent' => 'litigation']));
+            wp_set_object_terms($id, 'litigation', 'gp_lead_tag');
+        }
+
+        $kid = wp_insert_post(array(
+            'post_title'   => 'Litigation Clearance Protocol',
+            'post_content' => 'Standard operating procedure for verifying adverse party identities and clearing conflicts in high-stakes corporate disputes.',
+            'post_type'    => 'gp_kb',
+            'post_status'  => 'publish'
+        ));
+        if ($kid) {
+            update_post_meta($kid, '_gp_is_sample', '1');
+            update_post_meta($kid, '_kb_intel_level', 'Executive');
+            update_post_meta($kid, '_kb_access_control', 'Internal');
+        }
     }
 }
 new GrowthPress_Law();

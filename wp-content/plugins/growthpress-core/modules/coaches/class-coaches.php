@@ -26,8 +26,28 @@ class GrowthPress_Coaches {
     }
 
     public function generate_sample_data() {
-        $id = wp_insert_post(array('post_title' => 'Strategic Scaling Blueprint', 'post_content' => 'Comprehensive operational audit for a high-performance mentorship program.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
-        if ($id) update_post_meta($id, '_gp_is_sample', '1');
+        $id = wp_insert_post(array(
+            'post_title'   => 'Strategic Scaling Blueprint',
+            'post_content' => 'Comprehensive operational audit for a high-performance mentorship program. We identified $2.5M in untapped pipeline equity through behavioral sales optimization.',
+            'post_type'    => 'gp_project',
+            'post_status'  => 'publish'
+        ));
+        if ($id) {
+            update_post_meta($id, '_gp_is_sample', '1');
+            update_post_meta($id, '_gp_growth_roi', '+680%');
+            update_post_meta($id, '_gp_pipeline_value', '$2.5M+');
+        }
+
+        $sid = wp_insert_post(array(
+            'post_title'   => 'Behavioral Sales Triage',
+            'post_content' => 'Elite training on psychological closing tactics and neural triage protocols for high-ticket sales teams.',
+            'post_type'    => 'gp_service',
+            'post_status'  => 'publish'
+        ));
+        if ($sid) {
+            update_post_meta($sid, '_gp_is_sample', '1');
+            update_post_meta($sid, '_gp_service_icon', '🧠');
+        }
     }
 }
 new GrowthPress_Coaches();
