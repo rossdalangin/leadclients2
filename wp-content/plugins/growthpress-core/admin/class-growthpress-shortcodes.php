@@ -62,11 +62,11 @@ class GrowthPress_Shortcode_Ref {
                 'example' => '[gp_solar_financing]'
             ),
             array(
-                'tag'   => '[gp_dental_insurance_form]',
-                'title' => 'Dental Insurance Verifier',
-                'desc'  => 'Frontend tool for patients to check insurance coverage instantly.',
+                'tag'   => '[gp_insurance_optimizer]',
+                'title' => 'Dental Insurance Optimizer',
+                'desc'  => 'Frontend tool for patients to check insurance coverage and maximize benefits.',
                 'usage' => 'Place on Dental intake or pricing pages.',
-                'example' => '[gp_dental_insurance_form]'
+                'example' => '[gp_insurance_optimizer]'
             ),
             array(
                 'tag'   => '[gp_contractor_estimator]',
@@ -144,6 +144,111 @@ class GrowthPress_Shortcode_Ref {
                 'desc'  => 'Secure conflict of interest verification form.',
                 'usage' => 'Specific to Law niche.',
                 'example' => '[gp_law_conflict_check]'
+            ),
+            array(
+                'tag'   => '[gp_ai_faq]',
+                'title' => 'AI FAQ Assistant',
+                'desc'  => 'Context-aware AI chatbot that answers questions based on your KB.',
+                'usage' => 'Place on documentation, support, or service pages.',
+                'example' => '[gp_ai_faq]'
+            ),
+            array(
+                'tag'   => '[gp_staff_grid]',
+                'title' => 'Specialist Team Grid',
+                'desc'  => 'Displays all active specialists with performance radar metrics.',
+                'usage' => 'Place on Team or About pages.',
+                'example' => '[gp_staff_grid]'
+            ),
+            array(
+                'tag'   => '[gp_treatment_grid]',
+                'title' => 'Clinical Protocols Grid',
+                'desc'  => 'Displays specialized treatment protocols for medical/dental niches.',
+                'usage' => 'Place on Services or Clinical hubs.',
+                'example' => '[gp_treatment_grid]'
+            ),
+            array(
+                'tag'   => '[gp_market_chart]',
+                'title' => 'Strategic ROI Chart',
+                'desc'  => 'Interactive Chart.js visualization of market trajectory and ROI.',
+                'usage' => 'Best on Strategy or Results pages.',
+                'example' => '[gp_market_chart]'
+            ),
+            array(
+                'tag'   => '[gp_trust_badges]',
+                'title' => 'Elite Authority Logos',
+                'desc'  => 'Displays high-authority trust badges (Forbes, Bloomberg, etc.).',
+                'usage' => 'Place in footers or below hero sections.',
+                'example' => '[gp_trust_badges]'
+            ),
+            array(
+                'tag'   => '[gp_stats_bar]',
+                'title' => 'Financial Performance Bar',
+                'desc'  => 'Displays impressive system-wide performance statistics.',
+                'usage' => 'Place on About or Results pages.',
+                'example' => '[gp_stats_bar]'
+            ),
+            array(
+                'tag'   => '[gp_client_portal]',
+                'title' => 'Secure Client Portal',
+                'desc'  => 'The main entry point for clients to manage projects and assets.',
+                'usage' => 'Place on a dedicated /portal page.',
+                'example' => '[gp_client_portal]'
+            ),
+            array(
+                'tag'   => '[gp_coaching_assistant]',
+                'title' => 'Scaling Roadmap Engine',
+                'desc'  => 'AI-powered tool to identify bottlenecks and generate 12-month roadmaps.',
+                'usage' => 'Specific to Coaching niche.',
+                'example' => '[gp_coaching_assistant]'
+            ),
+            array(
+                'tag'   => '[gp_smile_gallery]',
+                'title' => 'Clinical Result Gallery',
+                'desc'  => 'High-fidelity grid of before/after clinical transformations.',
+                'usage' => 'Specific to Dental niche.',
+                'example' => '[gp_smile_gallery]'
+            ),
+            array(
+                'tag'   => '[gp_roofing_estimator]',
+                'title' => 'Structural Audit Estimator',
+                'desc'  => 'Drone-aware cost estimator for roofing and structural projects.',
+                'usage' => 'Specific to Roofing niche.',
+                'example' => '[gp_roofing_estimator]'
+            ),
+            array(
+                'tag'   => '[gp_consulting_audit]',
+                'title' => 'Strategic Efficiency Audit',
+                'desc'  => 'High-stakes operational audit intake for enterprise firms.',
+                'usage' => 'Specific to Consulting niche.',
+                'example' => '[gp_consulting_audit]'
+            ),
+            array(
+                'tag'   => '[gp_symptom_checker]',
+                'title' => 'AI Health Intelligence',
+                'desc'  => 'Neural triage tool for clinical symptom mapping.',
+                'usage' => 'Specific to Medical niche.',
+                'example' => '[gp_symptom_checker]'
+            ),
+            array(
+                'tag'   => '[gp_tax_estimator]',
+                'title' => 'Wealth Preservation Engine',
+                'desc'  => 'AI tax savings estimator for corporate and family office niches.',
+                'usage' => 'Specific to Accounting niche.',
+                'example' => '[gp_tax_estimator]'
+            ),
+            array(
+                'tag'   => '[gp_location_switcher]',
+                'title' => 'Regional Node Switcher',
+                'desc'  => 'Allows visitors to select their nearest strategic service hub.',
+                'usage' => 'Place in sidebars or footers.',
+                'example' => '[gp_location_switcher]'
+            ),
+            array(
+                'tag'   => '[gp_kb_search]',
+                'title' => 'Intelligence Search Hub',
+                'desc'  => 'AI-powered search interface for the technical Knowledge Base.',
+                'usage' => 'Place on KB Hub or support pages.',
+                'example' => '[gp_kb_search]'
             )
         );
         ?>

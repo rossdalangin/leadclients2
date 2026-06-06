@@ -48,6 +48,17 @@ class GrowthPress_Sample_Data {
         GrowthPress_Activity::log("Elite Ecosystem Sample Instantiation Completed.");
     }
 
+    public static function generate_everything() {
+        $original_niche = get_option('growthpress_niche', 'business');
+        $niches = array('dental', 'law', 'contractor', 'roofing', 'solar', 'accounting', 'medical', 'real-estate', 'coaches', 'consultants');
+        foreach($niches as $niche) {
+            update_option('growthpress_niche', $niche);
+            self::generate_all_sample_data();
+        }
+        update_option('growthpress_niche', $original_niche);
+        GrowthPress_Activity::log("Global Multi-Niche Ecosystem Instantiated.");
+    }
+
     public static function remove_all_sample_data() {
         $args = array(
             'post_type'      => array('gp_lead', 'gp_appointment', 'gp_property', 'gp_review', 'gp_proposal', 'gp_transaction', 'gp_funnel', 'gp_location', 'gp_task', 'gp_kb', 'gp_project', 'gp_service', 'gp_treatment', 'gp_staff'),

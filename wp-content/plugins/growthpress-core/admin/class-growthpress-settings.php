@@ -14,6 +14,7 @@ class GrowthPress_Settings {
         add_action( 'admin_init', array( $this, 'register_settings' ) );
         add_action( 'wp_ajax_gp_test_connectivity', array( $this, 'test_connectivity' ) );
         add_action( 'wp_ajax_gp_generate_sample_data', array( $this, 'ajax_generate_sample_data' ) );
+        add_action( 'wp_ajax_gp_generate_global_data', array( $this, 'ajax_generate_global_data' ) );
         add_action( 'wp_ajax_gp_remove_sample_data', array( $this, 'ajax_remove_sample_data' ) );
     }
 
@@ -47,6 +48,18 @@ class GrowthPress_Settings {
 
         $count = $after - $before;
         wp_send_json_success("Sample ecosystem instantiated. Generated $count new strategic nodes across the OS.");
+    }
+
+    public function ajax_generate_global_data() {
+        if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error('Unauthorized');
+        check_ajax_referer( 'gp_admin_nonce', 'gp_nonce' );
+
+        $before = $this->count_total_samples();
+        GrowthPress_Sample_Data::generate_everything();
+        $after = $this->count_total_samples();
+
+        $count = $after - $before;
+        wp_send_json_success("Global Multi-Niche Ecosystem instantiated. Generated $count strategic nodes across all 10 industries.");
     }
 
     public function ajax_remove_sample_data() {
@@ -364,6 +377,12 @@ class GrowthPress_Settings {
                             <p style="font-size:13px; opacity:0.7; margin-bottom:30px;">Safely remove all system-generated sample data across all custom post types while preserving your real production data.</p>
                             <button type="button" class="gp-btn" onclick="runTool('gp_remove_sample_data')" style="background:#EF4444; color:white; width:100%; height:60px; border-radius:15px;">Remove Sample Data</button>
                         </div>
+                    </div>
+
+                    <div style="margin-top:40px; padding:60px; background:linear-gradient(135deg, rgba(37,99,235,0.1) 0%, rgba(124,58,237,0.1) 100%); border-radius:40px; border:1px solid var(--primary); text-align:center;">
+                        <h3 style="margin-top:0;">Mass Global Ecosystem Instantiation</h3>
+                        <p style="font-size:14px; opacity:0.8; max-width:700px; margin:0 auto 40px;">This high-level tool populates sample data for ALL 10 target industries simultaneously. Recommended for enterprise demo environments requiring maximum visual authority and data density.</p>
+                        <button type="button" class="gp-btn" onclick="runTool('gp_generate_global_data')" style="background:var(--primary); color:white; height:80px; padding:0 60px; border-radius:20px; font-size:18px;">Instantiate Full Global Ecosystem</button>
                     </div>
                     <div id="tool-res" style="margin-top:30px; padding:20px; border-radius:15px; text-align:center; font-weight:700; display:none;"></div>
                 </div>
