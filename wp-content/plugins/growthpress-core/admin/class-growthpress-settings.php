@@ -16,6 +16,7 @@ class GrowthPress_Settings {
         add_action( 'wp_ajax_gp_generate_sample_data', array( $this, 'ajax_generate_sample_data' ) );
         add_action( 'wp_ajax_gp_generate_global_data', array( $this, 'ajax_generate_global_data' ) );
         add_action( 'wp_ajax_gp_remove_sample_data', array( $this, 'ajax_remove_sample_data' ) );
+        add_action( 'wp_ajax_gp_clear_activity_logs', array( $this, 'ajax_clear_activity_logs' ) );
     }
 
     public function add_settings_menu() {
@@ -72,6 +73,14 @@ class GrowthPress_Settings {
 
         $count = $before - $after;
         wp_send_json_success("Sample intelligence purged. Safely removed $count demo nodes from the ecosystem.");
+    }
+
+    public function ajax_clear_activity_logs() {
+        if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error('Unauthorized');
+        check_ajax_referer( 'gp_admin_nonce', 'gp_nonce' );
+
+        update_option( 'gp_activity_logs', array() );
+        wp_send_json_success("System activity logs cleared.");
     }
 
     private function count_total_samples() {
@@ -376,6 +385,11 @@ class GrowthPress_Settings {
                             <h4 style="margin-top:0;">Purge Sample Intelligence</h4>
                             <p style="font-size:13px; opacity:0.7; margin-bottom:30px;">Safely remove all system-generated sample data across all custom post types while preserving your real production data.</p>
                             <button type="button" class="gp-btn" onclick="runTool('gp_remove_sample_data')" style="background:#EF4444; color:white; width:100%; height:60px; border-radius:15px;">Remove Sample Data</button>
+                        </div>
+                        <div style="padding:40px; background:rgba(100,116,139,0.05); border-radius:30px; border:1px solid rgba(100,116,139,0.1);">
+                            <h4 style="margin-top:0;">Clear Activity Logs</h4>
+                            <p style="font-size:13px; opacity:0.7; margin-bottom:30px;">Purge the system activity log history. This action only affects the log entries, not actual system data or CRM leads.</p>
+                            <button type="button" class="gp-btn" onclick="runTool('gp_clear_activity_logs')" style="background:#64748B; color:white; width:100%; height:60px; border-radius:15px;">Clear Activity Log</button>
                         </div>
                     </div>
 

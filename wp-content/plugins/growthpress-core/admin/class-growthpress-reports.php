@@ -26,7 +26,7 @@ class GrowthPress_Reports {
         $total_value = 0;
         foreach($proposals as $p) {
             $status = get_post_meta($p->ID, '_gp_proposal_status', true);
-            if($status === 'Accepted') {
+            if($status === 'Accepted' || $status === 'Sent') {
                 $total_value += (float)get_post_meta($p->ID, '_proposal_value', true) ?: 0;
             }
         }

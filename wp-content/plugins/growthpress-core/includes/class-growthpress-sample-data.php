@@ -105,6 +105,18 @@ class GrowthPress_Sample_Data {
                 'tag' => 'Commercial',
                 'sentiment' => '{"urgency": 4, "sentiment": "neutral", "intent": "medium"}'
             ),
+            array(
+                'title' => 'Acme Corp (Global)',
+                'content' => 'Full-scale structural deployment completed. Highly successful multi-node migration.',
+                'email' => 'operations@acme-global.com',
+                'phone' => '555-9999',
+                'zip' => '60601',
+                'source' => 'Direct Triage',
+                'prob' => 100,
+                'stage' => 'closed',
+                'tag' => 'Enterprise',
+                'sentiment' => '{"urgency": 10, "sentiment": "positive", "intent": "closed"}'
+            ),
         );
 
         $ids = array();
@@ -140,7 +152,12 @@ class GrowthPress_Sample_Data {
                 update_post_meta($id, '_gp_behavioral_nudge', "Based on your interest in " . $l['tag'] . " solutions, we have a specialized team ready.");
                 update_post_meta($id, '_gp_nurture_sequence', "Day 1: Welcome\nDay 2: Value Proposition\nDay 3: Case Study\nDay 4: Demo Invitation\nDay 5: Final Follow-up");
                 update_post_meta($id, '_gp_growth_roadmap', "## Phase 1: Foundation\n- Implement AI Triage\n- Standardize intake nodes\n\n## Phase 2: Acceleration\n- Deploy multi-node nurture\n- Optimize ROI modeling");
+                update_post_meta($id, '_gp_roadmap_milestones', array('0' => 'complete', '1' => 'complete', '2' => 'pending', '3' => 'pending'));
                 update_post_meta($id, '_assigned_staff', $staff_id);
+
+                if($l['stage'] === 'closed') {
+                    update_post_meta($id, '_closed_date', date('Y-m-d H:i:s', strtotime('-2 days')));
+                }
 
                 $notes = array(
                     array('user' => 'System AI', 'time' => current_time('mysql'), 'text' => 'Lead automatically triaged and scored.')
