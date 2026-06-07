@@ -106,7 +106,7 @@ class GrowthPress_Dashboard {
             'gp_transaction' => 'Transactions', 'gp_location' => 'Locations', 'gp_funnel' => 'Funnels',
             'gp_task' => 'Tasks', 'gp_kb' => 'Knowledge Base', 'gp_service' => 'Services',
             'gp_project' => 'Case Studies', 'gp_review' => 'Reviews', 'gp_property' => 'Inventory',
-            'gp_treatment' => 'Treatments'
+            'gp_treatment' => 'Treatments', 'gp_staff' => 'Specialists'
         );
         ?>
         <div class="wrap growthpress-ecosystem">

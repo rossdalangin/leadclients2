@@ -60,7 +60,7 @@ class GrowthPress_Reports {
             'Revenue' => 'gp_transaction', 'Locations' => 'gp_location', 'Funnels' => 'gp_funnel',
             'Tasks' => 'gp_task', 'KB' => 'gp_kb', 'Services' => 'gp_service',
             'Cases' => 'gp_project', 'Reviews' => 'gp_review', 'Inventory' => 'gp_property',
-            'Clinical' => 'gp_treatment'
+            'Clinical' => 'gp_treatment', 'Specialists' => 'gp_staff'
         );
         $cpt_counts = array();
         foreach($cpts as $label => $type) $cpt_counts[$label] = wp_count_posts($type)->publish;

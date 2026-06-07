@@ -13,13 +13,13 @@ class GrowthPress_Sample_Data {
         $niche = get_option('growthpress_niche', 'business');
 
         // 1. Generate core CPT sample data
-        $lead_ids = self::generate_leads();
+        $location_ids = self::generate_locations();
+        $lead_ids = self::generate_leads($location_ids);
         $appt_ids = self::generate_appointments($lead_ids);
         $service_ids = self::generate_services();
         $proposal_ids = self::generate_proposals($lead_ids, $service_ids);
         $project_ids = self::generate_projects($lead_ids);
         self::generate_transactions($proposal_ids, $appt_ids);
-        self::generate_locations();
         self::generate_funnels();
         self::generate_tasks($lead_ids);
         self::generate_kb();
@@ -79,7 +79,7 @@ class GrowthPress_Sample_Data {
         GrowthPress_Activity::log("Sample Intelligence Purge Completed.");
     }
 
-    private static function generate_leads() {
+    private static function generate_leads($location_ids = array()) {
         $leads = array(
             array(
                 'title' => 'John Doe',
@@ -154,6 +154,10 @@ class GrowthPress_Sample_Data {
                 update_post_meta($id, '_gp_growth_roadmap', "## Phase 1: Foundation\n- Implement AI Triage\n- Standardize intake nodes\n\n## Phase 2: Acceleration\n- Deploy multi-node nurture\n- Optimize ROI modeling");
                 update_post_meta($id, '_gp_roadmap_milestones', array('0' => 'complete', '1' => 'complete', '2' => 'pending', '3' => 'pending'));
                 update_post_meta($id, '_assigned_staff', $staff_id);
+
+                if (!empty($location_ids)) {
+                    update_post_meta($id, '_assigned_location', $location_ids[rand(0, count($location_ids)-1)]);
+                }
 
                 if($l['stage'] === 'closed') {
                     update_post_meta($id, '_closed_date', date('Y-m-d H:i:s', strtotime('-2 days')));
@@ -291,6 +295,7 @@ class GrowthPress_Sample_Data {
             'Westside Satellite' => '456 Innovation Blvd, Tech Hub',
             'Eastside Hub' => '789 Growth Terrace, Industry Park'
         );
+        $ids = array();
         foreach ($locs as $l => $addr) {
             $id = wp_insert_post(array(
                 'post_title'   => $l,
@@ -299,6 +304,7 @@ class GrowthPress_Sample_Data {
                 'post_status'  => 'publish'
             ));
             if ($id) {
+                $ids[] = $id;
                 update_post_meta($id, '_gp_is_sample', '1');
                 update_post_meta($id, '_serviced_zips', '90210, 90211, 90212, 10001, 10002');
                 update_post_meta($id, '_location_address', $addr);
@@ -306,6 +312,7 @@ class GrowthPress_Sample_Data {
                 update_post_meta($id, '_location_map_url', 'https://maps.google.com/?q=' . urlencode($addr));
             }
         }
+        return $ids;
     }
 
     private static function generate_funnels() {
@@ -370,6 +377,7 @@ class GrowthPress_Sample_Data {
             update_post_meta($id, '_gp_is_sample', '1');
             update_post_meta($id, '_kb_intel_level', 'Executive');
             update_post_meta($id, '_kb_access_control', 'Internal');
+            wp_set_post_tags($id, 'Intelligence, Protocol, Executive');
         }
 
         $id2 = wp_insert_post(array(
@@ -382,6 +390,7 @@ class GrowthPress_Sample_Data {
             update_post_meta($id2, '_gp_is_sample', '1');
             update_post_meta($id2, '_kb_intel_level', 'Basic');
             update_post_meta($id2, '_kb_access_control', 'Client');
+            wp_set_post_tags($id2, 'Onboarding, Guide, Portal');
         }
     }
 
@@ -436,6 +445,7 @@ class GrowthPress_Sample_Data {
                 update_post_meta($id, '_gp_ai_score', rand(85, 98));
                 update_post_meta($id, '_gp_efficiency_gain', $data[1]);
                 update_post_meta($id, '_gp_pipeline_value', $data[2]);
+                wp_set_post_tags($id, 'Enterprise, Transformation, ROI');
             }
         }
         return $ids;
