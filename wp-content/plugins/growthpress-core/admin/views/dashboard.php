@@ -232,14 +232,25 @@
             <div class="glass-card gp-reveal" style="margin-bottom:30px;">
                 <h3 style="font-size:14px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.4; margin-bottom:25px; font-weight:950;">Agent Task Queue</h3>
                 <div style="display:grid; gap:15px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:700;">
-                        <span>AI Triage: Lead #422</span>
-                        <span style="color:#10B981;">ACTIVE</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:700;">
-                        <span>SEO Content: "Solar ROI"</span>
-                        <span style="opacity:0.4;">QUEUED</span>
-                    </div>
+                    <?php
+                    $ai_tasks = get_posts(array(
+                        'post_type' => 'gp_task',
+                        'meta_query' => array(
+                            array('key' => '_assigned_staff', 'value' => 'ai_node'),
+                            array('key' => '_task_status', 'value' => 'Pending')
+                        ),
+                        'posts_per_page' => 5
+                    ));
+                    if($ai_tasks): foreach($ai_tasks as $at):
+                        $prio = get_post_meta($at->ID, '_task_priority', true);
+                        ?>
+                        <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:700;">
+                            <span title="<?php echo esc_attr($at->post_content); ?>"><?php echo esc_html($at->post_title); ?></span>
+                            <span style="color:<?php echo ($prio === 'High') ? '#EF4444' : '#10B981'; ?>;"><?php echo strtoupper($prio); ?></span>
+                        </div>
+                    <?php endforeach; else: ?>
+                        <div style="font-size:11px; opacity:0.4;">No active agent tasks.</div>
+                    <?php endif; ?>
                 </div>
             </div>
 

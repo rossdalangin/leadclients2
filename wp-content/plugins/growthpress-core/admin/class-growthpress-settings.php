@@ -17,6 +17,7 @@ class GrowthPress_Settings {
         add_action( 'wp_ajax_gp_generate_global_data', array( $this, 'ajax_generate_global_data' ) );
         add_action( 'wp_ajax_gp_remove_sample_data', array( $this, 'ajax_remove_sample_data' ) );
         add_action( 'wp_ajax_gp_clear_activity_logs', array( $this, 'ajax_clear_activity_logs' ) );
+        add_action( 'wp_ajax_gp_system_reset', array( $this, 'ajax_system_reset' ) );
     }
 
     public function add_settings_menu() {
@@ -81,6 +82,22 @@ class GrowthPress_Settings {
 
         update_option( 'gp_activity_logs', array() );
         wp_send_json_success("System activity logs cleared.");
+    }
+
+    public function ajax_system_reset() {
+        if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error('Unauthorized');
+        check_ajax_referer( 'gp_admin_nonce', 'gp_nonce' );
+
+        if( strtoupper($_POST['confirm']) !== 'RESET' ) wp_send_json_error('Invalid confirmation string.');
+
+        $cpts = array('gp_lead', 'gp_appointment', 'gp_property', 'gp_review', 'gp_proposal', 'gp_transaction', 'gp_funnel', 'gp_location', 'gp_task', 'gp_kb', 'gp_project', 'gp_service', 'gp_treatment', 'gp_staff');
+        foreach($cpts as $type) {
+            $posts = get_posts(array('post_type' => $type, 'posts_per_page' => -1, 'post_status' => 'any', 'fields' => 'ids'));
+            foreach($posts as $id) wp_delete_post($id, true);
+        }
+
+        update_option( 'gp_activity_logs', array() );
+        wp_send_json_success("Full system reset executed. All ecosystem nodes purged.");
     }
 
     private function count_total_samples() {
@@ -398,6 +415,15 @@ class GrowthPress_Settings {
                         <p style="font-size:14px; opacity:0.8; max-width:700px; margin:0 auto 40px;">This high-level tool populates sample data for ALL 10 target industries simultaneously. Recommended for enterprise demo environments requiring maximum visual authority and data density.</p>
                         <button type="button" class="gp-btn" onclick="runTool('gp_generate_global_data')" style="background:var(--primary); color:white; height:80px; padding:0 60px; border-radius:20px; font-size:18px;">Instantiate Full Global Ecosystem</button>
                     </div>
+
+                    <div style="margin-top:40px; padding:40px; background:#FEF2F2; border: 2px solid #FEE2E2; border-radius:30px; text-align:center;">
+                        <h3 style="color:#B91C1C; margin-top:0;">Dangerous: Factory System Reset</h3>
+                        <p style="font-size:13px; color:#991B1B; margin-bottom:30px;">Purge ALL ecosystem data across all 14 Custom Post Types. This action is irreversible and clears both sample and production data.</p>
+                        <div style="max-width:300px; margin:0 auto;">
+                            <input type="text" id="reset-confirm" placeholder="Type 'RESET' to confirm" style="text-align:center; margin-bottom:20px; border-color:#FCA5A5;">
+                            <button type="button" class="gp-btn" onclick="runReset()" style="background:#EF4444; width:100%; height:60px; border-radius:15px;">EXECUTE TOTAL PURGE</button>
+                        </div>
+                    </div>
                     <div id="tool-res" style="margin-top:30px; padding:20px; border-radius:15px; text-align:center; font-weight:700; display:none;"></div>
                 </div>
             </div>
@@ -410,6 +436,23 @@ class GrowthPress_Settings {
                         res.text(response.data).css({'background':'#F0FDF4', 'color':'#10B981'});
                     } else {
                         res.text(response.data || 'Execution failed.').css({'background':'#FEF2F2', 'color':'#EF4444'});
+                    }
+                });
+            }
+            function runReset() {
+                const confirm = jQuery('#reset-confirm').val();
+                if(confirm !== 'RESET') { alert('Calibration error: Type RESET to confirm.'); return; }
+                const res = jQuery('#tool-res').fadeIn().text('EXECUTING TOTAL PURGE...').css({'background':'#FEF2F2', 'color':'#EF4444'});
+                jQuery.post(ajaxurl, {
+                    action: 'gp_system_reset',
+                    confirm: confirm,
+                    gp_nonce: '<?php echo wp_create_nonce("gp_admin_nonce"); ?>'
+                }, function(response) {
+                    if (response.success) {
+                        res.text(response.data).css({'background':'#F0FDF4', 'color':'#10B981'});
+                        setTimeout(() => location.reload(), 2000);
+                    } else {
+                        res.text(response.data).css({'background':'#FEF2F2', 'color':'#EF4444'});
                     }
                 });
             }

@@ -123,13 +123,17 @@ class GrowthPress_Sample_Data {
         $staff = get_users( array( 'role__in' => array('author', 'editor', 'administrator'), 'fields' => 'ID' ) );
         $staff_id = !empty($staff) ? $staff[0] : 0;
 
+        $i = 0;
         foreach ($leads as $l) {
+            $backdate = date('Y-m-d H:i:s', strtotime("-" . ($i * 5 + rand(1, 4)) . " days"));
             $id = wp_insert_post(array(
                 'post_title'   => $l['title'],
                 'post_content' => $l['content'],
                 'post_type'    => 'gp_lead',
-                'post_status'  => 'publish'
+                'post_status'  => 'publish',
+                'post_date'    => $backdate
             ));
+            $i++;
             if ($id) {
                 $ids[] = $id;
                 update_post_meta($id, '_gp_is_sample', '1');
@@ -151,7 +155,16 @@ class GrowthPress_Sample_Data {
                 update_post_meta($id, '_gp_ai_suggested_reply', "Hello " . explode(' ', $l['title'])[0] . ", I saw your inquiry about automation...");
                 update_post_meta($id, '_gp_behavioral_nudge', "Based on your interest in " . $l['tag'] . " solutions, we have a specialized team ready.");
                 update_post_meta($id, '_gp_nurture_sequence', "Day 1: Welcome\nDay 2: Value Proposition\nDay 3: Case Study\nDay 4: Demo Invitation\nDay 5: Final Follow-up");
-                update_post_meta($id, '_gp_growth_roadmap', "## Phase 1: Foundation\n- Implement AI Triage\n- Standardize intake nodes\n\n## Phase 2: Acceleration\n- Deploy multi-node nurture\n- Optimize ROI modeling");
+                $niche = get_option('growthpress_niche', 'business');
+                $niche_terms = array(
+                    'solar' => array('Engineering Audit', 'Incentive Triage', 'Array Blueprinting', 'Grid Integration'),
+                    'dental' => array('Clinical Analysis', 'Aesthetic Mapping', 'Treatment Kickoff', 'Final Restoration'),
+                    'law' => array('Conflict Clearance', 'Merit Review', 'Discovery Phase', 'Litigation Protocol'),
+                    'medical' => array('HIPAA Intake', 'Symptom Triage', 'Specialist Routing', 'Clinical Review')
+                );
+                $terms = $niche_terms[$niche] ?? array('Discovery Node', 'Strategic Triage', 'Architecture Design', 'Full Deployment');
+
+                update_post_meta($id, '_gp_growth_roadmap', "## Strategic Phase 1\n- " . $terms[0] . "\n- " . $terms[1] . "\n\n## Strategic Phase 2\n- " . $terms[2] . "\n- " . $terms[3]);
                 update_post_meta($id, '_gp_roadmap_milestones', array('0' => 'complete', '1' => 'complete', '2' => 'pending', '3' => 'pending'));
                 update_post_meta($id, '_assigned_staff', $staff_id);
 
@@ -189,7 +202,8 @@ class GrowthPress_Sample_Data {
         $id = wp_insert_post(array(
             'post_title'  => 'Sample Strategy Session',
             'post_type'   => 'gp_appointment',
-            'post_status' => 'publish'
+            'post_status' => 'publish',
+            'post_date'   => date('Y-m-d H:i:s', strtotime("-3 days"))
         ));
         if ($id) {
             $ids[] = $id;
@@ -266,7 +280,8 @@ class GrowthPress_Sample_Data {
             $id = wp_insert_post(array(
                 'post_title'  => 'Transaction: Invoice #' . (100 + $i),
                 'post_type'   => 'gp_transaction',
-                'post_status' => 'publish'
+                'post_status' => 'publish',
+                'post_date'   => date('Y-m-d H:i:s', strtotime("-" . ($i * 7) . " days"))
             ));
             if ($id) {
                 update_post_meta($id, '_gp_is_sample', '1');
@@ -346,6 +361,7 @@ class GrowthPress_Sample_Data {
         $staff = get_users( array( 'role__in' => array('author', 'editor', 'administrator'), 'fields' => 'ID' ) );
         $staff_id = !empty($staff) ? $staff[0] : 0;
 
+        $j = 0;
         foreach($tasks as $title => $prio) {
             $id = wp_insert_post(array(
                 'post_title'   => $title,
@@ -358,7 +374,14 @@ class GrowthPress_Sample_Data {
                 update_post_meta($id, '_task_priority', $prio);
                 update_post_meta($id, '_task_status', rand(0,1) ? 'Pending' : 'Completed');
                 update_post_meta($id, '_task_due_date', date('Y-m-d', strtotime('+' . rand(1, 14) . ' days')));
-                update_post_meta($id, '_assigned_staff', $staff_id);
+
+                // Assign every 2nd task to AI node
+                if($j % 2 === 0) {
+                    update_post_meta($id, '_assigned_staff', 'ai_node');
+                } else {
+                    update_post_meta($id, '_assigned_staff', $staff_id);
+                }
+                $j++;
                 if (!empty($lead_ids)) {
                     update_post_meta($id, '_related_lead', $lead_ids[rand(0, count($lead_ids)-1)]);
                 }
