@@ -24,62 +24,62 @@ class GrowthPress_AI_FAQ {
         ?>
         <div id="gp-ai-chat-bubble" class="gp-chat-bubble-container">
             <div id="gp-chat-launcher" class="gp-chat-launcher">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 11.5C21 16.7467 16.9706 21 12 21C10.1587 21 8.44851 20.4431 7.02534 19.4842L3 21L4.5 16.9747C3.5411 15.5515 3 13.8413 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 11.5Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 11.5C21 16.7467 16.9706 21 12 21C10.1587 21 8.44851 20.4431 7.02534 19.4842L3 21L4.5 16.9747C3.5411 15.5515 3 13.8413 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 11.5Z" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <div class="gp-launcher-pulse"></div>
             </div>
 
             <div id="gp-chat-window" class="gp-chat-window glass-card" style="display:none;">
-                <div class="gp-chat-header" style="background: <?php echo $primary; ?>;">
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <div style="width:10px; height:10px; background:#10B981; border-radius:50%; border:2px solid white;"></div>
+                <div class="gp-chat-header" style="background: <?php echo $primary; ?>; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    <div style="display:flex; align-items:center; gap:15px;">
+                        <div style="width:12px; height:12px; background:#10B981; border-radius:50%; border:2.5px solid white; box-shadow: 0 0 10px #10B981;"></div>
                         <div>
-                            <div style="font-size:14px; font-weight:900; letter-spacing:0.5px;"><?php echo $brand; ?> AI</div>
-                            <div style="font-size:10px; opacity:0.8; font-weight:600;">ACTIVE NOW</div>
+                            <div style="font-size:15px; font-weight:950; letter-spacing:0.5px;"><?php echo $brand; ?> Intelligence</div>
+                            <div style="font-size:10px; opacity:0.8; font-weight:900; letter-spacing:1px; text-transform: uppercase;">Node Active</div>
                         </div>
                     </div>
-                    <div id="gp-chat-close" style="cursor:pointer; opacity:0.7;">&times;</div>
+                    <div id="gp-chat-close" style="cursor:pointer; opacity:0.7; font-size:24px; font-weight:100;">&times;</div>
                 </div>
 
                 <div id="gp-faq-chat-box" class="gp-chat-body">
-                    <div class="gp-msg-ai">Hello! I'm your specialized <?php echo get_option('growthpress_niche', 'business'); ?> assistant. How can I help you grow today?</div>
+                    <div class="gp-msg-ai">Welcome to the <?php echo $brand; ?> command center. I am your specialized <?php echo get_option('growthpress_niche', 'business'); ?> intelligence node. How may I assist your strategy today?</div>
                 </div>
 
-                <div id="gp-chat-typing" style="display:none; padding:10px 20px; font-size:11px; color:#64748B; font-weight:700;">AI is thinking...</div>
+                <div id="gp-chat-typing" style="display:none; padding:15px 35px; font-size:11px; color:var(--primary); font-weight:950; letter-spacing:1px; text-transform: uppercase;">Node is processing...</div>
 
                 <div class="gp-chat-footer">
                     <input type="hidden" id="gp_ai_faq_nonce" value="<?php echo $nonce; ?>">
-                    <input type="text" id="gp-faq-input" placeholder="Type your inquiry...">
+                    <input type="text" id="gp-faq-input" placeholder="Type your strategic inquiry...">
                     <button id="gp-faq-send" onclick="askAI()">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
                 </div>
             </div>
         </div>
 
         <style>
-            .gp-chat-bubble-container { position: fixed; bottom: 30px; right: 30px; z-index: 10001; font-family: 'Inter', sans-serif; }
-            .gp-chat-launcher { width: 64px; height: 64px; border-radius: 50%; background: <?php echo $primary; ?>; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.15); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position:relative; }
-            .gp-chat-launcher:hover { transform: scale(1.1) rotate(5deg); }
+            .gp-chat-bubble-container { position: fixed; bottom: 40px; right: 40px; z-index: 10001; font-family: 'Inter', sans-serif; }
+            .gp-chat-launcher { width: 75px; height: 75px; border-radius: 50%; background: <?php echo $primary; ?>; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 20px 40px rgba(0,0,0,0.15); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position:relative; }
+            .gp-chat-launcher:hover { transform: scale(1.1) rotate(10deg); box-shadow: 0 25px 50px rgba(0,0,0,0.25); }
 
-            .gp-launcher-pulse { position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; background:<?php echo $primary; ?>; opacity:0.4; z-index:-1; animation: gp-pulse 2s infinite; }
-            @keyframes gp-pulse { 0% { transform: scale(1); opacity: 0.4; } 100% { transform: scale(1.6); opacity: 0; } }
+            .gp-launcher-pulse { position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; background:<?php echo $primary; ?>; opacity:0.4; z-index:-1; animation: gp-pulse 2.5s infinite; }
+            @keyframes gp-pulse { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(1.8); opacity: 0; } }
 
-            .gp-chat-window { position: absolute; bottom: 85px; right: 0; width: 360px; height: 520px; display: flex; flex-direction: column; padding: 0 !important; border-radius: 28px !important; box-shadow: 0 40px 80px -15px rgba(0,0,0,0.2) !important; animation: gp-slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid rgba(255,255,255,0.2); }
+            .gp-chat-window { position: absolute; bottom: 100px; right: 0; width: 420px; height: 600px; display: flex; flex-direction: column; padding: 0 !important; border-radius: 40px !important; box-shadow: 0 50px 100px -20px rgba(0,0,0,0.25) !important; animation: gp-chat-slide 0.6s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid rgba(255,255,255,0.4) !important; background: rgba(255,255,255,0.95) !important; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
 
-            .gp-chat-header { padding: 30px; color: white; display: flex; justify-content: space-between; align-items: center; border-radius: 28px 28px 0 0; }
-            .gp-chat-body { flex: 1; overflow-y: auto; padding: 30px; display: flex; flex-direction: column; gap: 20px; background: #F8FAFC; }
+            .gp-chat-header { padding: 40px; color: white; display: flex; justify-content: space-between; align-items: center; border-radius: 40px 40px 0 0; }
+            .gp-chat-body { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; gap: 25px; background: transparent; }
 
-            .gp-msg-ai, .gp-msg-user { padding: 15px 20px; border-radius: 20px; max-width: 85%; font-size: 14px; line-height: 1.5; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-            .gp-msg-ai { background: white; color: #1E293B; border-bottom-left-radius: 4px; border: 1px solid #E2E8F0; align-self: flex-start; }
-            .gp-msg-user { background: <?php echo $primary; ?>; color: white; border-bottom-right-radius: 4px; align-self: flex-end; }
+            .gp-msg-ai, .gp-msg-user { padding: 20px 25px; border-radius: 25px; max-width: 88%; font-size: 15px; line-height: 1.6; box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: all 0.3s ease; }
+            .gp-msg-ai { background: white; color: #1E293B; border-bottom-left-radius: 5px; border: 1px solid rgba(0,0,0,0.05); align-self: flex-start; font-weight: 500; }
+            .gp-msg-user { background: <?php echo $primary; ?>; color: white; border-bottom-right-radius: 5px; align-self: flex-end; font-weight: 600; }
 
-            .gp-chat-footer { padding: 20px; background: white; border-top: 1px solid #F1F5F9; display: flex; gap: 10px; align-items: center; border-radius: 0 0 28px 28px; }
-            .gp-chat-footer input { flex: 1; border: 1px solid #E2E8F0; border-radius: 16px; padding: 14px 18px; font-size: 14px; outline: none; transition: border-color 0.2s; margin:0; }
-            .gp-chat-footer input:focus { border-color: <?php echo $primary; ?>; }
-            .gp-chat-footer button { background: <?php echo $primary; ?>; border: none; width: 48px; height: 48px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
-            .gp-chat-footer button:hover { transform: scale(1.05); }
+            .gp-chat-footer { padding: 30px; background: white; border-top: 1px solid #F1F5F9; display: flex; gap: 15px; align-items: center; border-radius: 0 0 40px 40px; }
+            .gp-chat-footer input { flex: 1; border: 1px solid #E2E8F0; border-radius: 20px; padding: 18px 25px; font-size: 15px; outline: none; transition: all 0.3s ease; margin:0; background: #F8FAFC; font-weight: 600; }
+            .gp-chat-footer input:focus { border-color: <?php echo $primary; ?>; background: #FFF; box-shadow: 0 0 0 4px var(--primary-glow); }
+            .gp-chat-footer button { background: <?php echo $primary; ?>; border: none; width: 60px; height: 60px; border-radius: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; box-shadow: 0 10px 20px var(--primary-glow); }
+            .gp-chat-footer button:hover { transform: scale(1.05) translateY(-2px); }
 
-            @keyframes gp-slide-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+            @keyframes gp-chat-slide { from { opacity: 0; transform: translateY(40px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
         </style>
 
         <script>

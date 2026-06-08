@@ -41,39 +41,43 @@ class GrowthPress_Contractor {
     }
 
     public function render_estimator() {
-        return '<div class="gp-estimator glass-card gp-reveal" style="border-left: 20px solid #EF4444; padding:100px 80px; background: linear-gradient(135deg, var(--surface), #FFF5F5);">
-            <div style="text-align:center; margin-bottom:70px;">
-                <div style="font-size:12px; font-weight:950; color:#EF4444; text-transform:uppercase; letter-spacing:4px; margin-bottom:20px;">PRECISION QUOTATION ENGINE v4.5</div>
-                <h3 class="text-gradient" style="font-size:3.5rem; line-height:1.0;">Elite Renovation Estimator</h3>
-                <p style="font-size:1.25rem; opacity:0.7; max-width:700px; margin:25px auto 0;">Instant baseline engineering audit for your high-ticket renovation project using neural estimation logic.</p>
+        return '<style>
+            #proj-type, #proj-sqft { width:100%; height:80px; border-radius:25px; font-weight:700; border:2px solid #F1F5F9; padding:0 30px; font-size:18px; appearance: none; background: #FFF; transition: all 0.3s ease; }
+            #proj-type:focus, #proj-sqft:focus { border-color: #EF4444; outline: none; box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1); }
+        </style>
+        <div class="gp-estimator glass-card gp-reveal" style="border-left: 20px solid #EF4444; padding:120px 80px; background: linear-gradient(135deg, rgba(255,255,255,0.9), #FFF5F5); border-radius: 60px;">
+            <div style="text-align:center; margin-bottom:100px;">
+                <div style="font-size:11px; font-weight:950; color:#EF4444; text-transform:uppercase; letter-spacing:5px; margin-bottom:25px;">PRECISION QUOTATION ENGINE v4.5</div>
+                <h3 class="text-gradient" style="font-size:4.5rem; line-height:1.0; letter-spacing: -0.06em;">Elite Renovation Estimator</h3>
+                <p style="font-size:1.5rem; opacity:0.7; max-width:750px; margin:35px auto 0; font-weight: 500; line-height: 1.5;">Instant baseline engineering audit for your high-ticket renovation project using neural estimation logic.</p>
             </div>
 
-            <div id="est-steps" class="glass-card" style="background:#FFF; padding:60px; border-radius:44px; box-shadow:0 30px 60px rgba(0,0,0,0.03);">
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:40px;">
+            <div id="est-steps" class="glass-card" style="background:#FFF; padding:100px 80px; border-radius:60px; box-shadow:0 60px 120px -20px rgba(0,0,0,0.1);">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:50px; margin-bottom:60px;">
                     <div>
-                        <label style="font-weight:950; font-size:12px; opacity:0.5; letter-spacing:2px; display:block; margin-bottom:20px;">PROJECT CLASSIFICATION</label>
-                        <select id="proj-type" style="width:100%; height:75px; border-radius:20px; font-weight:700; border:2px solid #F1F5F9; padding:0 25px; font-size:18px;">
+                        <label style="font-weight:950; font-size:11px; opacity:0.4; letter-spacing:3px; display:block; margin-bottom:25px;">PROJECT CLASSIFICATION</label>
+                        <select id="proj-type">
                             <option value="250">Kitchen Transformation</option>
                             <option value="180">Master Bath Elite</option>
                             <option value="350">Full Structural Overhaul</option>
                         </select>
                     </div>
                     <div>
-                        <label style="font-weight:950; font-size:12px; opacity:0.5; letter-spacing:2px; display:block; margin-bottom:20px;">SQ FOOTAGE (EST)</label>
-                        <input type="number" id="proj-sqft" value="750" style="width:100%; height:75px; border-radius:20px; font-weight:700; border:2px solid #F1F5F9; padding:0 25px; font-size:18px;">
+                        <label style="font-weight:950; font-size:11px; opacity:0.4; letter-spacing:3px; display:block; margin-bottom:25px;">SQ FOOTAGE (EST)</label>
+                        <input type="number" id="proj-sqft" value="850">
                     </div>
                 </div>
-                <div style="background:#FEF2F2; border:2px solid #FEE2E2; padding:50px; border-radius:35px; text-align:center; margin-bottom:50px;">
-                    <div style="font-size:12px; font-weight:950; color:#991B1B; opacity:0.6; letter-spacing:1px; margin-bottom:15px;">ESTIMATED INVESTMENT RANGE</div>
-                    <div class="text-gradient" style="font-size:5rem; font-weight:950; color:#EF4444; line-height:1; letter-spacing:-0.05em;">$<span id="est-val">187,500</span></div>
+                <div style="background:#FEF2F2; border:2px solid #FEE2E2; padding:80px 40px; border-radius:50px; text-align:center; margin-bottom:80px;">
+                    <div style="font-size:11px; font-weight:950; color:#991B1B; opacity:0.5; letter-spacing:2px; margin-bottom:25px; text-transform: uppercase;">Estimated Investment Range</div>
+                    <div class="text-gradient" style="font-size:7.5rem; font-weight:950; color:#EF4444; line-height:1; letter-spacing:-0.07em;">$<span id="est-val">212,500</span></div>
                 </div>
-                <button class="gp-btn" style="width:100%; height:90px; font-size:22px; background:#EF4444;" onclick="jQuery(\'#est-steps\').fadeOut(); jQuery(\'#gp-quiz-form\').fadeIn();">Request Engineering Audit</button>
+                <button class="gp-btn" style="width:100%; height:100px; font-size:24px; background:#EF4444; border-radius:30px; letter-spacing: 2px;" onclick="jQuery(\'#est-steps\').fadeOut(); jQuery(\'#gp-quiz-form\').fadeIn();">REQUEST ENGINEERING AUDIT</button>
             </div>
             <div id="gp-quiz-form" style="display:none;">[gp_lead_form]</div>
             <script>
                 jQuery("#proj-type, #proj-sqft").on("change input", function() {
                     var rate = parseInt(jQuery("#proj-type").val());
-                    var sqft = parseInt(jQuery("#proj-sqft").val());
+                    var sqft = parseInt(jQuery("#proj-sqft").val()) || 0;
                     jQuery("#est-val").text((rate * sqft).toLocaleString());
                 });
             </script>

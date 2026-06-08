@@ -11,22 +11,30 @@ class GrowthPress_Law {
 
     public function render_conflict_check() {
         $nonce = wp_create_nonce('gp_lead_nonce');
-        return '<div class="gp-law-conflict glass-card gp-reveal" style="border-right: 20px solid #1E293B; padding:100px 80px; background: linear-gradient(135deg, var(--surface), #F1F5F9);">
-            <div style="text-align:center; margin-bottom:70px;">
-                <div style="font-size:12px; font-weight:950; color:#1E293B; text-transform:uppercase; letter-spacing:4px; margin-bottom:20px;">LITIGATION CLEARANCE NODE v5.9</div>
-                <h3 class="text-gradient" style="font-size:3.5rem; line-height:1.0;">Secure Conflict Verification</h3>
-                <p style="font-size:1.25rem; opacity:0.7; max-width:700px; margin:25px auto 0;">Submit adverse party identities for real-time conflict clearance and litigation eligibility.</p>
+        return '<style>
+            .gp-law-conflict input, .gp-law-conflict textarea { width:100%; background: #FFF; border: 1px solid #E2E8F0; border-radius: 20px; padding: 0 25px; transition: all 0.3s ease; font-weight: 700; height: 75px; }
+            .gp-law-conflict textarea { padding: 25px; height: 180px; line-height: 1.7; }
+            .gp-law-conflict input:focus, .gp-law-conflict textarea:focus { border-color: #1E293B; outline: none; box-shadow: 0 0 0 4px rgba(30, 41, 59, 0.1); }
+        </style>
+        <div class="gp-law-conflict glass-card gp-reveal" style="border-right: 20px solid #1E293B; padding:120px 80px; background: linear-gradient(135deg, rgba(255,255,255,0.9), #F1F5F9); border-radius: 60px;">
+            <div style="text-align:center; margin-bottom:80px;">
+                <div style="font-size:11px; font-weight:950; color:#1E293B; text-transform:uppercase; letter-spacing:5px; margin-bottom:20px;">LITIGATION CLEARANCE NODE v5.9</div>
+                <h3 class="text-gradient" style="font-size:4rem; line-height:1.0; letter-spacing: -0.05em;">Secure Conflict Verification</h3>
+                <p style="font-size:1.5rem; opacity:0.7; max-width:750px; margin:35px auto 0; font-weight: 500; line-height: 1.5;">Submit adverse party identities for real-time conflict clearance and litigation eligibility.</p>
             </div>
             <form class="gp-form" data-action="gp_submit_lead">
                 <input type="hidden" name="nonce" value="'.$nonce.'">
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:30px;">
-                    <div><label style="font-size:12px; font-weight:950; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:12px;">POTENTIAL ADVERSE PARTY</label><input type="text" name="adverse_party" placeholder="Entity or Person Name" required style="height:75px; border-radius:20px; border:2px solid #F1F5F9; padding:0 25px; font-size:16px;"></div>
-                    <div><label style="font-size:12px; font-weight:950; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:12px;">YOUR SECURE EMAIL</label><input type="email" name="lead_email" placeholder="Direct Email" required style="height:75px; border-radius:20px; border:2px solid #F1F5F9; padding:0 25px; font-size:16px;"></div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:35px; margin-bottom:35px;">
+                    <div><label style="font-size:11px; font-weight:950; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">POTENTIAL ADVERSE PARTY</label><input type="text" name="adverse_party" placeholder="Entity or Person Name" required></div>
+                    <div><label style="font-size:11px; font-weight:950; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">YOUR SECURE EMAIL</label><input type="email" name="lead_email" placeholder="direct@enterprise-legal.com" required></div>
                 </div>
-                <textarea name="lead_msg" placeholder="Summarize the nature of the dispute and any other related entities..." style="height:180px; margin-bottom:40px; border-radius:28px; padding:30px; font-size:16px; border:2px solid #F1F5F9; line-height:1.7;"></textarea>
-                <button type="submit" class="gp-btn" style="width:100%; height:90px; font-size:22px; background:#1E293B;">Execute Clearance Sequence</button>
+                <div style="margin-bottom:45px;">
+                    <label style="font-size:11px; font-weight:950; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">DISPUTE SUMMARY</label>
+                    <textarea name="lead_msg" placeholder="Summarize the nature of the dispute and any other related entities... (Privileged)"></textarea>
+                </div>
+                <button type="submit" class="gp-btn" style="width:100%; height:95px; font-size:22px; background:#1E293B; border-radius: 25px; letter-spacing: 2px;">EXECUTE CLEARANCE SEQUENCE</button>
             </form>
-            <div style="margin-top:40px; font-size:11px; opacity:0.4; text-align:center;">ENCRYPTION: AES-256-GCM. Clearance does not constitute engagement.</div>
+            <div style="margin-top:50px; font-size:12px; font-weight: 900; opacity:0.3; text-align:center; letter-spacing: 1px;">ENCRYPTION: AES-256-GCM. Clearance does not constitute engagement.</div>
         </div>';
     }
 
@@ -48,43 +56,51 @@ class GrowthPress_Law {
     public function render_legal_intake() {
         $nonce = wp_create_nonce('gp_lead_nonce');
         $brand = get_option('growthpress_brand_name', 'GrowthPress');
-        return '<div class="gp-legal-intake glass-card gp-reveal" style="border-right: 20px solid var(--secondary); background: linear-gradient(135deg, var(--surface), var(--bg)); position:relative; overflow:hidden; padding:100px 80px;">
-            <div style="position:absolute; top:0; right:0; background:var(--secondary); color:white; font-size:12px; font-weight:950; padding:12px 50px; transform:rotate(45deg) translate(30px, -30px); letter-spacing:3px;">SECURE</div>
-            <div style="text-align:center; margin-bottom:70px;">
-                <div style="font-size:12px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:4px; margin-bottom:20px;">LITIGATION INTELLIGENCE v4.0</div>
-                <h3 class="text-gradient" style="font-size:3.5rem; line-height:1.0;">Elite Case Merit Analysis</h3>
-                <p style="font-size:1.25rem; opacity:0.7; max-width:700px; margin:25px auto 0;">Submit your matter for real-time neural triage and high-stakes litigation prioritization.</p>
+        return '<style>
+            .gp-legal-intake input, .gp-legal-intake select, .gp-legal-intake textarea { width:100%; background: rgba(255,255,255,0.8); border: 1px solid #E2E8F0; border-radius: 20px; padding: 0 25px; transition: all 0.3s ease; font-weight: 700; height: 75px; }
+            .gp-legal-intake textarea { padding: 25px; height: 220px; line-height: 1.7; }
+            .gp-legal-intake input:focus, .gp-legal-intake select:focus, .gp-legal-intake textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px var(--primary-glow); background: #FFF; }
+        </style>
+        <div class="gp-legal-intake glass-card gp-reveal" style="border-right: 20px solid var(--secondary); background: linear-gradient(135deg, rgba(255,255,255,0.9), var(--bg)); position:relative; overflow:hidden; padding:120px 80px; border-radius: 60px;">
+            <div style="position:absolute; top:0; right:0; background:var(--secondary); color:white; font-size:12px; font-weight:950; padding:15px 60px; transform:rotate(45deg) translate(35px, -35px); letter-spacing:4px; box-shadow: 0 0 20px rgba(0,0,0,0.2);">SECURE</div>
+            <div style="text-align:center; margin-bottom:80px;">
+                <div style="font-size:11px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:5px; margin-bottom:25px;">LITIGATION INTELLIGENCE v4.0</div>
+                <h3 class="text-gradient" style="font-size:4.5rem; line-height:1.0; letter-spacing: -0.06em;">Elite Case Merit Analysis</h3>
+                <p style="font-size:1.5rem; opacity:0.7; max-width:750px; margin:35px auto 0; font-weight: 500; line-height: 1.5;">Submit your matter for real-time neural triage and high-stakes litigation prioritization.</p>
             </div>
 
-            <div style="background:rgba(0,0,0,0.03); border-radius:44px; padding:50px; margin-bottom:50px; border:1px solid rgba(0,0,0,0.05); position:relative;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                    <span style="font-size:12px; font-weight:950; opacity:0.5; letter-spacing:2px;">NEURAL MERIT PROBABILITY</span>
-                    <span id="merit-score" style="font-size:14px; font-weight:900; color:var(--primary); letter-spacing:1px;">ANALYZING...</span>
+            <div style="background:rgba(0,0,0,0.02); border-radius:50px; padding:60px; margin-bottom:70px; border:1px solid rgba(0,0,0,0.05); position:relative; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+                    <span style="font-size:11px; font-weight:950; opacity:0.4; letter-spacing:3px;">NEURAL MERIT PROBABILITY</span>
+                    <span id="merit-score" style="font-size:13px; font-weight:950; color:var(--primary); letter-spacing:2px; text-transform: uppercase;">Engine Initializing...</span>
                 </div>
-                <div style="height:14px; background:rgba(0,0,0,0.05); border-radius:10px; overflow:hidden; box-shadow:inset 0 2px 5px rgba(0,0,0,0.05);">
-                    <div id="merit-fill" style="height:100%; width:0%; background:linear-gradient(90deg, var(--primary), var(--primary-alt)); transition:width 2s cubic-bezier(0.16, 1, 0.3, 1);"></div>
+                <div style="height:16px; background:rgba(0,0,0,0.05); border-radius:12px; overflow:hidden; box-shadow:inset 0 2px 5px rgba(0,0,0,0.05);">
+                    <div id="merit-fill" style="height:100%; width:0%; background:linear-gradient(90deg, var(--primary), var(--primary-alt)); transition:width 2.5s cubic-bezier(0.16, 1, 0.3, 1);"></div>
                 </div>
             </div>
 
             <form class="gp-form" data-action="gp_submit_lead">
                 <input type="hidden" name="nonce" value="'.$nonce.'">
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:30px;">
-                    <div><label style="font-size:12px; font-weight:950; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:12px;">CLAIMANT IDENTITY</label><input type="text" name="lead_name" placeholder="Full Legal Name" required style="height:75px; border-radius:20px; border:2px solid #F1F5F9; padding:0 25px; font-size:16px;"></div>
-                    <div><label style="font-size:12px; font-weight:950; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:12px;">SECURE CHANNEL</label><input type="email" name="lead_email" placeholder="Direct Email" required style="height:75px; border-radius:20px; border:2px solid #F1F5F9; padding:0 25px; font-size:16px;"></div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:35px; margin-bottom:35px;">
+                    <div><label style="font-size:11px; font-weight:950; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">CLAIMANT IDENTITY</label><input type="text" name="lead_name" placeholder="Full Legal Name" required></div>
+                    <div><label style="font-size:11px; font-weight:950; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">SECURE CHANNEL</label><input type="email" name="lead_email" placeholder="direct@enterprise-legal.com" required></div>
                 </div>
-                <div style="margin-bottom:30px;">
-                    <label style="font-size:12px; font-weight:950; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:12px;">MATTER CLASSIFICATION</label>
-                    <select id="case_type" style="width:100%; height:75px; border-radius:20px; font-weight:700; border:2px solid #F1F5F9; padding:0 25px; font-size:16px;">
+                <div style="margin-bottom:35px;">
+                    <label style="font-size:11px; font-weight:950; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">MATTER CLASSIFICATION</label>
+                    <select id="case_type">
                         <option value="Commercial">High-Value Commercial Litigation</option>
                         <option value="Tort">Elite Personal Injury / Catastrophic</option>
                         <option value="Corporate">Strategic Corporate Transactional</option>
                         <option value="Estate">Family Office & Asset Protection</option>
                     </select>
                 </div>
-                <textarea name="lead_msg" placeholder="Summarize the matter events, involved parties, and target resolution... (Privileged)" style="height:220px; margin-bottom:40px; border-radius:28px; padding:30px; font-size:16px; border:2px solid #F1F5F9; line-height:1.7;"></textarea>
-                <button type="submit" class="gp-btn" style="width:100%; height:90px; font-size:22px;">Initiate Supreme Merit Review</button>
+                <div style="margin-bottom:45px;">
+                    <label style="font-size:11px; font-weight:950; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">PRIVILEGED MATTER SUMMARY</label>
+                    <textarea name="lead_msg" placeholder="Summarize the matter events, involved parties, and target resolution... (Privileged)"></textarea>
+                </div>
+                <button type="submit" class="gp-btn" style="width:100%; height:95px; font-size:22px; border-radius: 25px; letter-spacing: 2px;">INITIATE SUPREME MERIT REVIEW</button>
             </form>
-            <div style="margin-top:40px; font-size:11px; opacity:0.4; text-align:center; line-height:1.8; max-width:600px; margin-left:auto; margin-right:auto;">ENCRYPTION: AES-256 BIT SHA-2. NOTICE: This terminal is for administrative intake and neural triage only. Use of this system does not establish an attorney-client relationship. Data is processed under strict confidentiality protocols.</div>
+            <div style="margin-top:60px; font-size:12px; opacity:0.4; text-align:center; line-height:1.8; max-width:650px; margin-left:auto; margin-right:auto; font-weight: 500;">ENCRYPTION: AES-256 BIT SHA-2. NOTICE: This terminal is for administrative intake and neural triage only. Use of this system does not establish an attorney-client relationship. Data is processed under strict confidentiality protocols.</div>
 
             <script>
                 jQuery(document).ready(function($) {

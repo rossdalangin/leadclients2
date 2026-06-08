@@ -120,16 +120,20 @@ class GrowthPress_CRM {
 
     public function render_lead_form() {
         $nonce = wp_create_nonce('gp_lead_nonce');
-        return '<form class="gp-form glass-card" data-action="gp_submit_lead">
+        return '<style>
+            .gp-form input, .gp-form textarea { width: 100%; background: rgba(255,255,255,0.8); border: 1px solid #E2E8F0; padding: 20px; border-radius: 15px; transition: all 0.3s ease; font-weight: 600; }
+            .gp-form input:focus, .gp-form textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-glow); outline: none; background: #FFF; }
+        </style>
+        <form class="gp-form glass-card" data-action="gp_submit_lead" style="padding: 50px; border-radius: 35px;">
             <input type="hidden" name="nonce" value="' . $nonce . '">
-            <div style="margin-bottom:20px;"><label style="font-weight:900; font-size:10px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">IDENTITY</label><input type="text" name="lead_name" placeholder="Full Name" required></div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:20px;">
-                <div><label style="font-weight:900; font-size:10px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">COMMUNICATION</label><input type="email" name="lead_email" placeholder="Email Address" required></div>
-                <div><label style="font-weight:900; font-size:10px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">SECURE PHONE</label><input type="tel" name="lead_phone" placeholder="Phone Number"></div>
+            <div style="margin-bottom:25px;"><label style="font-weight:950; font-size:11px; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">IDENTITY</label><input type="text" name="lead_name" placeholder="Full Legal Name" required></div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:25px; margin-bottom:25px;">
+                <div><label style="font-weight:950; font-size:11px; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">COMMUNICATION</label><input type="email" name="lead_email" placeholder="direct@enterprise.com" required></div>
+                <div><label style="font-weight:950; font-size:11px; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">SECURE PHONE</label><input type="tel" name="lead_phone" placeholder="+1 (555) 000-0000"></div>
             </div>
-            <div style="margin-bottom:20px;"><label style="font-weight:900; font-size:10px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">GEOGRAPHIC DATA (ZIP)</label><input type="text" name="lead_zip" placeholder="ZIP Code"></div>
-            <div style="margin-bottom:20px;"><label style="font-weight:900; font-size:10px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">INQUIRY DETAIL</label><textarea name="lead_msg" placeholder="Describe your growth goals..."></textarea></div>
-            <button type="submit" class="gp-btn" style="width:100%;">Initialize Sequence</button>
+            <div style="margin-bottom:25px;"><label style="font-weight:950; font-size:11px; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">GEOGRAPHIC NODE (ZIP)</label><input type="text" name="lead_zip" placeholder="e.g. 90210"></div>
+            <div style="margin-bottom:30px;"><label style="font-weight:950; font-size:11px; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">GROWTH GOALS / INQUIRY</label><textarea name="lead_msg" placeholder="Describe your strategic objectives..." style="height: 120px;"></textarea></div>
+            <button type="submit" class="gp-btn" style="width:100%; height: 75px; font-size: 18px; border-radius: 20px;">INITIALIZE STRATEGIC SEQUENCE</button>
         </form>';
     }
 
@@ -145,13 +149,17 @@ class GrowthPress_CRM {
         $data = $questions[$niche] ?? array('q' => 'What is your primary goal?', 'opts' => array('Rapid Growth', 'Process Automation', 'Lead Generation'));
 
         $opts_html = '';
-        foreach($data['opts'] as $o) $opts_html .= '<button class="gp-btn" style="margin-bottom:15px; width:100%; border-radius:15px; text-transform:none;" onclick="nextStep(\''.esc_js($o).'\')">'.esc_html($o).'</button>';
+        foreach($data['opts'] as $o) $opts_html .= '<button class="gp-btn" style="margin-bottom:15px; width:100%; height: 70px; border-radius:20px; text-transform:none; font-size: 18px; font-weight: 700; background: #FFF; border: 1px solid #E2E8F0; color: var(--secondary) !important;" onclick="nextStep(\''.esc_js($o).'\')">'.esc_html($o).'</button>';
 
-        return '<div class="gp-quiz-container glass-card" style="padding:60px;">
-            <div class="gp-quiz-progress" style="height:6px; background:#F1F5F9; border-radius:10px; margin-bottom:40px; overflow:hidden;"><div class="gp-quiz-progress-fill" style="width:33%; height:100%; background:var(--primary); transition:width 0.5s ease;"></div></div>
-            <h3 class="text-gradient" style="margin-bottom:30px;">'.ucwords($niche).' OS Qualification</h3>
+        return '<div class="gp-quiz-container glass-card" style="padding:80px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.4);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px;">
+                <div style="font-size: 10px; font-weight: 950; opacity: 0.4; letter-spacing: 3px;">QUALIFICATION NODE</div>
+                <div style="font-size: 10px; font-weight: 950; color: var(--primary); letter-spacing: 1px;">STEP 01/02</div>
+            </div>
+            <div class="gp-quiz-progress" style="height:8px; background:#F1F5F9; border-radius:10px; margin-bottom:50px; overflow:hidden;"><div class="gp-quiz-progress-fill" style="width:50%; height:100%; background:var(--primary); transition:width 0.5s ease; box-shadow: 0 0 15px var(--primary-glow);"></div></div>
+            <h3 class="text-gradient" style="margin-bottom:40px; font-size: 2.5rem; line-height: 1.1;">'.ucwords($niche).' OS Intelligence</h3>
             <div id="gp-quiz-step-1">
-                <p style="font-size:20px; font-weight:700; margin-bottom:40px;">'.esc_html($data['q']).'</p>
+                <p style="font-size:22px; font-weight:800; margin-bottom:45px; color: var(--secondary);">'.esc_html($data['q']).'</p>
                 <div style="display:flex; flex-direction:column;">'.$opts_html.'</div>
             </div>
             <div id="gp-quiz-form" style="display:none;">'.$this->render_lead_form().'</div>

@@ -142,19 +142,23 @@ class GrowthPress_Booking {
         $nonce = wp_create_nonce('gp_booking_nonce');
         $staff = get_users( array( 'role__in' => array('author', 'editor', 'administrator') ) );
         ob_start(); ?>
-        <div class="gp-booking-elite glass-card" style="padding:60px; border-radius:40px; background:linear-gradient(135deg, var(--surface), var(--bg)); border:1px solid rgba(255,255,255,0.4);">
-            <div style="text-align:center; margin-bottom:40px;">
-                <div style="font-size:10px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:3px; margin-bottom:15px;">SECURE CALENDAR ENGINE</div>
-                <h2 class="text-gradient" style="font-size:2.8rem; margin:0;">Secure Your Strategy Session</h2>
-                <p style="opacity:0.6; font-size:14px; margin-top:10px;">Select a slot to engage with our elite <?php echo get_option('growthpress_niche', 'business'); ?> specialists.</p>
+        <style>
+            .gp-booking-form input, .gp-booking-form select { width: 100%; background: rgba(255,255,255,0.8); border: 1px solid #E2E8F0; padding: 0 20px; border-radius: 15px; transition: all 0.3s ease; font-weight: 700; height: 65px; }
+            .gp-booking-form input:focus, .gp-booking-form select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-glow); outline: none; background: #FFF; }
+        </style>
+        <div class="gp-booking-elite glass-card" style="padding:80px; border-radius:50px; background:linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,250,252,0.9)); border:1px solid rgba(255,255,255,0.6); box-shadow: 0 50px 100px -20px rgba(0,0,0,0.12);">
+            <div style="text-align:center; margin-bottom:60px;">
+                <div style="font-size:11px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:4px; margin-bottom:20px;">SECURE CALENDAR ENGINE v3.0</div>
+                <h2 class="text-gradient" style="font-size:3.5rem; margin:0; line-height: 1.1; letter-spacing: -0.05em;">Secure Your Strategy Session</h2>
+                <p style="opacity:0.6; font-size:16px; margin-top:15px; font-weight: 500;">Select a slot to engage with our elite <?php echo get_option('growthpress_niche', 'business'); ?> specialists.</p>
             </div>
 
-            <form id="gp-booking-form">
+            <form id="gp-booking-form" class="gp-booking-form">
                 <input type="hidden" name="nonce" value="<?php echo $nonce; ?>">
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:30px;">
                     <div>
-                        <label style="font-weight:950; font-size:11px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">PROFESSIONAL</label>
-                        <select name="staff_id" style="height:60px; border-radius:15px; font-weight:700;">
+                        <label style="font-weight:950; font-size:11px; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">SPECIALIST NODE</label>
+                        <select name="staff_id">
                             <option value="0">Any Available Specialist</option>
                             <?php foreach($staff as $member): ?>
                                 <option value="<?php echo $member->ID; ?>"><?php echo esc_html($member->display_name); ?></option>
@@ -162,8 +166,8 @@ class GrowthPress_Booking {
                         </select>
                     </div>
                     <div>
-                        <label style="font-weight:950; font-size:11px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">SERVICE TYPE</label>
-                        <select name="service" style="height:60px; border-radius:15px; font-weight:700;">
+                        <label style="font-weight:950; font-size:11px; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">STRATEGY TRACK</label>
+                        <select name="service">
                             <option value="consultation">Initial Strategy Audit</option>
                             <option value="blueprint">Performance Blueprinting</option>
                         </select>
@@ -172,31 +176,31 @@ class GrowthPress_Booking {
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:40px;">
                     <div>
-                        <label style="font-weight:950; font-size:11px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">PREFERRED DATE</label>
-                        <input type="date" name="date" required style="height:60px; border-radius:15px; font-weight:700;">
+                        <label style="font-weight:950; font-size:11px; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">PREFERRED DATE</label>
+                        <input type="date" name="date" required>
                     </div>
                     <div>
-                        <label style="font-weight:950; font-size:11px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">TARGET TIME</label>
-                        <input type="time" name="time" required style="height:60px; border-radius:15px; font-weight:700;">
+                        <label style="font-weight:950; font-size:11px; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">TARGET TIME</label>
+                        <input type="time" name="time" required>
                     </div>
                 </div>
 
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:40px;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:50px;">
                     <div>
-                        <label style="font-weight:950; font-size:11px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">APPLICANT NAME</label>
-                        <input type="text" name="client_name" placeholder="Full Legal Name" required style="height:60px; border-radius:15px; font-weight:700;">
+                        <label style="font-weight:950; font-size:11px; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">APPLICANT IDENTITY</label>
+                        <input type="text" name="client_name" placeholder="Full Legal Name" required>
                     </div>
                     <div>
-                        <label style="font-weight:950; font-size:11px; opacity:0.5; letter-spacing:1px; display:block; margin-bottom:10px;">EMAIL ADDRESS</label>
-                        <input type="email" name="client_email" placeholder="direct@example.com" required style="height:60px; border-radius:15px; font-weight:700;">
+                        <label style="font-weight:950; font-size:11px; opacity:0.4; letter-spacing:2px; display:block; margin-bottom:12px;">UPLINK EMAIL</label>
+                        <input type="email" name="client_email" placeholder="direct@enterprise.com" required>
                     </div>
                 </div>
 
-                <div style="display:flex; gap:20px;">
-                    <button type="submit" class="gp-btn" style="flex:2; height:75px; font-size:18px;">CONFIRM SLOT</button>
-                    <button type="button" class="gp-btn" onclick="joinWaitingList()" style="flex:1; background:var(--secondary); height:75px; font-size:14px; text-transform:none;">Join Waiting List</button>
+                <div style="display:flex; gap:25px;">
+                    <button type="submit" class="gp-btn" style="flex:2; height:85px; font-size:20px; border-radius: 20px;">CONFIRM SESSION SLOT</button>
+                    <button type="button" class="gp-btn" onclick="joinWaitingList()" style="flex:1; background:var(--secondary); height:85px; font-size:14px; text-transform:none; border-radius: 20px;">Join Priority Waiting List</button>
                 </div>
-                <div id="booking-res" style="margin-top:20px; text-align:center; font-weight:900; color:var(--primary);"></div>
+                <div id="booking-res" style="margin-top:30px; text-align:center; font-weight:900; color:var(--primary);"></div>
             </form>
         </div>
         <script>

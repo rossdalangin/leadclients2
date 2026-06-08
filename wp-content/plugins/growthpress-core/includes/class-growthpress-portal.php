@@ -70,7 +70,7 @@ class GrowthPress_Portal {
     }
 
     public function render_portal() {
-        if ( ! is_user_logged_in() ) return '<div class="glass-card" style="text-align:center; padding:120px 60px; border-radius:50px;"><div style="font-size:5rem; margin-bottom:30px;">🔐</div><h2 class="text-gradient" style="font-size:3.5rem;">Secure Node Authentication</h2><p style="opacity:0.7; font-size:1.2rem; margin-bottom:50px;">Identify yourself to access proprietary strategic metrics and legal/financial documents.</p><a href="'.wp_login_url(get_permalink()).'" class="gp-btn" style="height:80px; padding:0 80px; font-size:20px;">AUTHENTICATE SESSION</a></div>';
+        if ( ! is_user_logged_in() ) return '<div class="glass-card gp-reveal" style="text-align:center; padding:120px 60px; border-radius:60px; border: 1px solid rgba(255,255,255,0.4);"><div style="font-size:6rem; margin-bottom:40px;">🔐</div><h2 class="text-gradient" style="font-size:4rem; line-height:1.1;">Secure Node Authentication</h2><p style="opacity:0.7; font-size:1.4rem; max-width: 600px; margin: 30px auto 60px;">Identify yourself to access proprietary strategic metrics, legal blueprints, and financial ledgers.</p><a href="'.wp_login_url(get_permalink()).'" class="gp-btn" style="height:90px; padding:0 100px; font-size:22px; border-radius: 25px;">AUTHENTICATE SESSION</a></div>';
 
         $user = wp_get_current_user();
         $email = $user->user_email;
@@ -79,15 +79,15 @@ class GrowthPress_Portal {
         $proposals = ! empty($lead_ids) ? get_posts( array( 'post_type' => 'gp_proposal', 'meta_key' => '_related_lead', 'meta_compare' => 'IN', 'meta_value' => $lead_ids ) ) : array();
 
         ob_start(); ?>
-        <div class="gp-portal-v4 container" style="padding:120px 0;">
-            <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:80px;">
+        <div class="gp-portal-v4 container" style="padding:150px 0;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:100px;">
                 <div>
-                    <div style="font-size:12px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:4px; margin-bottom:20px;">AUTHENTICATED COMMAND CENTER</div>
-                    <h1 class="text-gradient" style="margin:0; font-size:4.5rem; letter-spacing:-0.06em;">Command: <?php echo esc_html($user->display_name); ?></h1>
+                    <div style="font-size:12px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:5px; margin-bottom:20px;">AUTHENTICATED COMMAND CENTER</div>
+                    <h1 class="text-gradient" style="margin:0; font-size:5.5rem; letter-spacing:-0.07em; line-height: 0.9;">Command: <?php echo esc_html($user->display_name); ?></h1>
                 </div>
                 <div style="text-align:right;">
-                    <div style="font-size:10px; font-weight:950; opacity:0.3; letter-spacing:2px; margin-bottom:10px;">ENCRYPTION: AES-256-GCM</div>
-                    <a href="<?php echo wp_logout_url(home_url()); ?>" class="gp-btn" style="background:var(--secondary); padding:12px 30px; font-size:11px; border-radius:15px; text-transform:none;">TERMINATE SESSION</a>
+                    <div style="font-size:11px; font-weight:950; opacity:0.3; letter-spacing:2px; margin-bottom:15px; text-transform: uppercase;">Node: AES-256-GCM Secure</div>
+                    <a href="<?php echo wp_logout_url(home_url()); ?>" class="gp-btn" style="background:var(--secondary); padding:15px 40px; font-size:12px; border-radius:18px; text-transform:none; font-weight: 800;">TERMINATE SESSION</a>
                 </div>
             </div>
 

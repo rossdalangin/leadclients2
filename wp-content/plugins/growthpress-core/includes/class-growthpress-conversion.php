@@ -32,8 +32,12 @@ class GrowthPress_Conversion {
         );
         $msg = $messages[$niche] ?? '🚀 Limited availability for new high-ticket strategy sessions this month.';
 
-        return '<div class="gp-urgency-banner gp-reveal" style="background: var(--secondary); color: white; padding: 15px; text-align: center; font-weight: 800; font-size: 13px; position: relative; overflow: hidden; letter-spacing: 1px; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1);">
-            <div class="gp-pulse-icon" style="display: inline-block; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; margin-right: 12px; animation: gp-pulse 2s infinite;"></div>
+        return '<style>
+            @keyframes gp-banner-shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+            .gp-urgency-banner::before { content: ""; position: absolute; top: 0; left: 0; width: 30%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent); animation: gp-banner-shimmer 3s infinite; }
+        </style>
+        <div class="gp-urgency-banner gp-reveal" style="background: var(--secondary); color: white; padding: 20px; text-align: center; font-weight: 900; font-size: 14px; position: relative; overflow: hidden; letter-spacing: 2px; text-transform: uppercase; border-bottom: 2px solid var(--primary);">
+            <div class="gp-pulse-icon" style="display: inline-block; width: 12px; height: 12px; background: #EF4444; border-radius: 50%; margin-right: 15px; animation: gp-pulse 2s infinite; box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);"></div>
             ' . esc_html($msg) . '
         </div>';
     }
@@ -88,12 +92,16 @@ class GrowthPress_Conversion {
     }
 
     public function render_trust_badges() {
-        return '<div class="gp-trust-grid gp-reveal" style="display: flex; justify-content: center; align-items: center; gap: 60px; margin: 80px 0; flex-wrap: wrap;">
-            <div class="trust-badge" style="font-weight: 950; font-size: 24px; letter-spacing: -1px; opacity: 0.3;">FORBES</div>
-            <div class="trust-badge" style="font-weight: 950; font-size: 24px; letter-spacing: -1px; opacity: 0.3;">BLOOMBERG</div>
-            <div class="trust-badge" style="font-weight: 950; font-size: 24px; letter-spacing: -1px; opacity: 0.3;">TECHCRUNCH</div>
-            <div class="trust-badge" style="font-weight: 950; font-size: 24px; letter-spacing: -1px; opacity: 0.3;">WIRED</div>
-            <div class="trust-badge" style="font-weight: 950; font-size: 24px; letter-spacing: -1px; opacity: 0.3;">INC.</div>
+        return '<style>
+            .trust-badge { transition: all 0.3s ease; filter: grayscale(1); cursor: pointer; }
+            .trust-badge:hover { filter: grayscale(0); opacity: 1 !important; transform: scale(1.1); }
+        </style>
+        <div class="gp-trust-grid gp-reveal" style="display: flex; justify-content: center; align-items: center; gap: 80px; margin: 100px 0; flex-wrap: wrap;">
+            <div class="trust-badge" style="font-weight: 950; font-size: 28px; letter-spacing: -1.5px; opacity: 0.25;">FORBES</div>
+            <div class="trust-badge" style="font-weight: 950; font-size: 28px; letter-spacing: -1.5px; opacity: 0.25;">BLOOMBERG</div>
+            <div class="trust-badge" style="font-weight: 950; font-size: 28px; letter-spacing: -1.5px; opacity: 0.25;">TECHCRUNCH</div>
+            <div class="trust-badge" style="font-weight: 950; font-size: 28px; letter-spacing: -1.5px; opacity: 0.25;">WIRED</div>
+            <div class="trust-badge" style="font-weight: 950; font-size: 28px; letter-spacing: -1.5px; opacity: 0.25;">INC.</div>
         </div>';
     }
 
@@ -125,18 +133,18 @@ class GrowthPress_Conversion {
     }
 
     public function render_stats_bar() {
-        return '<div class="gp-stats-bar glass-card gp-reveal" style="display: flex; justify-content: space-around; padding: 60px; text-align: center; margin-top: 80px;">
-            <div>
-                <div class="text-gradient" style="font-size: 3rem; font-weight: 950; line-height: 1;">$250M+</div>
-                <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; margin-top: 10px; letter-spacing: 2px; opacity: 0.6;">Pipeline Managed</div>
+        return '<div class="gp-stats-bar glass-card gp-reveal" style="display: grid; grid-template-columns: repeat(3, 1fr); padding: 80px 40px; text-align: center; margin: 100px 0; border-radius: 50px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 40px 100px -20px rgba(0,0,0,0.1);">
+            <div style="border-right: 1px solid rgba(0,0,0,0.05);">
+                <div class="text-gradient gp-counter" data-target="250" style="font-size: 4.5rem; font-weight: 950; line-height: 1; letter-spacing: -0.05em;">$250M+</div>
+                <div style="font-size: 11px; font-weight: 900; text-transform: uppercase; margin-top: 20px; letter-spacing: 3px; opacity: 0.4;">Pipeline Equity</div>
+            </div>
+            <div style="border-right: 1px solid rgba(0,0,0,0.05);">
+                <div class="text-gradient gp-counter" data-target="14" style="font-size: 4.5rem; font-weight: 950; line-height: 1; letter-spacing: -0.05em;">14k+</div>
+                <div style="font-size: 11px; font-weight: 900; text-transform: uppercase; margin-top: 20px; letter-spacing: 3px; opacity: 0.4;">Inquiries Triage</div>
             </div>
             <div>
-                <div class="text-gradient" style="font-size: 3rem; font-weight: 950; line-height: 1;">14k+</div>
-                <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; margin-top: 10px; letter-spacing: 2px; opacity: 0.6;">Inquiries Captured</div>
-            </div>
-            <div>
-                <div class="text-gradient" style="font-size: 3rem; font-weight: 950; line-height: 1;">98%</div>
-                <div style="font-size: 12px; font-weight: 800; text-transform: uppercase; margin-top: 10px; letter-spacing: 2px; opacity: 0.6;">Client Retention</div>
+                <div class="text-gradient gp-counter" data-target="98" style="font-size: 4.5rem; font-weight: 950; line-height: 1; letter-spacing: -0.05em;">98%</div>
+                <div style="font-size: 11px; font-weight: 900; text-transform: uppercase; margin-top: 20px; letter-spacing: 3px; opacity: 0.4;">Client Retention</div>
             </div>
         </div>';
     }

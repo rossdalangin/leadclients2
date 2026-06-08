@@ -93,30 +93,34 @@ class GrowthPress_RealEstate {
     public function render_property_matcher() {
         $properties = get_posts(array('post_type' => 'gp_property', 'posts_per_page' => 3));
         ob_start(); ?>
-        <div class="gp-property-matcher glass-card gp-reveal" style="text-align:center; padding:120px 80px; background: radial-gradient(circle at top right, rgba(37,99,235,0.05), transparent 50%), var(--glass-bg);">
-            <div style="font-size:12px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:4px; margin-bottom:25px;">NEURAL INVENTORY MATCH v4.0</div>
-            <h3 class="text-gradient" style="font-size:4rem; letter-spacing:-0.07em; line-height:1.0;">AI Lifestyle Matcher</h3>
-            <p style="font-size:1.3rem; opacity:0.7; max-width:750px; margin:30px auto 0;">Our neural network cross-references your specific lifestyle DNA with our proprietary off-market inventory node.</p>
+        <style>
+            .gp-lifestyle-btn { width:100%; height:140px; text-transform:none; border-radius:40px; font-size:22px; letter-spacing:-0.02em; font-weight: 800; background: #FFF; border: 1px solid #E2E8F0; color: var(--secondary) !important; transition: all 0.4s ease; cursor: pointer; }
+            .gp-lifestyle-btn:hover { border-color: var(--primary); transform: translateY(-10px); box-shadow: 0 30px 60px -15px rgba(0,0,0,0.1); }
+        </style>
+        <div class="gp-property-matcher glass-card gp-reveal" style="text-align:center; padding:150px 80px; background: radial-gradient(circle at top right, rgba(37,99,235,0.08), transparent 50%), rgba(255,255,255,0.9); border-radius: 60px;">
+            <div style="font-size:11px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:6px; margin-bottom:25px;">NEURAL INVENTORY MATCH v4.0</div>
+            <h3 class="text-gradient" style="font-size:5rem; letter-spacing:-0.08em; line-height:0.9;">AI Lifestyle Matcher</h3>
+            <p style="font-size:1.5rem; opacity:0.7; max-width:800px; margin:40px auto 0; font-weight: 500; line-height: 1.5;">Our neural network cross-references your specific lifestyle DNA with our proprietary off-market inventory node.</p>
 
-            <div id="lifestyle-steps" style="margin-top:80px;">
-                <div class="wp-block-columns" style="gap:40px;">
+            <div id="lifestyle-steps" style="margin-top:100px;">
+                <div class="wp-block-columns" style="gap:50px;">
                     <?php if($properties): foreach($properties as $p):
                         $tags = get_post_meta($p->ID, '_gp_lifestyle_tags', true) ?: 'Suburban Sanctuary';
                         $first_tag = explode(',', $tags)[0];
                         ?>
                         <div class="wp-block-column">
-                            <button class="gp-btn" style="width:100%; height:120px; text-transform:none; border-radius:35px; font-size:20px; letter-spacing:0;" onclick="jQuery('#lifestyle-steps').fadeOut(); jQuery('#gp-quiz-form').fadeIn();">
+                            <button class="gp-lifestyle-btn" onclick="jQuery('#lifestyle-steps').fadeOut(); jQuery('#gp-quiz-form').fadeIn();">
                                 <?php echo esc_html($first_tag); ?>
                             </button>
                         </div>
                     <?php endforeach; else: ?>
-                        <div class="wp-block-column"><button class="gp-btn" style="width:100%; height:120px; text-transform:none; border-radius:35px; font-size:20px; letter-spacing:0;" onclick="jQuery('#lifestyle-steps').fadeOut(); jQuery('#gp-quiz-form').fadeIn();">Suburban Sanctuary</button></div>
+                        <div class="wp-block-column"><button class="gp-lifestyle-btn" onclick="jQuery('#lifestyle-steps').fadeOut(); jQuery('#gp-quiz-form').fadeIn();">Suburban Sanctuary</button></div>
                     <?php endif; ?>
                 </div>
-                <div style="margin-top:50px; font-size:12px; font-weight:950; opacity:0.3; letter-spacing:3px;">INFERENCE STATUS: READY FOR DOMAIN MAPPING</div>
+                <div style="margin-top:70px; font-size:12px; font-weight:950; opacity:0.3; letter-spacing:4px; text-transform: uppercase;">Inference Status: Ready for Domain Mapping</div>
             </div>
-            <div id="gp-quiz-form" style="display:none; margin-top:60px;">
-                <div style="max-width:600px; margin:0 auto;">
+            <div id="gp-quiz-form" style="display:none; margin-top:80px;">
+                <div style="max-width:700px; margin:0 auto;">
                     <?php echo do_shortcode('[gp_lead_form]'); ?>
                 </div>
             </div>

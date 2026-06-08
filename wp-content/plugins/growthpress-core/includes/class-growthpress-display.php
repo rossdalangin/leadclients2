@@ -166,49 +166,75 @@ class GrowthPress_Display {
     private function render_grid( $posts, $title, $type = '' ) {
         if ( empty( $posts ) ) return '';
         ob_start(); ?>
-        <div class="gp-content-grid-wrapper" style="margin: 60px 0;">
-            <h2 class="text-gradient" style="font-size: 2.5rem; margin-bottom: 40px; text-align: center;"><?php echo esc_html( $title ); ?></h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+        <style>
+            .gp-grid-item {
+                transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
+                backdrop-filter: blur(15px);
+                -webkit-backdrop-filter: blur(15px);
+                border: 1px solid rgba(255, 255, 255, 0.15);
+            }
+            .gp-grid-item:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 30px 60px -12px rgba(50, 50, 93, 0.25), 0 18px 36px -18px rgba(0, 0, 0, 0.3);
+                border-color: var(--primary);
+            }
+            .gp-grid-item .gp-intel-badge {
+                transition: all 0.3s ease;
+            }
+            .gp-grid-item:hover .gp-intel-badge {
+                transform: scale(1.1);
+                box-shadow: 0 0 15px var(--primary-glow);
+            }
+        </style>
+        <div class="gp-content-grid-wrapper" style="margin: 80px 0;">
+            <div style="text-align: center; margin-bottom: 60px;">
+                <div style="font-size: 11px; font-weight: 900; color: var(--primary); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px;">ECOSYSTEM NODES</div>
+                <h2 class="text-gradient" style="font-size: 3.5rem; margin: 0; line-height: 1.1;"><?php echo esc_html( $title ); ?></h2>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 40px;">
                 <?php foreach ( $posts as $p ) : ?>
-                    <div class="glass-card gp-reveal" style="padding: 40px; border-radius: 30px; display: flex; flex-direction: column; position: relative; overflow: hidden;">
+                    <div class="glass-card gp-grid-item gp-reveal" style="padding: 45px; border-radius: 40px; display: flex; flex-direction: column; position: relative; overflow: hidden; background: rgba(255, 255, 255, 0.65);">
 
                         <?php if ( $type === 'gp_project' ) :
                             $roi = get_post_meta($p->ID, '_gp_growth_roi', true);
                             if ($roi) : ?>
-                                <div style="position: absolute; top: 20px; right: 20px; background: var(--primary); color: white; padding: 5px 12px; border-radius: 10px; font-size: 10px; font-weight: 950; z-index: 10;"><?php echo esc_html($roi); ?> ROI</div>
+                                <div class="gp-intel-badge" style="position: absolute; top: 25px; right: 25px; background: var(--primary); color: white; padding: 6px 16px; border-radius: 30px; font-size: 10px; font-weight: 950; z-index: 10; letter-spacing: 1px;"><?php echo esc_html($roi); ?> ROI</div>
                             <?php endif;
                         endif; ?>
 
                         <?php if ( has_post_thumbnail( $p->ID ) ) : ?>
-                            <div style="margin: -40px -40px 30px -40px; height: 200px; overflow: hidden; border-radius: 30px 30px 0 0;">
-                                <?php echo get_the_post_thumbnail( $p->ID, 'medium_large', array( 'style' => 'width: 100%; height: 100%; object-fit: cover;' ) ); ?>
+                            <div style="margin: -45px -45px 35px -45px; height: 240px; overflow: hidden; border-radius: 0; position: relative;">
+                                <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 60%, rgba(255,255,255,0.8)); z-index: 1;"></div>
+                                <?php echo get_the_post_thumbnail( $p->ID, 'medium_large', array( 'style' => 'width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;' ) ); ?>
                             </div>
                         <?php endif; ?>
 
-                        <h3 style="margin: 0 0 10px 0; font-size: 20px; font-weight: 900;"><?php echo esc_html( $p->post_title ); ?></h3>
+                        <div style="display: flex; flex-direction: column; flex: 1;">
+                            <h3 style="margin: 0 0 15px 0; font-size: 24px; font-weight: 950; letter-spacing: -0.02em; line-height: 1.2;"><?php echo esc_html( $p->post_title ); ?></h3>
 
-                        <?php if ( $type === 'gp_staff' ) :
-                            $exp = get_post_meta($p->ID, '_staff_expertise', true);
-                            if ($exp) : ?>
-                                <div style="font-size: 10px; font-weight: 950; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;"><?php echo esc_html($exp); ?></div>
-                            <?php endif;
-                        endif; ?>
+                            <?php if ( $type === 'gp_staff' ) :
+                                $exp = get_post_meta($p->ID, '_staff_expertise', true);
+                                if ($exp) : ?>
+                                    <div style="font-size: 11px; font-weight: 950; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;"><?php echo esc_html($exp); ?></div>
+                                <?php endif;
+                            endif; ?>
 
-                        <div style="font-size: 14px; opacity: 0.7; line-height: 1.6; margin-bottom: 25px; flex: 1;">
-                            <?php echo wp_trim_words( $p->post_content, 20 ); ?>
+                            <div style="font-size: 15px; opacity: 0.7; line-height: 1.8; margin-bottom: 30px; flex: 1; font-weight: 500;">
+                                <?php echo wp_trim_words( $p->post_content, 22 ); ?>
+                            </div>
+
+                            <?php if ( $type === 'gp_project' ) :
+                                $val = get_post_meta($p->ID, '_gp_pipeline_value', true);
+                                if ($val) : ?>
+                                    <div style="margin-bottom: 30px; padding: 20px; background: rgba(79, 70, 229, 0.04); border-radius: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(79, 70, 229, 0.1);">
+                                        <span style="font-size: 10px; font-weight: 950; opacity: 0.5; letter-spacing: 1px;">PIPELINE EQUITY</span>
+                                        <span style="font-size: 16px; font-weight: 950; color: var(--primary);"><?php echo esc_html($val); ?></span>
+                                    </div>
+                                <?php endif;
+                            endif; ?>
+
+                            <a href="<?php echo get_permalink( $p->ID ); ?>" class="gp-btn" style="text-align: center; padding: 18px; font-size: 13px; border-radius: 18px; background: var(--secondary); color: white !important; font-weight: 800; letter-spacing: 0.5px;">EXPLORE INTEL NODE</a>
                         </div>
-
-                        <?php if ( $type === 'gp_project' ) :
-                            $val = get_post_meta($p->ID, '_gp_pipeline_value', true);
-                            if ($val) : ?>
-                                <div style="margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.03); border-radius: 15px; display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="font-size: 10px; font-weight: 950; opacity: 0.5;">PIPELINE VALUE</span>
-                                    <span style="font-size: 14px; font-weight: 950; color: var(--secondary);"><?php echo esc_html($val); ?></span>
-                                </div>
-                            <?php endif;
-                        endif; ?>
-
-                        <a href="<?php echo get_permalink( $p->ID ); ?>" class="gp-btn" style="text-align: center; padding: 12px; font-size: 12px; border-radius: 12px; background: var(--secondary); color: white !important;">EXPLORE INTEL</a>
                     </div>
                 <?php endforeach; ?>
             </div>

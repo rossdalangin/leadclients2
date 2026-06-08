@@ -8,20 +8,24 @@ class GrowthPress_Coaches {
     }
 
     public function render_assistant() {
-        return '<div class="gp-coaching-assistant glass-card gp-reveal" style="padding:80px 60px; text-align:center; background: linear-gradient(135deg, var(--surface), #FFF5F7); position:relative; overflow:hidden;">
-            <div style="position:absolute; top:20px; right:40px; font-size:10px; font-weight:950; opacity:0.3; letter-spacing:3px;">ELITE PERFORMANCE TRIAGE</div>
-            <h3 class="text-gradient" style="font-size:2.8rem;">Scalability & Performance Engine</h3>
-            <p style="font-size:1.1rem; opacity:0.7; max-width:600px; margin:20px auto 0;">Select your primary operational bottleneck to generate an AI-powered 12-month high-ticket scaling roadmap.</p>
+        return '<style>
+            .gp-bottleneck-btn { width:100%; background:#DB2777; text-transform:none; border-radius:25px; height:90px; font-size:20px; font-weight: 800; letter-spacing: -0.01em; color: white !important; transition: all 0.4s ease; border: none; cursor: pointer; box-shadow: 0 15px 35px rgba(219, 39, 120, 0.2); }
+            .gp-bottleneck-btn:hover { transform: translateY(-8px); box-shadow: 0 25px 50px rgba(219, 39, 120, 0.35); filter: brightness(1.1); }
+        </style>
+        <div class="gp-coaching-assistant glass-card gp-reveal" style="padding:120px 80px; text-align:center; background: linear-gradient(135deg, rgba(255,255,255,0.95), #FFF5F7); position:relative; overflow:hidden; border-radius: 60px;">
+            <div style="position:absolute; top:40px; right:60px; font-size:11px; font-weight:950; opacity:0.3; letter-spacing:5px; text-transform: uppercase;">Elite Performance Triage</div>
+            <h3 class="text-gradient" style="font-size:4.5rem; line-height: 0.9; letter-spacing: -0.06em;">Scalability & Performance Engine</h3>
+            <p style="font-size:1.5rem; opacity:0.7; max-width:700px; margin:40px auto 0; font-weight: 500; line-height: 1.5;">Select your primary operational bottleneck to generate an AI-powered 12-month high-ticket scaling roadmap.</p>
 
-            <div id="coach-steps" class="glass-card" style="background:#FFF; padding:50px; border-radius:32px; margin-top:50px; box-shadow:0 20px 50px rgba(219,39,119,0.05);">
-                <div style="display:grid; gap:20px; margin-bottom:40px;">
-                    <button class="gp-btn" style="width:100%; background:#DB2777; text-transform:none; border-radius:18px; height:80px; font-size:18px;" onclick="jQuery(\'#coach-steps\').fadeOut(); jQuery(\'#gp-quiz-form\').fadeIn();">Scale to 7 Figures (Market Dominance)</button>
-                    <button class="gp-btn" style="width:100%; background:#DB2777; text-transform:none; border-radius:18px; height:80px; font-size:18px;" onclick="jQuery(\'#coach-steps\').fadeOut(); jQuery(\'#gp-quiz-form\').fadeIn();">Automate High-Authority Content</button>
-                    <button class="gp-btn" style="width:100%; background:#DB2777; text-transform:none; border-radius:18px; height:80px; font-size:18px;" onclick="jQuery(\'#coach-steps\').fadeOut(); jQuery(\'#gp-quiz-form\').fadeIn();">Master Behavioral Sales Psychology</button>
+            <div id="coach-steps" class="glass-card" style="background:#FFF; padding:80px 60px; border-radius:50px; margin-top:80px; box-shadow:0 40px 100px rgba(219,39,119,0.08); border: 1px solid rgba(0,0,0,0.03);">
+                <div style="display:grid; gap:25px; margin-bottom:50px;">
+                    <button class="gp-bottleneck-btn" onclick="jQuery(\'#coach-steps\').fadeOut(); jQuery(\'#gp-quiz-form\').fadeIn();">Scale to 7 Figures (Market Dominance)</button>
+                    <button class="gp-bottleneck-btn" onclick="jQuery(\'#coach-steps\').fadeOut(); jQuery(\'#gp-quiz-form\').fadeIn();">Automate High-Authority Content</button>
+                    <button class="gp-bottleneck-btn" onclick="jQuery(\'#coach-steps\').fadeOut(); jQuery(\'#gp-quiz-form\').fadeIn();">Master Behavioral Sales Psychology</button>
                 </div>
-                <div style="font-size:11px; font-weight:900; opacity:0.4; text-transform:uppercase; letter-spacing:1px;">AVERAGE INFERENCE TIME: 7.2 SECONDS</div>
+                <div style="font-size:12px; font-weight:950; opacity:0.4; text-transform:uppercase; letter-spacing:3px;">Average Inference Time: 7.2 Seconds</div>
             </div>
-            <div id="gp-quiz-form" style="display:none; margin-top:40px;">[gp_lead_form]</div>
+            <div id="gp-quiz-form" style="display:none; margin-top:60px; max-width: 700px; margin-left: auto; margin-right: auto;">[gp_lead_form]</div>
         </div>';
     }
 
