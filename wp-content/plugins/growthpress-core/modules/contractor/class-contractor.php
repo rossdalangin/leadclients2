@@ -11,26 +11,35 @@ class GrowthPress_Contractor {
     public function render_roi_tracker() {
         $projects = get_posts(array('post_type' => 'gp_project', 'posts_per_page' => 3, 'meta_key' => '_gp_is_sample', 'meta_value' => '1'));
         ob_start(); ?>
-        <div class="gp-project-roi-tracker glass-card gp-reveal" style="padding:60px;">
-            <h3 style="margin-top:0; margin-bottom:40px;">Structural ROI Performance</h3>
-            <div style="display:grid; gap:30px;">
+        <style>
+            .gp-roi-item { transition: all 0.4s ease; border: 1px solid rgba(0,0,0,0.05); }
+            .gp-roi-item:hover { transform: scale(1.02); border-color: var(--primary); background: #FFF !important; }
+            .gp-roi-bar-fill { transition: width 2s cubic-bezier(0.16, 1, 0.3, 1); }
+        </style>
+        <div class="gp-project-roi-tracker glass-card gp-reveal" style="padding:80px; border-radius: 60px;">
+            <div style="text-align: center; margin-bottom: 60px;">
+                <div style="font-size: 11px; font-weight: 950; color: var(--primary); text-transform: uppercase; letter-spacing: 5px; margin-bottom: 15px;">Success Portfolio</div>
+                <h3 style="margin:0; font-size: 3.5rem; letter-spacing: -0.06em; font-weight: 950; line-height: 1;">Structural ROI Performance</h3>
+            </div>
+            <div style="display:grid; gap:40px;">
                 <?php foreach($projects as $p):
                     $roi = get_post_meta($p->ID, '_gp_growth_roi', true) ?: '+15%';
                     $value = get_post_meta($p->ID, '_gp_pipeline_value', true) ?: '$250k';
+                    $rand_width = rand(70, 98);
                     ?>
-                    <div style="background:rgba(255,255,255,0.5); padding:30px; border-radius:25px; border:1px solid rgba(0,0,0,0.03);">
-                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div class="gp-roi-item" style="background:rgba(255,255,255,0.6); padding:40px; border-radius:40px; box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:35px;">
                             <div>
-                                <h4 style="margin:0; font-size:18px;"><?php echo esc_html($p->post_title); ?></h4>
-                                <div style="font-size:11px; opacity:0.5; margin-top:5px;">VALUATION: <?php echo $value; ?></div>
+                                <h4 style="margin:0; font-size:22px; font-weight: 950; letter-spacing: -0.02em;"><?php echo esc_html($p->post_title); ?></h4>
+                                <div style="font-size:12px; font-weight: 800; opacity:0.4; margin-top:10px; text-transform: uppercase; letter-spacing: 1px;">Ecosystem Valuation: <span style="color:var(--secondary); opacity: 1;"><?php echo $value; ?></span></div>
                             </div>
                             <div style="text-align:right;">
-                                <div style="font-size:24px; font-weight:950; color:var(--primary);"><?php echo $roi; ?></div>
-                                <div style="font-size:10px; font-weight:900; opacity:0.4;">EQUITY GAIN</div>
+                                <div style="font-size:32px; font-weight:950; color:var(--primary); line-height: 1;"><?php echo $roi; ?></div>
+                                <div style="font-size:11px; font-weight:950; opacity:0.3; text-transform: uppercase; letter-spacing: 1px; margin-top: 8px;">Net Equity Gain</div>
                             </div>
                         </div>
-                        <div style="margin-top:20px; height:8px; background:#F1F5F9; border-radius:10px; overflow:hidden;">
-                            <div style="width:<?php echo rand(60, 95); ?>%; height:100%; background:var(--primary);"></div>
+                        <div style="height:12px; background:#F1F5F9; border-radius:15px; overflow:hidden; position: relative;">
+                            <div class="gp-roi-bar-fill" style="width:<?php echo $rand_width; ?>%; height:100%; background:linear-gradient(90deg, var(--primary), var(--primary-alt)); box-shadow: 0 0 20px var(--primary-glow);"></div>
                         </div>
                     </div>
                 <?php endforeach; ?>

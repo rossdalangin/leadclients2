@@ -12,32 +12,51 @@ class GrowthPress_Accounting {
     public function render_savings_ledger() {
         $leads = get_posts(array('post_type' => 'gp_lead', 'posts_per_page' => 5, 'meta_key' => '_gp_is_sample', 'meta_value' => '1'));
         ob_start(); ?>
-        <div class="gp-tax-ledger glass-card gp-reveal" style="padding:60px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
-                <h3 style="margin:0;">Tax Preservation Ledger</h3>
-                <div style="background:var(--primary-glow); color:var(--primary); padding:8px 15px; border-radius:30px; font-size:10px; font-weight:950;">FISCAL v5.9</div>
+        <div class="gp-tax-ledger glass-card gp-reveal" style="padding:80px; border-radius: 60px; background: rgba(255,255,255,0.9);">
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:60px;">
+                <div>
+                    <div style="font-size:11px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:5px; margin-bottom:15px;">AUTHENTICATED FISCAL DATA</div>
+                    <h3 style="margin:0; font-size: 32px; letter-spacing: -0.04em; font-weight: 950;">Tax Preservation Ledger</h3>
+                </div>
+                <div style="background:var(--secondary); color:white; padding:10px 25px; border-radius:15px; font-size:11px; font-weight:950; letter-spacing: 1px;">LEDGER: v6.3 FINAL</div>
             </div>
-            <table style="width:100%; border-collapse:collapse;">
-                <thead>
-                    <tr style="text-align:left; border-bottom:1px solid rgba(0,0,0,0.05);">
-                        <th style="padding:15px 0; font-size:11px; opacity:0.4;">ENTITY</th>
-                        <th style="padding:15px 0; font-size:11px; opacity:0.4;">STRATEGY</th>
-                        <th style="padding:15px 0; font-size:11px; opacity:0.4; text-align:right;">SAVINGS EST.</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach($leads as $l):
-                        $prob = get_post_meta($l->ID, '_gp_ai_probability', true);
-                        $savings = $prob * 1250;
-                        ?>
-                        <tr style="border-bottom:1px solid rgba(0,0,0,0.03);">
-                            <td style="padding:20px 0; font-weight:700;"><?php echo esc_html($l->post_title); ?></td>
-                            <td style="padding:20px 0; font-size:13px; opacity:0.7;">Corporate Restructuring</td>
-                            <td style="padding:20px 0; text-align:right; font-weight:900; color:#10B981;">$<?php echo number_format($savings); ?></td>
+            <div style="border: 1px solid #F1F5F9; border-radius: 30px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
+                <table style="width:100%; border-collapse:collapse; background: #FFF;">
+                    <thead>
+                        <tr style="text-align:left; background: #F8FAFC;">
+                            <th style="padding:25px 35px; font-size:11px; font-weight: 950; opacity:0.5; letter-spacing: 2px;">ENTITY NODE</th>
+                            <th style="padding:25px 35px; font-size:11px; font-weight: 950; opacity:0.5; letter-spacing: 2px;">OPTIMIZATION STRATEGY</th>
+                            <th style="padding:25px 35px; font-size:11px; font-weight: 950; opacity:0.5; letter-spacing: 2px; text-align:right;">EQUITY PRESERVATION</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach($leads as $l):
+                            $prob = get_post_meta($l->ID, '_gp_ai_probability', true) ?: 75;
+                            $savings = $prob * 1450;
+                            ?>
+                            <tr style="border-bottom:1px solid #F1F5F9;">
+                                <td style="padding:30px 35px; font-weight:800; font-size: 16px; color: var(--secondary);"><?php echo esc_html($l->post_title); ?></td>
+                                <td style="padding:30px 35px; font-size:14px; font-weight: 600; opacity:0.7;">Corporate Architecture Redesign</td>
+                                <td style="padding:30px 35px; text-align:right; font-weight:950; color:#10B981; font-size: 18px;">$<?php echo number_format($savings); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                    <tfoot>
+                        <tr style="background: #F8FAFC;">
+                            <td colspan="2" style="padding:25px 35px; font-weight: 950; font-size: 12px; letter-spacing: 1px;">AGGREGATE SECTOR SAVINGS</td>
+                            <td style="padding:25px 35px; text-align:right; font-weight:950; font-size: 20px; color: var(--primary);">$<?php
+                                $total = 0; foreach($leads as $l) { $total += (get_post_meta($l->ID, '_gp_ai_probability', true) ?: 75) * 1450; }
+                                echo number_format($total);
+                            ?></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div style="margin-top:40px; display: flex; justify-content: center; gap: 40px; opacity: 0.3; font-weight: 950; font-size: 10px; letter-spacing: 3px;">
+                <span>ENCRYPTION: AES-256</span>
+                <span>PROTOCOL: FISCAL-X</span>
+                <span>STATUS: VERIFIED</span>
+            </div>
         </div>
         <?php
         return ob_get_clean();

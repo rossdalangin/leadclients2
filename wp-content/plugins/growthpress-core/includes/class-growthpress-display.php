@@ -18,6 +18,7 @@ class GrowthPress_Display {
         add_shortcode( 'gp_location_grid', array( $this, 'render_location_grid' ) );
         add_shortcode( 'gp_funnel_grid', array( $this, 'render_funnel_grid' ) );
         add_shortcode( 'gp_treatment_grid', array( $this, 'render_treatment_grid' ) );
+        add_shortcode( 'gp_ecosystem_radar', array( $this, 'render_ecosystem_radar' ) );
         add_shortcode( 'gp_market_chart', array( $this, 'render_market_chart' ) );
         add_shortcode( 'gp_kb_search', array( $this, 'render_kb_search' ) );
         add_shortcode( 'gp_treatment_search', array( $this, 'render_treatment_search' ) );
@@ -63,6 +64,58 @@ class GrowthPress_Display {
     public function render_treatment_grid() {
         $posts = get_posts( array( 'post_type' => 'gp_treatment', 'posts_per_page' => 6 ) );
         return $this->render_grid( $posts, 'Clinical Protocols' );
+    }
+
+    public function render_ecosystem_radar() {
+        $cpts = array(
+            'Leads' => 'gp_lead', 'Bookings' => 'gp_appointment', 'Equity' => 'gp_proposal',
+            'Revenue' => 'gp_transaction', 'Locations' => 'gp_location', 'Funnels' => 'gp_funnel',
+            'Tasks' => 'gp_task', 'KB' => 'gp_kb', 'Services' => 'gp_service',
+            'Cases' => 'gp_project', 'Reviews' => 'gp_review', 'Inventory' => 'gp_property',
+            'Clinical' => 'gp_treatment', 'Specialists' => 'gp_staff'
+        );
+        $counts = array();
+        foreach($cpts as $label => $type) $counts[$label] = wp_count_posts($type)->publish;
+
+        ob_start(); ?>
+        <div class="gp-ecosystem-radar glass-card gp-reveal" style="padding:60px; text-align:center; margin:40px 0;">
+            <div style="font-size:11px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:4px; margin-bottom:20px;">SYSTEM AUTHORITY MATRIX</div>
+            <h3 class="text-gradient" style="font-size:2.5rem; margin:0 0 40px 0;">Ecosystem Authority Radar</h3>
+            <div style="max-width:600px; margin:0 auto;">
+                <canvas id="ecosystemRadarFrontend" height="400"></canvas>
+            </div>
+            <script>
+            jQuery(document).ready(function($) {
+                const ctx = document.getElementById('ecosystemRadarFrontend').getContext('2d');
+                new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: <?php echo json_encode(array_keys($counts)); ?>,
+                        datasets: [{
+                            label: 'Node Authority',
+                            data: <?php echo json_encode(array_values($counts)); ?>,
+                            backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                            borderColor: '#4F46E5',
+                            pointBackgroundColor: '#4F46E5',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(0,0,0,0.05)' },
+                                pointLabels: { font: { weight: 'bold', size: 10 } }
+                            }
+                        },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            });
+            </script>
+        </div>
+        <?php
+        return ob_get_clean();
     }
 
     public function render_market_chart() {

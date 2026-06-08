@@ -143,28 +143,37 @@ class GrowthPress_Content_Studio {
 
                 <!-- Center: Output & Preview -->
                 <div style="display:flex; flex-direction:column; gap:30px;">
-                    <div class="glass-card" style="padding:0; overflow:hidden; background:#0F172A; color:white; border:none;">
-                        <div style="padding:20px 30px; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center;">
-                            <span style="font-size:11px; font-weight:950; opacity:0.5; letter-spacing:2px;">INTELLIGENCE STREAM</span>
+                    <div class="glass-card" style="padding:0; overflow:hidden; background:#0F172A; color:white; border:none; border-radius: 30px; box-shadow: 0 40px 100px -20px rgba(0,0,0,0.5);">
+                        <div style="padding:25px 35px; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <div id="studio-status-ping" class="status-ping" style="width:10px; height:10px; background:rgba(255,255,255,0.2); border-radius:50%;"></div>
+                                <span style="font-size:11px; font-weight:950; opacity:0.5; letter-spacing:2px; text-transform: uppercase;">Intelligence Stream</span>
+                            </div>
                             <div style="display:flex; gap:10px;">
-                                <button class="button button-small" onclick="copyStudioOutput()" style="background:rgba(255,255,255,0.1); color:white; border:none;">COPY RAW</button>
+                                <button class="button button-small" onclick="copyStudioOutput()" style="background:rgba(255,255,255,0.1); color:white; border:none; font-weight: 800;">COPY RAW</button>
                             </div>
                         </div>
-                        <div id="gp-studio-output" style="padding:40px; font-family:'JetBrains Mono', monospace; font-size:13px; line-height:1.7; height:450px; overflow-y:auto; color:rgba(255,255,255,0.9);">
-                            <span style="opacity:0.2;">// Standing by for neural uplink...</span>
+                        <div id="gp-studio-output" style="padding:45px; font-family:'JetBrains Mono', monospace; font-size:14px; line-height:1.8; height:480px; overflow-y:auto; color:rgba(255,255,255,0.95); position: relative;">
+                            <div id="studio-loader" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); text-align:center;">
+                                <div class="gp-pulse-icon" style="width:40px; height:40px; background:var(--primary); border-radius:50%; margin:0 auto 20px; animation:gp-pulse 1.5s infinite;"></div>
+                                <div style="font-size:10px; font-weight:950; letter-spacing:3px; opacity:0.5;">SYNCHRONIZING NEURAL LINK...</div>
+                            </div>
+                            <span id="studio-placeholder" style="opacity:0.2;">// Standing by for neural uplink protocol...</span>
                         </div>
                     </div>
 
-                    <div class="glass-card" style="padding:40px;">
-                        <h3 style="margin:0 0 20px 0;">Design Node Preview</h3>
-                        <div style="display:flex; gap:20px; margin-bottom:30px;">
-                            <button class="design-preview-btn active" data-design="unisex">Unisex Node</button>
-                            <button class="design-preview-btn" data-design="male">Male Node</button>
-                            <button class="design-preview-btn" data-design="female">Female Node</button>
+                    <div class="glass-card" style="padding:50px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.8);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
+                            <h3 style="margin:0; font-size: 20px; font-weight: 950; letter-spacing: -0.02em;">Design Node Preview</h3>
+                            <div style="display:flex; gap:12px;">
+                                <button class="design-preview-btn active" data-design="unisex">Unisex</button>
+                                <button class="design-preview-btn" data-design="male">Executive</button>
+                                <button class="design-preview-btn" data-design="female">Luxe</button>
+                            </div>
                         </div>
-                        <div id="design-preview-area" class="preview-unisex" style="padding:40px; border-radius:20px; border:1px solid #EEE; min-height:200px;">
-                            <h4 id="preview-title" style="margin-bottom:15px;">Asset Preview</h4>
-                            <div id="preview-body" style="font-size:14px; opacity:0.8;">Generated content will be rendered here to verify geometric and typographic alignment.</div>
+                        <div id="design-preview-area" class="preview-unisex" style="padding:50px; border-radius:30px; border:1px solid #F1F5F9; min-height:250px; transition: all 0.5s ease;">
+                            <h4 id="preview-title" style="margin-bottom:20px; font-size: 24px; font-weight: 950; letter-spacing: -0.04em;">Asset Preview</h4>
+                            <div id="preview-body" style="font-size:15px; opacity:0.75; line-height: 1.7; font-weight: 500;">Generated content will be rendered here to verify geometric and typographic alignment across design nodes.</div>
                         </div>
                     </div>
                 </div>

@@ -1,13 +1,13 @@
 <div class="wrap growthpress-dashboard">
-    <div class="dashboard-header gp-reveal">
-        <div style="display:flex; align-items:center; gap:25px;">
+    <div class="dashboard-header gp-reveal" style="margin-bottom: 50px;">
+        <div style="display:flex; align-items:center; gap:35px;">
             <?php $dash_logo = get_option('growthpress_dashboard_logo'); if($dash_logo): ?>
-                <img src="<?php echo esc_url($dash_logo); ?>" style="max-height:50px;">
+                <img src="<?php echo esc_url($dash_logo); ?>" style="max-height:60px;">
             <?php else: ?>
-                <h1 style="font-size:2.5rem; font-weight:950; letter-spacing:-0.08em; margin:0; line-height:1;"><?php echo esc_html(get_option('growthpress_brand_name', 'GrowthPress')); ?> <span style="font-weight:300; opacity:0.3;">OS</span></h1>
+                <h1 style="font-size:3rem; font-weight:950; letter-spacing:-0.09em; margin:0; line-height:1;"><?php echo esc_html(get_option('growthpress_brand_name', 'GrowthPress')); ?> <span style="font-weight:300; opacity:0.25;">OS</span></h1>
             <?php endif; ?>
-            <div style="height:35px; width:1px; background:rgba(0,0,0,0.08);"></div>
-            <select id="gp-niche-switcher" onchange="switchNiche(this.value)" style="background:rgba(255,255,255,0.5); border:1px solid rgba(0,0,0,0.1); padding:8px 15px; border-radius:12px; font-size:10px; font-weight:950; letter-spacing:2px; text-transform:uppercase; cursor:pointer;">
+            <div style="height:45px; width:1px; background:rgba(0,0,0,0.1);"></div>
+            <select id="gp-niche-switcher" onchange="switchNiche(this.value)" style="height:55px; background:rgba(255,255,255,0.8); border:1px solid rgba(0,0,0,0.05); padding:0 20px; border-radius:15px; font-size:11px; font-weight:950; letter-spacing:3px; text-transform:uppercase; cursor:pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.02);">
                 <?php
                 $active_niche = get_option('growthpress_niche', 'business');
                 $niches = array('dental', 'law', 'contractor', 'roofing', 'solar', 'accounting', 'medical', 'real-estate', 'coaches', 'consultants');
@@ -16,36 +16,48 @@
                 <?php endforeach; ?>
             </select>
         </div>
-        <div style="display:flex; gap:15px; align-items:center;">
+        <div style="display:flex; gap:20px; align-items:center;">
             <div style="position:relative;" id="gp-search-container">
-                <input type="text" id="gp-strategic-search" placeholder="Strategic Search..." style="background:rgba(255,255,255,0.9); border:1px solid rgba(0,0,0,0.1); padding:10px 20px; border-radius:20px; font-size:11px; width:220px;">
-                <span class="dashicons dashicons-search" style="position:absolute; right:15px; top:10px; opacity:0.3;"></span>
-                <div id="gp-search-results" style="display:none; position:absolute; top:50px; left:0; width:100%; background:white; border-radius:15px; box-shadow:0 20px 40px rgba(0,0,0,0.1); z-index:1000; overflow:hidden;"></div>
+                <input type="text" id="gp-strategic-search" placeholder="Strategic Search..." style="height:55px; background:rgba(255,255,255,0.95); border:1px solid rgba(0,0,0,0.08); padding:0 30px; border-radius:20px; font-size:12px; width:280px; font-weight: 600;">
+                <span class="dashicons dashicons-search" style="position:absolute; right:20px; top:18px; opacity:0.3;"></span>
+                <div id="gp-search-results" style="display:none; position:absolute; top:65px; left:0; width:100%; background:white; border-radius:20px; box-shadow:0 30px 60px rgba(0,0,0,0.15); z-index:1000; overflow:hidden; border: 1px solid rgba(0,0,0,0.05);"></div>
             </div>
-            <div class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle Strategic Dark Mode" style="width:40px; height:40px;"><span class="dashicons dashicons-visibility"></span></div>
-            <button class="gp-btn" style="padding:10px 20px; font-size:11px; border-radius:12px; background:var(--secondary); color:white !important;" onclick="exportLeads()">EXPORT INTEL</button>
-            <div class="ai-status" style="background:#10B981; color:white; padding:10px 20px; border-radius:30px; font-size:11px; font-weight:950; letter-spacing:1px; box-shadow:0 15px 30px rgba(16,185,129,0.25);">CORE ACTIVE</div>
+            <div class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle Strategic Dark Mode" style="width:55px; height:55px; background: #FFF; border: 1px solid #EEE; border-radius: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease;"><span class="dashicons dashicons-visibility"></span></div>
+            <button class="gp-btn" style="height:55px; padding:0 30px; font-size:12px; border-radius:15px; background:var(--secondary); color:white !important; font-weight: 800; letter-spacing: 1px;" onclick="exportLeads()">EXPORT INTEL</button>
+            <div class="ai-status" style="background:linear-gradient(135deg, #10B981, #059669); color:white; height:55px; padding:0 30px; border-radius:30px; font-size:12px; font-weight:950; letter-spacing:2px; box-shadow:0 15px 40px rgba(16,185,129,0.3); display: flex; align-items: center;">CORE ACTIVE</div>
         </div>
     </div>
 
-    <!-- System Node Health -->
-    <div class="glass-card gp-reveal" style="margin-bottom:40px; padding:30px; background:linear-gradient(90deg, var(--surface) 0%, rgba(var(--surface-rgb), 0.5) 100%);">
+    <!-- System Node Health Elite -->
+    <div class="glass-card gp-reveal" style="margin-bottom:50px; padding:40px; border-radius: 40px; background:rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.8);">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div style="display:flex; gap:40px; align-items:center;">
-                <div style="display:flex; align-items:center; gap:12px;">
+            <div style="display:flex; gap:60px; align-items:center;">
+                <div style="display:flex; align-items:center; gap:15px;">
                     <div class="status-ping active"></div>
-                    <span style="font-size:11px; font-weight:900; letter-spacing:1px; opacity:0.6;">NEURAL ENGINE: ONLINE</span>
+                    <div>
+                        <div style="font-size:11px; font-weight:950; letter-spacing:2px; color: var(--secondary);">NEURAL ENGINE</div>
+                        <div style="font-size:10px; opacity:0.5; font-weight: 800;">GPT-4 TURBO ONLINE</div>
+                    </div>
                 </div>
-                <div style="display:flex; align-items:center; gap:12px;">
+                <div style="display:flex; align-items:center; gap:15px;">
                     <div class="status-ping active"></div>
-                    <span style="font-size:11px; font-weight:900; letter-spacing:1px; opacity:0.6;">CRM DATA SYNC: ACTIVE</span>
+                    <div>
+                        <div style="font-size:11px; font-weight:950; letter-spacing:2px; color: var(--secondary);">CRM DATA SYNC</div>
+                        <div style="font-size:10px; opacity:0.5; font-weight: 800;">100% NODES ACTIVE</div>
+                    </div>
                 </div>
-                <div style="display:flex; align-items:center; gap:12px;">
+                <div style="display:flex; align-items:center; gap:15px;">
                     <div class="status-ping warning"></div>
-                    <span style="font-size:11px; font-weight:900; letter-spacing:1px; opacity:0.6;">EXTERNAL API: LATENCY</span>
+                    <div>
+                        <div style="font-size:11px; font-weight:950; letter-spacing:2px; color: var(--secondary);">EXTERNAL API</div>
+                        <div style="font-size:10px; opacity:0.5; font-weight: 800;">84ms LATENCY DETECTED</div>
+                    </div>
                 </div>
             </div>
-            <div style="font-size:10px; font-weight:950; opacity:0.3; letter-spacing:2px;">ECOSYSTEM v6.1 DEFINITIVE</div>
+            <div style="text-align: right;">
+                <div style="font-size:11px; font-weight:950; opacity:0.4; letter-spacing:3px;">SYSTEM VERSION</div>
+                <div style="font-size:14px; font-weight:950; color: var(--primary);">ELITE v6.3 DEFINITIVE</div>
+            </div>
         </div>
     </div>
 
@@ -73,34 +85,34 @@
 
     <div class="dashboard-grid">
         <div class="main-col">
-            <!-- Strategic Performance Engine -->
-            <div class="glass-card gp-reveal" style="margin-bottom:30px; padding:30px;">
-                <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:30px;">
+            <!-- Strategic Performance Engine Elite -->
+            <div class="glass-card gp-reveal" style="margin-bottom:40px; padding:45px; border-radius: 40px;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:50px;">
                     <div>
-                        <h3 style="margin:0; font-size:22px; font-weight:950; letter-spacing:-0.04em;">Intelligence Performance Hub</h3>
-                        <p style="font-size:15px; opacity:0.6; margin-top:8px;">Real-time trajectory modeling across all high-ticket conversion vectors.</p>
+                        <h3 style="margin:0; font-size:26px; font-weight:950; letter-spacing:-0.05em;">Intelligence Performance Hub</h3>
+                        <p style="font-size:16px; opacity:0.6; margin-top:10px; font-weight: 500;">Real-time trajectory modeling across all high-ticket conversion vectors.</p>
                     </div>
                     <div style="text-align:right;">
-                        <span style="font-size:11px; font-weight:950; opacity:0.4; letter-spacing:2px;">ENGINE LATENCY</span><br>
-                        <span style="color:#10B981; font-weight:900; font-size:14px;">142ms (OPTIMAL)</span>
+                        <div style="font-size:11px; font-weight:950; opacity:0.4; letter-spacing:3px;">ENGINE LATENCY</div>
+                        <div style="color:#10B981; font-weight:950; font-size:16px; margin-top:5px;">142ms (OPTIMAL)</div>
                     </div>
                 </div>
-                <div class="stats-grid">
-                    <div class="stat gp-reveal">
-                        <span style="font-size:10px; font-weight:950; color:#64748B; text-transform:uppercase; letter-spacing:2px;">Captured Inquiries</span>
-                        <b><?php echo $lead_count_30d; ?></b>
-                        <div style="position:absolute; bottom:0; left:0; height:4px; width:100%; background:var(--primary);"></div>
+                <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 50px;">
+                    <div class="stat gp-reveal" style="padding: 35px; border-radius: 30px; background: rgba(0,0,0,0.02); position: relative; overflow: hidden; border: 1px solid rgba(0,0,0,0.03);">
+                        <span style="font-size:11px; font-weight:950; color:#64748B; text-transform:uppercase; letter-spacing:2px;">Captured Inquiries</span>
+                        <b style="font-size: 3.5rem; letter-spacing: -0.05em; display: block; margin-top: 10px;"><?php echo $lead_count_30d; ?></b>
+                        <div style="position:absolute; bottom:0; left:0; height:6px; width:100%; background:var(--primary);"></div>
                     </div>
-                    <div class="stat gp-reveal" style="animation-delay: 0.1s;">
-                        <span style="font-size:10px; font-weight:950; color:#64748B; text-transform:uppercase; letter-spacing:2px;">Strategy Sessions</span>
-                        <b style="color:#10B981;"><?php echo $booking_count; ?></b>
-                        <div style="position:absolute; bottom:0; left:0; height:4px; width:100%; background:#10B981;"></div>
+                    <div class="stat gp-reveal" style="animation-delay: 0.1s; padding: 35px; border-radius: 30px; background: rgba(0,0,0,0.02); position: relative; overflow: hidden; border: 1px solid rgba(0,0,0,0.03);">
+                        <span style="font-size:11px; font-weight:950; color:#64748B; text-transform:uppercase; letter-spacing:2px;">Strategy Sessions</span>
+                        <b style="color:#10B981; font-size: 3.5rem; letter-spacing: -0.05em; display: block; margin-top: 10px;"><?php echo $booking_count; ?></b>
+                        <div style="position:absolute; bottom:0; left:0; height:6px; width:100%; background:#10B981;"></div>
                     </div>
-                    <div class="stat gp-reveal" style="animation-delay: 0.2s;">
-                        <span style="font-size:10px; font-weight:950; color:#64748B; text-transform:uppercase; letter-spacing:2px;">Pipeline Equity</span>
+                    <div class="stat gp-reveal" style="animation-delay: 0.2s; padding: 35px; border-radius: 30px; background: rgba(0,0,0,0.02); position: relative; overflow: hidden; border: 1px solid rgba(0,0,0,0.03);">
+                        <span style="font-size:11px; font-weight:950; color:#64748B; text-transform:uppercase; letter-spacing:2px;">Pipeline Equity</span>
                         <?php $pipe_val = GrowthPress_Proposals::get_instance()->get_pipeline_value(); ?>
-                        <b style="color:var(--primary);">$<?php echo number_format($pipe_val); ?></b>
-                        <div style="position:absolute; bottom:0; left:0; height:4px; width:100%; background:var(--primary);"></div>
+                        <b style="color:var(--primary); font-size: 3.5rem; letter-spacing: -0.05em; display: block; margin-top: 10px;">$<?php echo number_format($pipe_val); ?></b>
+                        <div style="position:absolute; bottom:0; left:0; height:6px; width:100%; background:var(--primary);"></div>
                     </div>
                 </div>
                 <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:30px;">
@@ -150,12 +162,12 @@
                                     $staff_id = get_post_meta($lead->ID, '_assigned_staff', true);
                                     $staff = $staff_id ? get_userdata($staff_id) : null;
                                     ?>
-                                    <div class="kanban-card glass-card <?php echo $prob > 85 ? 'neural-pulse' : ''; ?> gp-reveal" data-id="<?php echo $lead->ID; ?>" style="border-left: 8px solid <?php echo $prob > 80 ? '#10B981' : 'var(--primary)'; ?>; padding:25px;">
+                                    <div class="kanban-card glass-card <?php echo $prob > 85 ? 'neural-pulse' : ''; ?> gp-reveal" data-id="<?php echo $lead->ID; ?>" style="border-left: 8px solid <?php echo $prob > 80 ? '#10B981' : 'var(--primary)'; ?>; padding:30px; border-radius: 25px; margin-bottom: 25px; background: rgba(255,255,255,0.7);">
                                         <?php if($prob > 88): ?>
-                                            <div style="position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #EF4444, #B91C1C); color: white; font-size: 8px; font-weight: 950; padding: 4px 20px; transform: rotate(45deg) translate(15px, -15px); text-transform: uppercase; letter-spacing:1px; box-shadow:0 5px 15px rgba(239,68,68,0.3);">HOT</div>
+                                            <div style="position: absolute; top: 0; right: 0; background: linear-gradient(135deg, #EF4444, #B91C1C); color: white; font-size: 9px; font-weight: 950; padding: 5px 25px; transform: rotate(45deg) translate(20px, -20px); text-transform: uppercase; letter-spacing:2px; box-shadow:0 5px 15px rgba(239,68,68,0.25); z-index: 10;">HOT</div>
                                         <?php endif; ?>
 
-                                        <strong style="display:block; margin-bottom:12px; font-size:16px; font-weight:950; letter-spacing:-0.04em; color:var(--secondary);"><?php echo esc_html($lead->post_title); ?></strong>
+                                        <strong style="display:block; margin-bottom:15px; font-size:18px; font-weight:950; letter-spacing:-0.05em; color:var(--secondary); line-height: 1.1;"><?php echo esc_html($lead->post_title); ?></strong>
 
                                         <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                                             <div>
@@ -164,23 +176,24 @@
                                                 $sentiment_data = json_decode($sentiment_raw, true);
                                                 $urgency = $sentiment_data['urgency'] ?? 5;
                                                 ?>
-                                                <div style="display:flex; gap:5px; margin-bottom:15px;">
+                                                <div style="display:flex; gap:8px; margin-bottom:20px;">
                                                     <?php $tag = wp_get_object_terms($lead->ID, 'gp_lead_tag', array('fields' => 'names')); if($tag): ?>
-                                                        <div style="font-size:8px; background:var(--primary-glow); color:var(--primary); padding:4px 10px; border-radius:30px; font-weight:900; text-transform: uppercase; letter-spacing:1px; border:1px solid rgba(37,99,235,0.08);"><?php echo esc_html($tag[0]); ?></div>
+                                                        <div style="font-size:9px; background:var(--primary-glow); color:var(--primary); padding:5px 12px; border-radius:30px; font-weight:950; text-transform: uppercase; letter-spacing:1px; border:1px solid rgba(37,99,235,0.1);"><?php echo esc_html($tag[0]); ?></div>
                                                     <?php endif; ?>
-                                                    <div style="font-size:8px; background:<?php echo $urgency > 7 ? '#FEF2F2' : '#F0FDF4'; ?>; color:<?php echo $urgency > 7 ? '#EF4444' : '#10B981'; ?>; padding:4px 10px; border-radius:30px; font-weight:900; text-transform: uppercase; letter-spacing:1px; border:1px solid <?php echo $urgency > 7 ? '#FEE2E2' : '#DCFCE7'; ?>;">URGENCY: <?php echo $urgency; ?></div>
+                                                    <div style="font-size:9px; background:<?php echo $urgency > 7 ? '#FEF2F2' : '#F0FDF4'; ?>; color:<?php echo $urgency > 7 ? '#EF4444' : '#10B981'; ?>; padding:5px 12px; border-radius:30px; font-weight:950; text-transform: uppercase; letter-spacing:1px; border:1px solid <?php echo $urgency > 7 ? '#FEE2E2' : '#DCFCE7'; ?>;">URGENCY: <?php echo $urgency; ?></div>
                                                 </div>
-                                                <div style="font-size:12px; font-weight:950; color:#10B981; letter-spacing:0.5px;">PROBABILITY: <?php echo $prob; ?>%</div>
+                                                <div style="font-size:13px; font-weight:950; color:#10B981; letter-spacing:0.5px;">PROBABILITY: <span style="font-size: 15px;"><?php echo $prob; ?>%</span></div>
                                             </div>
 
-                                            <div class="staff-avatar" title="<?php echo $staff ? esc_attr($staff->display_name) : 'UNASSIGNED'; ?>" style="width: 40px; height: 40px; border-radius: 50%; background: #FFF; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 950; border: 3px solid #F8FAFC; box-shadow: 0 10px 20px rgba(0,0,0,0.08); color:var(--secondary);">
+                                            <div class="staff-avatar" title="<?php echo $staff ? esc_attr($staff->display_name) : 'UNASSIGNED'; ?>" style="width: 48px; height: 48px; border-radius: 50%; background: #FFF; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 950; border: 4px solid #F8FAFC; box-shadow: 0 10px 30px rgba(0,0,0,0.1); color:var(--secondary); position: relative;">
                                                 <?php echo $staff ? substr($staff->display_name, 0, 1) : '?'; ?>
+                                                <div style="position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #10B981; border-radius: 50%; border: 2px solid #FFF;"></div>
                                             </div>
                                         </div>
 
-                                        <div style="margin-top:20px; display: flex; gap:8px;">
-                                            <a href="<?php echo get_edit_post_link($lead->ID); ?>" class="gp-btn" style="flex:1; padding:8px; font-size:10px; border-radius:10px; background:var(--secondary); text-align:center; color:white !important;">INTEL BRIEF</a>
-                                            <button class="gp-btn" style="padding:8px; border-radius:10px; background:transparent; border:1px solid #E2E8F0; color:var(--secondary) !important; width:40px;"><span class="dashicons dashicons-email"></span></button>
+                                        <div style="margin-top:25px; display: flex; gap:10px;">
+                                            <a href="<?php echo get_edit_post_link($lead->ID); ?>" class="gp-btn" style="flex:1; padding:12px; font-size:11px; border-radius:12px; background:var(--secondary); text-align:center; color:white !important; font-weight: 800; letter-spacing: 0.5px;">INTEL BRIEF</a>
+                                            <button class="gp-btn" style="padding:12px; border-radius:12px; background:transparent; border:1px solid #E2E8F0; color:var(--secondary) !important; width:48px;"><span class="dashicons dashicons-email"></span></button>
                                         </div>
                                     </div>
                                 <?php endif;
@@ -267,14 +280,14 @@
                 <?php endforeach; else: echo "<p style='opacity:0.4; font-size:11px;'>No prospects in waiting queue.</p>"; endif; ?>
             </div>
 
-            <!-- Revenue ROI Hub -->
-            <div class="glass-card gp-reveal" style="margin-bottom:30px; background:var(--primary); color:white; border:none; position:relative;">
-                <div style="position:absolute; top:20px; right:20px; cursor:help; opacity:0.5;" title="Calculated from 'Paid' Revenue transactions vs pending Pipeline Equity.">ⓘ</div>
-                <h3 style="color:white; font-size:14px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6; margin-bottom:25px; font-weight:950;">Revenue Analytics</h3>
-                <div style="display:grid; gap:20px;">
+            <!-- Revenue ROI Hub Elite -->
+            <div class="glass-card gp-reveal" style="margin-bottom:40px; background:var(--primary); color:white; border:none; position:relative; padding: 45px; border-radius: 40px; box-shadow: 0 30px 60px -15px var(--primary-glow);">
+                <div style="position:absolute; top:30px; right:30px; cursor:help; opacity:0.4;" title="Calculated from 'Paid' Revenue transactions vs pending Pipeline Equity.">ⓘ</div>
+                <h3 style="color:white; font-size:14px; text-transform: uppercase; letter-spacing: 3px; opacity: 0.7; margin-bottom:35px; font-weight:950;">Revenue Analytics</h3>
+                <div style="display:grid; gap:30px;">
                     <div>
-                        <div style="font-size:10px; font-weight:900; opacity:0.6; letter-spacing:1px; margin-bottom:5px;">EARNED EQUITY</div>
-                        <div style="font-size:24px; font-weight:950;">$<?php
+                        <div style="font-size:11px; font-weight:950; opacity:0.6; letter-spacing:2px; margin-bottom:8px; text-transform: uppercase;">Earned Equity</div>
+                        <div style="font-size:36px; font-weight:950; letter-spacing: -0.05em;">$<?php
                             $revenue = 0; $expenses = 0;
                             $transactions = get_posts(array('post_type'=>'gp_transaction', 'meta_key'=>'_status', 'meta_value'=>'Paid', 'posts_per_page'=>-1));
                             foreach($transactions as $tx) {
@@ -285,15 +298,16 @@
                             echo number_format($revenue);
                         ?></div>
                     </div>
-                    <div style="height:1px; background:rgba(255,255,255,0.1);"></div>
-                    <div>
-                        <div style="font-size:10px; font-weight:900; opacity:0.6; letter-spacing:1px; margin-bottom:5px;">OPERATING EXPENSES (OpEx)</div>
-                        <div style="font-size:24px; font-weight:950; color:#FFA4A4;">$<?php echo number_format($expenses); ?></div>
-                    </div>
-                    <div style="height:1px; background:rgba(255,255,255,0.1);"></div>
-                    <div>
-                        <div style="font-size:10px; font-weight:900; opacity:0.6; letter-spacing:1px; margin-bottom:5px;">POTENTIAL UPSIDE</div>
-                        <div style="font-size:24px; font-weight:950;">$<?php echo number_format($pipe_val * 0.4); ?></div>
+                    <div style="height:1px; background:rgba(255,255,255,0.15);"></div>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                        <div>
+                            <div style="font-size:10px; font-weight:950; opacity:0.5; letter-spacing:1px; margin-bottom:5px; text-transform: uppercase;">OpEx</div>
+                            <div style="font-size:18px; font-weight:950; color:rgba(255,255,255,0.8);">$<?php echo number_format($expenses); ?></div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size:10px; font-weight:950; opacity:0.5; letter-spacing:1px; margin-bottom:5px; text-transform: uppercase;">Upside (60%)</div>
+                            <div style="font-size:18px; font-weight:950; color:#10B981;">$<?php echo number_format($pipe_val * 0.6); ?></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -349,19 +363,19 @@
                 </div>
             </div>
 
-            <!-- Conversion Command -->
-            <div class="glass-card" style="background: var(--secondary); color: white; border: none; border-radius:40px; padding:45px; margin-top:40px; position:relative;">
-                <div style="position:absolute; top:20px; right:20px; cursor:help; opacity:0.3;" title="Traffic share and conversion velocity across the entire ecosystem.">ⓘ</div>
-                <h3 style="color: white; font-size: 16px; letter-spacing:1px; font-weight:950;">Funnel Command</h3>
-                <div style="height:280px; display:flex; align-items:flex-end; gap:25px; padding: 40px 0;">
-                    <div style="flex:1; height:100%; background:var(--primary); border-radius:15px; display:flex; align-items:center; justify-content:center; color:white; font-size:11px; font-weight:950; writing-mode:vertical-rl; box-shadow:0 0 25px var(--primary-glow);">INTAKE</div>
-                    <div style="flex:1; height:85%; background:#10B981; border-radius:15px; display:flex; align-items:center; justify-content:center; color:white; font-size:11px; font-weight:950; writing-mode:vertical-rl;">NEURAL TRIAGE</div>
-                    <div style="flex:1; height:52%; background:#F59E0B; border-radius:15px; display:flex; align-items:center; justify-content:center; color:white; font-size:11px; font-weight:950; writing-mode:vertical-rl;">STRATEGY</div>
-                    <div style="flex:1; height:24%; background:#EF4444; border-radius:15px; display:flex; align-items:center; justify-content:center; color:white; font-size:11px; font-weight:950; writing-mode:vertical-rl;">EQUITY</div>
+            <!-- Conversion Command Elite -->
+            <div class="glass-card" style="background: var(--secondary); color: white; border: none; border-radius:50px; padding:55px; margin-top:40px; position:relative; box-shadow: 0 40px 100px -20px rgba(0,0,0,0.3);">
+                <div style="position:absolute; top:30px; right:30px; cursor:help; opacity:0.3;" title="Traffic share and conversion velocity across the entire ecosystem.">ⓘ</div>
+                <h3 style="color: white; font-size: 18px; letter-spacing:2px; font-weight:950; text-transform: uppercase;">Funnel Command</h3>
+                <div style="height:320px; display:flex; align-items:flex-end; gap:30px; padding: 50px 0;">
+                    <div style="flex:1; height:100%; background:var(--primary); border-radius:20px; display:flex; align-items:center; justify-content:center; color:white; font-size:12px; font-weight:950; writing-mode:vertical-rl; box-shadow:0 0 30px var(--primary-glow); letter-spacing: 2px;">INTAKE</div>
+                    <div style="flex:1; height:85%; background:#10B981; border-radius:20px; display:flex; align-items:center; justify-content:center; color:white; font-size:12px; font-weight:950; writing-mode:vertical-rl; letter-spacing: 2px;">TRIAGE</div>
+                    <div style="flex:1; height:52%; background:#F59E0B; border-radius:20px; display:flex; align-items:center; justify-content:center; color:white; font-size:12px; font-weight:950; writing-mode:vertical-rl; letter-spacing: 2px;">STRATEGY</div>
+                    <div style="flex:1; height:24%; background:#EF4444; border-radius:20px; display:flex; align-items:center; justify-content:center; color:white; font-size:12px; font-weight:950; writing-mode:vertical-rl; letter-spacing: 2px;">EQUITY</div>
                 </div>
-                <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; display: flex; justify-content: space-between; font-size: 13px; font-weight: 900;">
-                    <span style="opacity:0.5;">CONV. VELOCITY</span>
-                    <span style="color:var(--accent);"><?php echo $velocity_days; ?> DAYS</span>
+                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 35px; display: flex; justify-content: space-between; font-size: 15px; font-weight: 950;">
+                    <span style="opacity:0.4; letter-spacing: 1px;">CONV. VELOCITY</span>
+                    <span style="color:var(--accent); letter-spacing: 1px;"><?php echo $velocity_days; ?> DAYS</span>
                 </div>
             </div>
         </div>

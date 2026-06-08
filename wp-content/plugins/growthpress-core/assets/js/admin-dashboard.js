@@ -80,23 +80,50 @@ jQuery(document).ready(function($) {
         var $out = $('#gp-studio-output');
         var $actions = $('#gp-studio-actions');
         var tone = $('.tone-btn.active').data('tone');
+        var topic = $('#gp-content-topic').val();
+        var $loader = $('#studio-loader');
+        var $placeholder = $('#studio-placeholder');
+        var $ping = $('#studio-status-ping');
 
-        $out.html('<span style="opacity:0.3;">// AI Strategist is calculating with ' + tone + ' tone...</span>');
+        if(!topic) { alert('Calibration error: Topic focus required.'); return; }
+
+        $placeholder.hide();
+        $out.find('.ai-response').remove();
+        $loader.fadeIn();
         $actions.hide();
+        $ping.css('background', '#10B981');
 
         $.post(ajaxurl, {
             action: 'gp_generate_content',
             content_type: $('#gp-content-type').val(),
-            topic: $('#gp-content-topic').val(),
+            topic: topic,
             tone: tone,
             gp_nonce: gp_admin.nonce
         }, function(res) {
+            $loader.hide();
+            $ping.css('background', 'rgba(255,255,255,0.2)');
             if (res.success) {
-                $out.html('<div class="ai-response">' + res.data.replace(/\n/g, '<br>') + '</div>');
-                $('#preview-body').html(res.data.replace(/\n/g, '<br>'));
-                $actions.css('display', 'grid');
+                const $responseNode = $('<div class="ai-response"></div>').appendTo($out);
+                let i = 0;
+                const text = res.data;
+                const speed = 2; // Terminal typing speed
+
+                function typeEffect() {
+                    if (i < text.length) {
+                        $responseNode.append(text.charAt(i) === "\n" ? "<br>" : text.charAt(i));
+                        i++;
+                        $out.scrollTop($out[0].scrollHeight);
+                        setTimeout(typeEffect, speed);
+                    } else {
+                        $('#preview-body').html(res.data.replace(/\n/g, '<br>'));
+                        $('#preview-title').text(topic.toUpperCase());
+                        $actions.css('display', 'grid');
+                        $ping.css('background', '#10B981').addClass('status-ping-active');
+                    }
+                }
+                typeEffect();
             } else {
-                $out.html('Error generating content: ' + res.data);
+                $out.append('<div class="ai-response" style="color:#EF4444;">ENGINE ERROR: ' + res.data + '</div>');
             }
         });
     };
