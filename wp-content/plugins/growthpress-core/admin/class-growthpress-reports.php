@@ -56,7 +56,7 @@ class GrowthPress_Reports {
         $conv_rate = $stats['Total Leads'] > 0 ? round(($stats['Confirmed Bookings'] / $stats['Total Leads']) * 100, 1) : 0;
 
         $cpts = array(
-            'Leads' => 'gp_lead', 'Bookings' => 'gp_appointment', 'Proposals' => 'gp_proposal',
+            'Leads' => 'gp_lead', 'Bookings' => 'gp_appointment', 'Equity' => 'gp_proposal',
             'Revenue' => 'gp_transaction', 'Locations' => 'gp_location', 'Funnels' => 'gp_funnel',
             'Tasks' => 'gp_task', 'KB' => 'gp_kb', 'Services' => 'gp_service',
             'Cases' => 'gp_project', 'Reviews' => 'gp_review', 'Inventory' => 'gp_property',

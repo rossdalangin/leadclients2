@@ -309,20 +309,31 @@ class GrowthPress_Proposals {
         $lead_id = get_post_meta($proposal_id, '_related_lead', true);
         if ($lead_id) {
             wp_set_object_terms($lead_id, 'closed', 'gp_lead_stage');
+            update_post_meta($lead_id, '_closed_date', current_time('mysql'));
 
             // Create Kickoff Task
             $crm = GrowthPress_CRM::get_instance();
             $crm->create_task("Project Kickoff: " . get_the_title($lead_id), "Proposal accepted. Initialize onboarding sequence.", $lead_id);
 
-            // Create Draft Case Study
-            wp_insert_post(array(
+            // Create Draft Case Study with relational metadata
+            $project_id = wp_insert_post(array(
                 'post_title'   => 'Case Study: ' . get_the_title($lead_id),
                 'post_content' => 'Proposal accepted on ' . date('Y-m-d') . ". Summary: " . get_the_excerpt($lead_id),
                 'post_type'    => 'gp_project',
                 'post_status'  => 'draft'
             ));
 
-            GrowthPress_Activity::log( "Lead #$lead_id transitioned to 'Closed' following proposal acceptance. Draft Case Study generated." );
+            if ($project_id) {
+                update_post_meta($project_id, '_related_lead', $lead_id);
+                update_post_meta($project_id, '_originating_proposal', $proposal_id);
+
+                // Inherit sample flag if applicable
+                if (get_post_meta($lead_id, '_gp_is_sample', true)) {
+                    update_post_meta($project_id, '_gp_is_sample', '1');
+                }
+            }
+
+            GrowthPress_Activity::log( "Lead #$lead_id transitioned to 'Closed' following proposal acceptance. Draft Case Study initialized." );
         }
 
         $value = get_post_meta($proposal_id, '_proposal_value', true);
