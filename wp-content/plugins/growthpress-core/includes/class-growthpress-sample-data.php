@@ -1,6 +1,6 @@
 <?php
 /**
- * GrowthPress Sample Data Management - Elite v4.5 Consolidated
+ * GrowthPress Sample Data Management - Elite v6.3 Consolidated
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

@@ -9,7 +9,7 @@ jQuery(document).ready(function($) {
         }, 2600);
     }
 
-    // Scroll-Triggered Parallax Depth v4.0
+    // Scroll-Triggered Parallax Depth v6.3
     $(window).scroll(function() {
         var scrolled = $(window).scrollTop();
         $('.gp-hero').css('background-position', 'center ' + (scrolled * 0.45) + 'px');
@@ -46,7 +46,7 @@ jQuery(document).ready(function($) {
         });
     });
 
-    // Smooth Reveal Engine v4.0
+    // Smooth Reveal Engine v6.3
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -61,7 +61,7 @@ jQuery(document).ready(function($) {
         revealObserver.observe(this);
     });
 
-    // Ultra Magnetic Physics v5.5 (Spring-based Interaction)
+    // Ultra Magnetic Physics v6.3 (Spring-based Interaction)
     $(document).on('mousemove', '.gp-btn, #gp-chat-launcher, .staff-avatar', function(e) {
         const rect = this.getBoundingClientRect();
         const x = (e.clientX - rect.left - rect.width / 2) / 3.5;

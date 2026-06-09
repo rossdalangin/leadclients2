@@ -1,6 +1,6 @@
 <?php
 /**
- * Contractor Niche specialized Closer Tools - Ultra Elite v4.5
+ * Contractor Niche specialized Closer Tools - Ultra Elite v6.3
  */
 class GrowthPress_Contractor {
     public function __construct() {
@@ -56,7 +56,7 @@ class GrowthPress_Contractor {
         </style>
         <div class="gp-estimator glass-card gp-reveal" style="border-left: 20px solid #EF4444; padding:120px 80px; background: linear-gradient(135deg, rgba(255,255,255,0.9), #FFF5F5); border-radius: 60px;">
             <div style="text-align:center; margin-bottom:100px;">
-                <div style="font-size:11px; font-weight:950; color:#EF4444; text-transform:uppercase; letter-spacing:5px; margin-bottom:25px;">PRECISION QUOTATION ENGINE v4.5</div>
+                <div style="font-size:11px; font-weight:950; color:#EF4444; text-transform:uppercase; letter-spacing:5px; margin-bottom:25px;">PRECISION QUOTATION ENGINE v6.3</div>
                 <h3 class="text-gradient" style="font-size:4.5rem; line-height:1.0; letter-spacing: -0.06em;">Elite Renovation Estimator</h3>
                 <p style="font-size:1.5rem; opacity:0.7; max-width:750px; margin:35px auto 0; font-weight: 500; line-height: 1.5;">Instant baseline engineering audit for your high-ticket renovation project using neural estimation logic.</p>
             </div>

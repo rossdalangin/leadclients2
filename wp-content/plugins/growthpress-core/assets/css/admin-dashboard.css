@@ -1,4 +1,4 @@
-/* GrowthPress Ultimate Visual Overhaul v5.0 - Hyper-Glassmorphism SaaS Aesthetic */
+/* GrowthPress Ultimate Visual Overhaul v6.3 - Hyper-Glassmorphism SaaS Aesthetic */
 
 :root {
     --primary: #2563EB;
@@ -113,7 +113,7 @@
     }
 }
 
-/* Glass Card v5.1 */
+/* Glass Card v6.3 */
 .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(30px) saturate(180%);

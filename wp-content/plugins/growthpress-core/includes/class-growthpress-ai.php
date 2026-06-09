@@ -1,6 +1,6 @@
 <?php
 /**
- * GrowthPress AI Core Class - Omni-Intelligence v4.5
+ * GrowthPress AI Core Class - Omni-Intelligence v6.3
  * Supports OpenAI, Anthropic (Claude), Google (Gemini), Perplexity, and Ollama.
  */
 

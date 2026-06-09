@@ -1,6 +1,6 @@
 <?php
 /**
- * GrowthPress Settings Page - Final Elite v4.5 Multi-AI
+ * GrowthPress Settings Page - Final Elite v6.3 Multi-AI
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -138,7 +138,7 @@ class GrowthPress_Settings {
         <div class="wrap growthpress-settings gp-reveal">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px; padding:30px; background:rgba(255,255,255,0.6); border-radius:30px; border:1px solid var(--glass-border);">
                 <h1 style="margin:0;">Ecosystem Intelligence & Configuration</h1>
-                <div style="background:var(--secondary); color:white; padding:8px 16px; border-radius:30px; font-size:11px; font-weight:900; letter-spacing:1px;">ELITE v4.5 OMNI-AI</div>
+                <div style="background:var(--secondary); color:white; padding:8px 16px; border-radius:30px; font-size:11px; font-weight:900; letter-spacing:1px;">ELITE v6.3 OMNI-AI</div>
             </div>
 
             <div class="gp-settings-tabs">
@@ -617,8 +617,8 @@ class GrowthPress_Settings {
                 </div>
 
                 <div class="glass-card" style="max-width:1100px;">
-                    <h2 class="text-gradient">Master Operations Manual v4.5</h2>
-                    <p>GrowthPress v4.5 now supports **Multi-Intelligence Nodes**. You can toggle between providers instantly based on specialized niche requirements.</p>
+                    <h2 class="text-gradient">Master Operations Manual v6.3</h2>
+                    <p>GrowthPress v6.3 now supports **Multi-Intelligence Nodes**. You can toggle between providers instantly based on specialized niche requirements.</p>
                     <hr style="opacity:0.1; margin:30px 0;">
                     <div style="display:grid; grid-template-columns: 1fr 1fr; gap:40px;">
                         <div>

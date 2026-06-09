@@ -1,6 +1,6 @@
 <?php
 /**
- * Consultants Niche specialized Closer Tools - Ultra Elite v4.5
+ * Consultants Niche specialized Closer Tools - Ultra Elite v6.3
  */
 class GrowthPress_Consultants {
     public function __construct() {
@@ -10,7 +10,7 @@ class GrowthPress_Consultants {
     public function render_audit() {
         return '<div class="gp-consulting-audit glass-card gp-reveal" style="padding:100px 80px; border-top: 20px solid var(--primary); background: linear-gradient(135deg, var(--surface), #F8FAFC);">
             <div style="text-align:center; margin-bottom:70px;">
-                <div style="font-size:12px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:4px; margin-bottom:25px;">OPERATIONAL INTELLIGENCE AUDIT v4.5</div>
+                <div style="font-size:12px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:4px; margin-bottom:25px;">OPERATIONAL INTELLIGENCE AUDIT v6.3</div>
                 <h3 class="text-gradient" style="font-size:3.5rem; line-height:1.0;">Strategic Efficiency Engine</h3>
                 <p style="font-size:1.25rem; opacity:0.7; max-width:750px; margin:25px auto 0;">Our neural-calibrated engine analyzes your current business model to identify high-impact automation and scaling opportunities across all departments.</p>
             </div>

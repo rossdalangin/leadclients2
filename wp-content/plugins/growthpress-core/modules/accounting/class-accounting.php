@@ -1,6 +1,6 @@
 <?php
 /**
- * Accounting Niche specialized Closer Tools - Ultra Elite v4.5
+ * Accounting Niche specialized Closer Tools - Ultra Elite v6.3
  */
 class GrowthPress_Accounting {
     public function __construct() {
@@ -71,7 +71,7 @@ class GrowthPress_Accounting {
         </style>
         <div class="gp-tax-audit glass-card gp-reveal" style="border-left: 20px solid #7C3AED; padding:120px 80px; background: linear-gradient(135deg, rgba(255,255,255,0.9), #F5F3FF); border-radius: 60px;">
             <div style="text-align:center; margin-bottom:80px;">
-                <div style="font-size:11px; font-weight:950; color:#7C3AED; text-transform:uppercase; letter-spacing:5px; margin-bottom:25px;">FISCAL INTELLIGENCE NODE v5.9</div>
+                <div style="font-size:11px; font-weight:950; color:#7C3AED; text-transform:uppercase; letter-spacing:5px; margin-bottom:25px;">FISCAL INTELLIGENCE NODE v6.3</div>
                 <h3 class="text-gradient" style="font-size:4.5rem; line-height:1.0; letter-spacing: -0.06em;">Secure Tax Strategy Audit</h3>
                 <p style="font-size:1.5rem; opacity:0.7; max-width:750px; margin:35px auto 0; font-weight: 500; line-height: 1.5;">Submit your corporate profile for a proprietary AI tax optimization analysis.</p>
             </div>
@@ -106,7 +106,7 @@ class GrowthPress_Accounting {
         </style>
         <div class="gp-tax-estimator glass-card gp-reveal" style="border-right: 20px solid #7C3AED; padding:120px 80px; background: linear-gradient(135deg, rgba(255,255,255,0.9), #F5F3FF); border-radius: 60px;">
             <div style="text-align:center; margin-bottom:100px;">
-                <div style="font-size:11px; font-weight:950; color:#7C3AED; text-transform:uppercase; letter-spacing:5px; margin-bottom:25px;">WEALTH PRESERVATION ENGINE v4.5</div>
+                <div style="font-size:11px; font-weight:950; color:#7C3AED; text-transform:uppercase; letter-spacing:5px; margin-bottom:25px;">WEALTH PRESERVATION ENGINE v6.3</div>
                 <h3 class="text-gradient" style="font-size:4.5rem; line-height:1.0; letter-spacing: -0.06em;">AI Tax Optimization Estimator</h3>
                 <p style="font-size:1.5rem; opacity:0.7; max-width:750px; margin:35px auto 0; font-weight: 500; line-height: 1.5;">Determine your potential tax optimization nodes and capital preservation benefits based on your current corporate profile.</p>
             </div>

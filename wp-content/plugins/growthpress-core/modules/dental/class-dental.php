@@ -1,6 +1,6 @@
 <?php
 /**
- * Dental Niche specialized Closer Tools - Ultra Elite v4.0
+ * Dental Niche specialized Closer Tools - Ultra Elite v6.3
  */
 class GrowthPress_Dental {
     public function __construct() {
@@ -85,7 +85,7 @@ class GrowthPress_Dental {
         </style>
         <div class="gp-insurance-optimizer glass-card gp-reveal" style="padding:120px 80px; border-left: 20px solid #0EA5E9; background: linear-gradient(135deg, rgba(255,255,255,0.9), #F0F9FF); border-radius: 60px;">
             <div style="text-align:center; margin-bottom:100px;">
-                <div style="font-size:11px; font-weight:950; color:#0EA5E9; text-transform:uppercase; letter-spacing:5px; margin-bottom:25px;">CLINICAL COVERAGE INTELLIGENCE v4.0</div>
+                <div style="font-size:11px; font-weight:950; color:#0EA5E9; text-transform:uppercase; letter-spacing:5px; margin-bottom:25px;">CLINICAL COVERAGE INTELLIGENCE v6.3</div>
                 <h3 class="text-gradient" style="font-size:4.5rem; line-height:1.0; letter-spacing: -0.06em;">Insurance Optimization Engine</h3>
                 <p style="font-size:1.5rem; opacity:0.7; max-width:750px; margin:35px auto 0; font-weight: 500;">Our neural engine instantly verifies your coverage parameters to maximize clinical benefits and eliminate financial friction.</p>
             </div>
@@ -120,7 +120,7 @@ class GrowthPress_Dental {
         </style>
         <div class="gp-smile-gallery" style="margin-top:200px; margin-bottom: 200px;">
             <div style="text-align:center; margin-bottom:150px;">
-                <div style="font-size:11px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:6px; margin-bottom:25px;">TRANSFORMATION ARCHIVE v4.0</div>
+                <div style="font-size:11px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:6px; margin-bottom:25px;">TRANSFORMATION ARCHIVE v6.3</div>
                 <h2 class="text-gradient" style="font-size:5.5rem; line-height:0.85; letter-spacing:-0.08em;">Elite Patient Transformations</h2>
                 <p style="max-width:850px; margin:40px auto 0; font-size:1.6rem; opacity:0.7; font-weight: 500; line-height: 1.5;">Visual confirmation of our precision reconstructive engineering and aesthetic excellence.</p>
             </div>

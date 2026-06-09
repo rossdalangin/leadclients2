@@ -1,6 +1,6 @@
 <?php
 /**
- * Solar Niche specialized Closer Tools - Ultra Elite v4.0
+ * Solar Niche specialized Closer Tools - Ultra Elite v6.3
  */
 class GrowthPress_Solar {
     public function __construct() {
@@ -19,7 +19,7 @@ class GrowthPress_Solar {
         </style>
         <div class="gp-solar-financing glass-card gp-reveal" style="border-left: 20px solid #10B981; padding:100px 80px; background: linear-gradient(135deg, rgba(255,255,255,0.9), #F0FDF4); border-radius: 50px;">
             <div style="text-align:center; margin-bottom:70px;">
-                <div style="font-size:11px; font-weight:950; color:#10B981; text-transform:uppercase; letter-spacing:5px; margin-bottom:20px;">CAPITAL DEPLOYMENT NODE v5.9</div>
+                <div style="font-size:11px; font-weight:950; color:#10B981; text-transform:uppercase; letter-spacing:5px; margin-bottom:20px;">CAPITAL DEPLOYMENT NODE v6.3</div>
                 <h3 class="text-gradient" style="font-size:4rem; line-height:1.0; letter-spacing: -0.05em;">$0-Down Solar Financing</h3>
                 <p style="font-size:1.4rem; opacity:0.7; max-width:700px; margin:30px auto 0; font-weight: 500;">Apply for immediate capital authorization to initialize your energy independence sequence with no upfront investment.</p>
             </div>
@@ -68,7 +68,7 @@ class GrowthPress_Solar {
         </style>
         <div class="gp-solar-calc glass-card gp-reveal" style="border-top: 20px solid #F59E0B; text-align:center; padding:120px 80px; background: linear-gradient(180deg, rgba(245,158,11,0.06) 0%, transparent 100%), rgba(255,255,255,0.9); border-radius: 60px; box-shadow: 0 60px 120px -30px rgba(0,0,0,0.15);">
             <div style="text-align:center; margin-bottom:100px;">
-                <div style="font-size:11px; font-weight:950; color:#F59E0B; text-transform:uppercase; letter-spacing:5px; margin-bottom:25px;">ENERGY INDEPENDENCE ENGINE v4.0</div>
+                <div style="font-size:11px; font-weight:950; color:#F59E0B; text-transform:uppercase; letter-spacing:5px; margin-bottom:25px;">ENERGY INDEPENDENCE ENGINE v6.3</div>
                 <h3 class="text-gradient" style="font-size:4.5rem; line-height:1.0; letter-spacing: -0.06em;">Precision ROI Predictor</h3>
                 <p style="font-size:1.5rem; opacity:0.7; max-width:750px; margin:35px auto 0; font-weight: 500;">Determine your 25-year energy equity and federal incentive eligibility with neural precision modeling.</p>
             </div>

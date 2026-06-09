@@ -1,6 +1,6 @@
 <?php
 /**
- * GrowthPress Customer Portal Class - v4.0 SaaS-Pro Standards
+ * GrowthPress Customer Portal Class - v6.3 SaaS-Pro Standards
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

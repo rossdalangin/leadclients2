@@ -1,6 +1,6 @@
 <?php
 /**
- * Law Niche specialized Closer Tools - Ultra Elite v4.0
+ * Law Niche specialized Closer Tools - Ultra Elite v6.3
  */
 class GrowthPress_Law {
     public function __construct() {
@@ -18,7 +18,7 @@ class GrowthPress_Law {
         </style>
         <div class="gp-law-conflict glass-card gp-reveal" style="border-right: 20px solid #1E293B; padding:120px 80px; background: linear-gradient(135deg, rgba(255,255,255,0.9), #F1F5F9); border-radius: 60px;">
             <div style="text-align:center; margin-bottom:80px;">
-                <div style="font-size:11px; font-weight:950; color:#1E293B; text-transform:uppercase; letter-spacing:5px; margin-bottom:20px;">LITIGATION CLEARANCE NODE v5.9</div>
+                <div style="font-size:11px; font-weight:950; color:#1E293B; text-transform:uppercase; letter-spacing:5px; margin-bottom:20px;">LITIGATION CLEARANCE NODE v6.3</div>
                 <h3 class="text-gradient" style="font-size:4rem; line-height:1.0; letter-spacing: -0.05em;">Secure Conflict Verification</h3>
                 <p style="font-size:1.5rem; opacity:0.7; max-width:750px; margin:35px auto 0; font-weight: 500; line-height: 1.5;">Submit adverse party identities for real-time conflict clearance and litigation eligibility.</p>
             </div>
@@ -64,7 +64,7 @@ class GrowthPress_Law {
         <div class="gp-legal-intake glass-card gp-reveal" style="border-right: 20px solid var(--secondary); background: linear-gradient(135deg, rgba(255,255,255,0.9), var(--bg)); position:relative; overflow:hidden; padding:120px 80px; border-radius: 60px;">
             <div style="position:absolute; top:0; right:0; background:var(--secondary); color:white; font-size:12px; font-weight:950; padding:15px 60px; transform:rotate(45deg) translate(35px, -35px); letter-spacing:4px; box-shadow: 0 0 20px rgba(0,0,0,0.2);">SECURE</div>
             <div style="text-align:center; margin-bottom:80px;">
-                <div style="font-size:11px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:5px; margin-bottom:25px;">LITIGATION INTELLIGENCE v4.0</div>
+                <div style="font-size:11px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:5px; margin-bottom:25px;">LITIGATION INTELLIGENCE v6.3</div>
                 <h3 class="text-gradient" style="font-size:4.5rem; line-height:1.0; letter-spacing: -0.06em;">Elite Case Merit Analysis</h3>
                 <p style="font-size:1.5rem; opacity:0.7; max-width:750px; margin:35px auto 0; font-weight: 500; line-height: 1.5;">Submit your matter for real-time neural triage and high-stakes litigation prioritization.</p>
             </div>

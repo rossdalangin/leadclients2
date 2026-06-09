@@ -142,7 +142,7 @@ body {
 }
 .main-navigation a:hover { opacity: 1; }
 
-/* Ultimate Glassmorphism Engine v5.8 - Hyper-Cinematic */
+/* Ultimate Glassmorphism Engine v6.3 - Hyper-Cinematic */
 .glass-card, .gp-estimator, .gp-solar-calc, .gp-symptom-checker, .gp-ai-faq, .gp-insurance-optimizer, .gp-legal-intake {
     background: linear-gradient(135deg, rgba(var(--surface-rgb), 0.85) 0%, rgba(var(--surface-rgb), 0.65) 100%);
     backdrop-filter: blur(var(--blur)) saturate(190%);
@@ -223,7 +223,7 @@ body.gp-design-female .glass-card {
     box-shadow: var(--shadow-lg), 0 0 40px var(--primary-glow);
 }
 
-/* Fluid Typography Scaled v5.7 */
+/* Fluid Typography Scaled v6.3 */
 h1 { font-family: var(--font-heading, 'Inter'); font-size: var(--step-5); line-height: 0.82; font-weight: 950; letter-spacing: -0.08em; text-wrap: balance; }
 h2 { font-family: var(--font-heading, 'Inter'); font-size: var(--step-4); font-weight: 900; letter-spacing: -0.06em; line-height: 0.92; text-wrap: balance; }
 h3 { font-size: var(--step-2); font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; }
@@ -266,7 +266,7 @@ body.gp-design-female h1, body.gp-design-female h2 { letter-spacing: -0.02em; fo
     100% { opacity: 1; transform: translateY(0); filter: blur(0); }
 }
 
-/* Elite Geometric Overlays v5.6 */
+/* Elite Geometric Overlays v6.3 */
 .magnetic-grid {
     background-size: 50px 50px;
     background-image:

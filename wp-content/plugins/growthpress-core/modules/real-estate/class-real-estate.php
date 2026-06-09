@@ -1,6 +1,6 @@
 <?php
 /**
- * Real Estate Niche specialized Closer Tools - Ultra Elite v4.0
+ * Real Estate Niche specialized Closer Tools - Ultra Elite v6.3
  */
 class GrowthPress_RealEstate {
     public function __construct() {
@@ -98,7 +98,7 @@ class GrowthPress_RealEstate {
             .gp-lifestyle-btn:hover { border-color: var(--primary); transform: translateY(-10px); box-shadow: 0 30px 60px -15px rgba(0,0,0,0.1); }
         </style>
         <div class="gp-property-matcher glass-card gp-reveal" style="text-align:center; padding:150px 80px; background: radial-gradient(circle at top right, rgba(37,99,235,0.08), transparent 50%), rgba(255,255,255,0.9); border-radius: 60px;">
-            <div style="font-size:11px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:6px; margin-bottom:25px;">NEURAL INVENTORY MATCH v4.0</div>
+            <div style="font-size:11px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:6px; margin-bottom:25px;">NEURAL INVENTORY MATCH v6.3</div>
             <h3 class="text-gradient" style="font-size:5rem; letter-spacing:-0.08em; line-height:0.9;">AI Lifestyle Matcher</h3>
             <p style="font-size:1.5rem; opacity:0.7; max-width:800px; margin:40px auto 0; font-weight: 500; line-height: 1.5;">Our neural network cross-references your specific lifestyle DNA with our proprietary off-market inventory node.</p>
 

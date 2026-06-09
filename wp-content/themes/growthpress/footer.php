@@ -46,7 +46,7 @@
             </div>
         </div>
 		<div class="site-info" style="border-top: 1px solid rgba(255,255,255,0.06); padding-top: 50px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: rgba(255,255,255,0.3); font-weight: 600;">
-			<div>&copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?>. Final Elite v4.6 Deployment.</div>
+			<div>&copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?>. Final Elite v6.3 Deployment.</div>
             <div style="display: flex; gap: 30px; align-items: center;">
                 <div style="display:flex; align-items:center; gap:10px;">
                     <span style="width:8px; height:8px; border-radius:50%; background:#10B981; box-shadow: 0 0 10px #10B981;"></span>

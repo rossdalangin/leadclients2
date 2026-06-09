@@ -30,7 +30,7 @@ if ( ! $roadmap ) {
 
 <main id="primary" class="site-main container" style="padding: 120px 0;">
     <div style="text-align:center; margin-bottom:80px;">
-        <div style="font-size:12px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:4px; margin-bottom:20px;">OPERATIONAL ARCHITECTURE v5.9</div>
+        <div style="font-size:12px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:4px; margin-bottom:20px;">OPERATIONAL ARCHITECTURE v6.3</div>
         <h1 class="text-gradient" style="font-size:4.5rem; letter-spacing:-0.06em; line-height:1;">Strategic Growth Roadmap</h1>
         <p style="font-size:1.3rem; opacity:0.7; max-width:800px; margin:25px auto 0;">Your 12-month trajectory for market dominance, engineered by the GrowthPress AI neural engine.</p>
     </div>

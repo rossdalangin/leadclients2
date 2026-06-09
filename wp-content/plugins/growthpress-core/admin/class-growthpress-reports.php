@@ -1,6 +1,6 @@
 <?php
 /**
- * GrowthPress Reporting Class - Data-Driven v4.5
+ * GrowthPress Reporting Class - Data-Driven v6.3
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -69,7 +69,7 @@ class GrowthPress_Reports {
         <div class="wrap growthpress-reports">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:50px;">
                 <h1>Strategic ROI & Ecosystem Health</h1>
-                <div style="background:var(--primary-glow); color:var(--primary); padding:10px 20px; border-radius:30px; font-size:11px; font-weight:950; letter-spacing:2px;">ENGINE: OMNI-INTELLIGENCE v4.5</div>
+                <div style="background:var(--primary-glow); color:var(--primary); padding:10px 20px; border-radius:30px; font-size:11px; font-weight:950; letter-spacing:2px;">ENGINE: OMNI-INTELLIGENCE v6.3</div>
             </div>
 
             <!-- Niche Intelligence Layer -->

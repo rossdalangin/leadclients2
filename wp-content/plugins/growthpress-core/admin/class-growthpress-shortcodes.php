@@ -290,7 +290,7 @@ class GrowthPress_Shortcode_Ref {
                     <h1 style="margin:0;">Shortcode Strategic Repository</h1>
                     <p style="opacity:0.6; margin:5px 0 0 0;">Deploy high-stakes Business OS modules anywhere in your ecosystem.</p>
                 </div>
-                <div style="background:var(--secondary); color:white; padding:8px 16px; border-radius:30px; font-size:11px; font-weight:950; letter-spacing:1px;">ELITE v4.5</div>
+                <div style="background:var(--secondary); color:white; padding:8px 16px; border-radius:30px; font-size:11px; font-weight:950; letter-spacing:1px;">ELITE v6.3</div>
             </div>
 
             <div class="shortcode-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap:30px; margin-top:20px;">

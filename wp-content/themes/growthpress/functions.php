@@ -1,6 +1,6 @@
 <?php
 /**
- * GrowthPress Theme Functions - Advanced Customizer v5.0
+ * GrowthPress Theme Functions - Advanced Customizer v6.3
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

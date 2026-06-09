@@ -1,6 +1,6 @@
 <?php
 /**
- * Medical Niche specialized Closer Tools - Ultra Elite v4.0
+ * Medical Niche specialized Closer Tools - Ultra Elite v6.3
  */
 class GrowthPress_Medical {
     public function __construct() {
@@ -17,7 +17,7 @@ class GrowthPress_Medical {
         </style>
         <div class="gp-medical-intake glass-card gp-reveal" style="border-right: 20px solid #10B981; padding:120px 80px; background: linear-gradient(135deg, rgba(255,255,255,0.9), #F0FDF4); border-radius: 60px;">
             <div style="text-align:center; margin-bottom:80px;">
-                <div style="font-size:11px; font-weight:950; color:#10B981; text-transform:uppercase; letter-spacing:5px; margin-bottom:20px;">CLINICAL INTAKE NODE v5.9</div>
+                <div style="font-size:11px; font-weight:950; color:#10B981; text-transform:uppercase; letter-spacing:5px; margin-bottom:20px;">CLINICAL INTAKE NODE v6.3</div>
                 <h3 class="text-gradient" style="font-size:4.5rem; line-height:1.0; letter-spacing: -0.06em;">Secure Patient Onboarding</h3>
                 <p style="font-size:1.5rem; opacity:0.7; max-width:700px; margin:35px auto 0; font-weight: 500; line-height: 1.5;">Initialize your clinical record within our HIPAA-compliant neural architecture.</p>
             </div>
@@ -52,7 +52,7 @@ class GrowthPress_Medical {
         <div class="gp-symptom-checker glass-card gp-reveal" style="border-left: 20px solid #10B981; padding:120px 80px; position:relative; overflow:hidden; border-radius: 60px;">
             <div style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0.04; background-image:url(\'data:image/svg+xml,%3Csvg width=\"30\" height=\"30\" viewBox=\"0 0 30 30\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cpath d=\"M15 0v30M0 15h30\" stroke=\"%2310B981\" stroke-width=\"2\"/%3E%3C/svg%3E\'); pointer-events:none;"></div>
             <div style="text-align:center; margin-bottom:80px;">
-                <div style="font-size:11px; font-weight:950; color:#10B981; text-transform:uppercase; letter-spacing:5px; margin-bottom:25px;">HIPAA-COMPLIANT NEURAL TRIAGE v4.0</div>
+                <div style="font-size:11px; font-weight:950; color:#10B981; text-transform:uppercase; letter-spacing:5px; margin-bottom:25px;">HIPAA-COMPLIANT NEURAL TRIAGE v6.3</div>
                 <h2 class="text-gradient" style="font-size:4.5rem; line-height:1.0; letter-spacing: -0.06em;">AI Health Intelligence Assistant</h2>
                 <p style="font-size:1.5rem; opacity:0.7; max-width:750px; margin:35px auto 0; font-weight: 500; line-height: 1.5;">Instantly analyze clinical concerns to route your case to the appropriate board-certified specialist.</p>
             </div>
