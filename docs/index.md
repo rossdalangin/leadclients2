@@ -1,9 +1,9 @@
-# GrowthPress Documentation: Master Index v5.2 (Final)
+# GrowthPress Documentation: Master Index v6.3 Definitive
 
-Welcome to the comprehensive documentation library for the GrowthPress Business Operating System.
+Welcome to the comprehensive documentation library for the GrowthPress Business Operating System Elite.
 
 ## Technical
-- [Api Specification](api-specification.md)
+- [Api Specification v6.3](api-specification.md)
 - [Architecture Map](architecture-map.md)
 - [Architecture](architecture.md)
 - [Database Schema Deep Dive](database-schema-deep-dive.md)
@@ -16,7 +16,7 @@ Welcome to the comprehensive documentation library for the GrowthPress Business 
 - [Behavioral Psychology Glossary](behavioral-psychology-glossary.md)
 - [Client Communication Strategy](client-communication-strategy.md)
 - [Conversion Strategy](conversion-strategy.md)
-- [Master Prompt Library](master-prompt-library.md)
+- [Master Prompt Library v6.3](master-prompt-library.md)
 - [Niche Success Blueprints](niche-success-blueprints.md)
 - [Operations Playbook](operations-playbook.md)
 - [Ux Strategy](ux-strategy.md)
@@ -46,25 +46,15 @@ Welcome to the comprehensive documentation library for the GrowthPress Business 
 - [System Scalability Multisite](system-scalability-multisite.md)
 - [Team Collaboration Guide](team-collaboration-guide.md)
 - [User Flows](user-flows.md)
-- [User Guide](user-guide.md)
+- [User Guide v6.3](user-guide.md)
 - [White Label Guide](white-label-guide.md)
 
 ## Marketing
 - [Ad Copy Examples](marketing/ad-copy-examples.md)
 - [Email Sequences](marketing/email-sequences.md)
 - [Email Templates](marketing/email-templates.md)
-- [Accounting Gtm](marketing/gtm-plans/accounting-gtm.md)
-- [Consultants Gtm](marketing/gtm-plans/consultants-gtm.md)
-- [Contractor Gtm](marketing/gtm-plans/contractor-gtm.md)
-- [Dental Clinic Gtm](marketing/gtm-plans/dental-clinic-gtm.md)
-- [High Ticket Gtm](marketing/gtm-plans/high-ticket-gtm.md)
-- [Law Firm Gtm](marketing/gtm-plans/law-firm-gtm.md)
-- [Medical Clinic Gtm](marketing/gtm-plans/medical-clinic-gtm.md)
-- [Real Estate Gtm](marketing/gtm-plans/real-estate-gtm.md)
-- [Roofing Gtm](marketing/gtm-plans/roofing-gtm.md)
-- [Solar Gtm](marketing/gtm-plans/solar-gtm.md)
 - [Industry Campaigns](marketing/industry-campaigns.md)
-- [Pitch Deck](marketing/pitch-deck.md)
+- [Pitch Deck Elite v6.3](marketing/pitch-deck.md)
 - [Promotion Image Prompts](marketing/promotion-image-prompts.md)
 - [Sales Battlecards](marketing/sales-battlecards.md)
 - [Sales Scripts](marketing/sales-scripts.md)
@@ -92,7 +82,6 @@ Welcome to the comprehensive documentation library for the GrowthPress Business 
 - [Monetization Roadmap](marketing/toolkit/monetization-roadmap.md)
 - [Niche Sales Scripts](marketing/toolkit/niche-sales-scripts.md)
 - [Objection Handling](marketing/toolkit/objection-handling.md)
-- [Pitch Deck](marketing/toolkit/pitch-deck.md)
 - [Proposal Templates Niche](marketing/toolkit/proposal-templates-niche.md)
 - [Referral Engine Playbook](marketing/toolkit/referral-engine-playbook.md)
 - [Sales Presentation Script](marketing/toolkit/sales-presentation-script.md)

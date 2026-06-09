@@ -1,4 +1,4 @@
-# GrowthPress Elite: API & Integration Specification
+# GrowthPress Elite: API & Integration Specification v6.3
 
 The GrowthPress OS is built with a REST-first architecture, allowing seamless integration with Zapier, Make.com, and custom enterprise middleware.
 
@@ -8,23 +8,26 @@ All requests must include the `growthpress_api_token` in the Bearer header.
 
 ## 📡 Endpoints
 
-### 1. Lead Injection (`POST /wp-json/gp/v1/leads`)
+### 1. Lead Injection (`POST /wp-json/growthpress/v1/leads`)
 Inject leads from external sources (e.g., Facebook Lead Ads).
-**Payload**: `{"name": "...", "email": "...", "message": "...", "niche": "..."}`
+**Payload**: `{"name": "...", "email": "..."}`
 
-### 2. Appointment Webhook (`POST /wp-json/gp/v1/missed-call`)
+### 2. Missed Call Automation (`POST /wp-json/growthpress/v1/missed-call`)
 Twilio webhook endpoint for automated missed call follow-up.
+**Payload**: `{"From": "+1234567890"}`
 **Logic**: Triggers the AI to generate a niche-aware SMS response.
 
-### 3. Strategy Fetch (`GET /wp-json/gp/v1/strategy/{lead_id}`)
-Retrieve AI-generated sales insights and probability scores for a specific lead.
+### 3. Financial Ledger Sync (`POST /wp-json/growthpress/v1/sync-transactions`)
+Synchronize external payments into the GrowthPress ROI Hub.
+**Payload**: `{"amount": 1500, "title": "External Invoice #102"}`
 
-### 4. Portal Sync (`GET /wp-json/gp/v1/portal/{user_id}`)
-Fetch active proposals and case statuses for external client dashboards.
+### 4. Operational Availability (`GET /wp-json/growthpress/v1/get-availability`)
+Fetch currently booked slots in the master calendar for external booking integrations.
 
 ---
 
 ## 🛠️ Internal Hooks for Developers
 *   `gp_lead_captured`: Triggered after successful intake.
-*   `gp_proposal_accepted`: Triggered after one-click acceptance in the portal.
+*   `gp_appointment_created`: Fires when a strategy session is confirmed.
+*   `gp_appointment_completed`: Triggers reputation and review sequences.
 *   `gp_niche_lead_analysis`: Fires after the AI completes sentiment and intent scoring.
