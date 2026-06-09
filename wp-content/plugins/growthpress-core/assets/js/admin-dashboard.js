@@ -134,13 +134,13 @@ jQuery(document).ready(function($) {
         const content = $('#gp-studio-output').find('.ai-response').text();
 
         if (!title || !content) {
-            alert('Generate content first before syncing.');
+            alert('Calibration error: Generate content node first before synchronization.');
             return;
         }
 
         const btn = $(`.sync-btn[onclick="syncAsset('${type}')"]`);
         const originalText = btn.text();
-        btn.text('SYNCING...').prop('disabled', true);
+        btn.text('SYNCHRONIZING...').prop('disabled', true).css('opacity', 0.5);
 
         $.post(ajaxurl, {
             action: 'gp_sync_to_kb',
@@ -150,11 +150,14 @@ jQuery(document).ready(function($) {
             gp_nonce: gp_admin.nonce
         }, function(res) {
             if (res.success) {
-                alert(res.data);
+                btn.text('SYNCED').css({'background':'#10B981', 'color':'#FFF', 'opacity':1});
+                setTimeout(() => {
+                    btn.text(originalText).css({'background':'', 'color':'', 'opacity':''}).prop('disabled', false);
+                }, 2000);
             } else {
-                alert('Sync failed.');
+                alert('Synchronization failed.');
+                btn.text(originalText).prop('disabled', false).css('opacity', 1);
             }
-            btn.text(originalText).prop('disabled', false);
         });
     };
 

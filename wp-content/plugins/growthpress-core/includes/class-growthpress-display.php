@@ -28,7 +28,7 @@ class GrowthPress_Display {
 
     public function render_kb_grid() {
         $posts = get_posts( array( 'post_type' => 'gp_kb', 'posts_per_page' => 6 ) );
-        return $this->render_grid( $posts, 'Knowledge Base' );
+        return $this->render_grid( $posts, 'Knowledge Base', 'gp_kb' );
     }
 
     public function render_case_study_grid() {
@@ -43,27 +43,27 @@ class GrowthPress_Display {
 
     public function render_service_grid() {
         $posts = get_posts( array( 'post_type' => 'gp_service', 'posts_per_page' => 6 ) );
-        return $this->render_grid( $posts, 'Service Lines' );
+        return $this->render_grid( $posts, 'Service Lines', 'gp_service' );
     }
 
     public function render_inventory_grid() {
         $posts = get_posts( array( 'post_type' => 'gp_property', 'posts_per_page' => 6 ) );
-        return $this->render_grid( $posts, 'Portfolio Inventory' );
+        return $this->render_grid( $posts, 'Portfolio Inventory', 'gp_property' );
     }
 
     public function render_location_grid() {
         $posts = get_posts( array( 'post_type' => 'gp_location', 'posts_per_page' => 6 ) );
-        return $this->render_grid( $posts, 'Service Locations' );
+        return $this->render_grid( $posts, 'Service Locations', 'gp_location' );
     }
 
     public function render_funnel_grid() {
         $posts = get_posts( array( 'post_type' => 'gp_funnel', 'posts_per_page' => 6 ) );
-        return $this->render_grid( $posts, 'Conversion Funnels' );
+        return $this->render_grid( $posts, 'Conversion Funnels', 'gp_funnel' );
     }
 
     public function render_treatment_grid() {
         $posts = get_posts( array( 'post_type' => 'gp_treatment', 'posts_per_page' => 6 ) );
-        return $this->render_grid( $posts, 'Clinical Protocols' );
+        return $this->render_grid( $posts, 'Clinical Protocols', 'gp_treatment' );
     }
 
     public function render_ecosystem_radar() {
@@ -120,26 +120,84 @@ class GrowthPress_Display {
 
     public function render_market_chart() {
         ob_start(); ?>
-        <div class="gp-market-chart glass-card" style="padding:60px; margin:40px 0;">
-            <h3 class="text-gradient" style="margin-bottom:30px;">Strategic Sector Trajectory</h3>
-            <canvas id="gpMarketChart" height="200"></canvas>
+        <div class="gp-market-chart glass-card gp-reveal" style="padding:80px; margin:60px 0; border-radius: 60px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:60px;">
+                <div>
+                    <div style="font-size:11px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:5px; margin-bottom:15px;">Cinematic Data Visualization</div>
+                    <h3 class="text-gradient" style="margin:0; font-size: 3.5rem; letter-spacing: -0.06em; line-height: 1;">Strategic Sector Trajectory</h3>
+                </div>
+                <div style="text-align:right; display:flex; gap:30px;">
+                    <div>
+                        <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:2px;">SECTOR DOMINANCE</div>
+                        <div style="font-size:24px; font-weight:950; color:var(--primary);">94.2%</div>
+                    </div>
+                    <div>
+                        <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:2px;">EQUITY GROWTH</div>
+                        <div style="font-size:24px; font-weight:950; color:#10B981;">+32.8%</div>
+                    </div>
+                </div>
+            </div>
+            <div style="height:400px; width:100%;">
+                <canvas id="gpMarketChart"></canvas>
+            </div>
             <script>
             jQuery(document).ready(function($) {
                 const ctx = document.getElementById('gpMarketChart').getContext('2d');
+                const gradient1 = ctx.createLinearGradient(0, 0, 0, 400);
+                gradient1.addColorStop(0, 'rgba(79, 70, 229, 0.2)');
+                gradient1.addColorStop(1, 'rgba(79, 70, 229, 0)');
+
+                const gradient2 = ctx.createLinearGradient(0, 0, 0, 400);
+                gradient2.addColorStop(0, 'rgba(16, 185, 129, 0.2)');
+                gradient2.addColorStop(1, 'rgba(16, 185, 129, 0)');
+
                 new Chart(ctx, {
                     type: 'line',
                     data: {
-                        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-                        datasets: [{
-                            label: 'Market Authority %',
-                            data: [65, 78, 82, 94],
-                            borderColor: '#4F46E5',
-                            tension: 0.4,
-                            fill: true,
-                            backgroundColor: 'rgba(79, 70, 229, 0.05)'
-                        }]
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                        datasets: [
+                            {
+                                label: 'Market Authority %',
+                                data: [62, 68, 75, 72, 85, 89, 94],
+                                borderColor: '#4F46E5',
+                                borderWidth: 4,
+                                tension: 0.45,
+                                fill: true,
+                                backgroundColor: gradient1,
+                                pointBackgroundColor: '#FFF',
+                                pointBorderColor: '#4F46E5',
+                                pointBorderWidth: 3,
+                                pointRadius: 5,
+                                pointHoverRadius: 8
+                            },
+                            {
+                                label: 'Acquisition Velocity',
+                                data: [35, 45, 52, 65, 60, 78, 88],
+                                borderColor: '#10B981',
+                                borderWidth: 4,
+                                borderDash: [5, 5],
+                                tension: 0.45,
+                                fill: true,
+                                backgroundColor: gradient2,
+                                pointBackgroundColor: '#FFF',
+                                pointBorderColor: '#10B981',
+                                pointBorderWidth: 3,
+                                pointRadius: 5
+                            }
+                        ]
                     },
-                    options: { plugins: { legend: { display: false } } }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { display: false },
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { weight: '900', family: 'Inter', size: 11 }, color: '#94A3B8' }
+                            }
+                        }
+                    }
                 });
             });
             </script>
@@ -248,18 +306,25 @@ class GrowthPress_Display {
                 <?php foreach ( $posts as $p ) : ?>
                     <div class="glass-card gp-grid-item gp-reveal" style="padding: 45px; border-radius: 40px; display: flex; flex-direction: column; position: relative; overflow: hidden; background: rgba(255, 255, 255, 0.65);">
 
-                        <?php if ( $type === 'gp_project' ) :
-                            $roi = get_post_meta($p->ID, '_gp_growth_roi', true);
-                            if ($roi) : ?>
-                                <div class="gp-intel-badge" style="position: absolute; top: 25px; right: 25px; background: var(--primary); color: white; padding: 6px 16px; border-radius: 30px; font-size: 10px; font-weight: 950; z-index: 10; letter-spacing: 1px;"><?php echo esc_html($roi); ?> ROI</div>
-                            <?php endif;
-                        endif; ?>
+                        <?php
+                        $badge_text = '';
+                        if ( $type === 'gp_project' ) { $badge_text = get_post_meta($p->ID, '_gp_growth_roi', true) . ' ROI'; }
+                        elseif ( $type === 'gp_kb' ) { $badge_text = get_post_meta($p->ID, '_kb_intel_level', true); }
+                        elseif ( $type === 'gp_treatment' ) { $badge_text = get_post_meta($p->ID, '_treatment_complexity', true); }
+                        elseif ( $type === 'gp_location' ) { $badge_text = 'ACTIVE NODE'; }
+
+                        if ($badge_text) : ?>
+                            <div class="gp-intel-badge" style="position: absolute; top: 25px; right: 25px; background: var(--primary); color: white; padding: 6px 16px; border-radius: 30px; font-size: 10px; font-weight: 950; z-index: 10; letter-spacing: 1px; text-transform: uppercase;"><?php echo esc_html($badge_text); ?></div>
+                        <?php endif; ?>
 
                         <?php if ( has_post_thumbnail( $p->ID ) ) : ?>
                             <div style="margin: -45px -45px 35px -45px; height: 240px; overflow: hidden; border-radius: 0; position: relative;">
                                 <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 60%, rgba(255,255,255,0.8)); z-index: 1;"></div>
                                 <?php echo get_the_post_thumbnail( $p->ID, 'medium_large', array( 'style' => 'width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;' ) ); ?>
                             </div>
+                        <?php elseif ( $type === 'gp_service' ) :
+                            $icon = get_post_meta($p->ID, '_gp_service_icon', true) ?: '💎'; ?>
+                            <div style="margin: -45px -45px 35px -45px; height: 240px; background: var(--primary-glow); display: flex; align-items: center; justify-content: center; font-size: 6rem;"><?php echo $icon; ?></div>
                         <?php endif; ?>
 
                         <div style="display: flex; flex-direction: column; flex: 1;">
@@ -267,24 +332,43 @@ class GrowthPress_Display {
 
                             <?php if ( $type === 'gp_staff' ) :
                                 $exp = get_post_meta($p->ID, '_staff_expertise', true);
-                                if ($exp) : ?>
-                                    <div style="font-size: 11px; font-weight: 950; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;"><?php echo esc_html($exp); ?></div>
-                                <?php endif;
-                            endif; ?>
+                                $perf_json = get_post_meta($p->ID, '_staff_performance_json', true);
+                                $perf = json_decode($perf_json, true) ?: ['efficiency' => rand(85, 95)];
+                                ?>
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                                    <?php if ($exp) : ?>
+                                        <div style="font-size: 11px; font-weight: 950; color: var(--primary); text-transform: uppercase; letter-spacing: 2px;"><?php echo esc_html($exp); ?></div>
+                                    <?php endif; ?>
+                                    <div style="font-size: 10px; font-weight: 950; background: #F0FDF4; color: #10B981; padding: 4px 10px; border-radius: 10px;"><?php echo $perf['efficiency']; ?>% EFF</div>
+                                </div>
+                            <?php endif; ?>
 
                             <div style="font-size: 15px; opacity: 0.7; line-height: 1.8; margin-bottom: 30px; flex: 1; font-weight: 500;">
                                 <?php echo wp_trim_words( $p->post_content, 22 ); ?>
                             </div>
 
-                            <?php if ( $type === 'gp_project' ) :
+                            <?php
+                            $meta_html = '';
+                            if ( $type === 'gp_project' ) {
                                 $val = get_post_meta($p->ID, '_gp_pipeline_value', true);
-                                if ($val) : ?>
-                                    <div style="margin-bottom: 30px; padding: 20px; background: rgba(79, 70, 229, 0.04); border-radius: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(79, 70, 229, 0.1);">
-                                        <span style="font-size: 10px; font-weight: 950; opacity: 0.5; letter-spacing: 1px;">PIPELINE EQUITY</span>
-                                        <span style="font-size: 16px; font-weight: 950; color: var(--primary);"><?php echo esc_html($val); ?></span>
-                                    </div>
-                                <?php endif;
-                            endif; ?>
+                                if ($val) $meta_html = '<span style="font-size: 10px; font-weight: 950; opacity: 0.5;">PIPELINE EQUITY</span><span style="font-size: 16px; font-weight: 950; color: var(--primary);">'.esc_html($val).'</span>';
+                            } elseif ( $type === 'gp_property' ) {
+                                $price = get_post_meta($p->ID, '_gp_price', true);
+                                if ($price) $meta_html = '<span style="font-size: 10px; font-weight: 950; opacity: 0.5;">ASSET VALUATION</span><span style="font-size: 16px; font-weight: 950; color: #10B981;">$'.number_format($price).'</span>';
+                            } elseif ( $type === 'gp_treatment' ) {
+                                $dur = get_post_meta($p->ID, '_treatment_duration', true);
+                                if ($dur) $meta_html = '<span style="font-size: 10px; font-weight: 950; opacity: 0.5;">CLINICAL DURATION</span><span style="font-size: 16px; font-weight: 950; color: var(--primary);">'.esc_html($dur).'</span>';
+                            } elseif ( $type === 'gp_funnel' ) {
+                                $a = (int)get_post_meta($p->ID, '_hits_A', true);
+                                $b = (int)get_post_meta($p->ID, '_hits_B', true);
+                                $meta_html = '<span style="font-size: 10px; font-weight: 950; opacity: 0.5;">TRAFFIC VELOCITY</span><span style="font-size: 16px; font-weight: 950; color: var(--primary);">'.($a+$b).' HITS</span>';
+                            }
+
+                            if ($meta_html) : ?>
+                                <div style="margin-bottom: 30px; padding: 20px; background: rgba(79, 70, 229, 0.04); border-radius: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(79, 70, 229, 0.1);">
+                                    <?php echo $meta_html; ?>
+                                </div>
+                            <?php endif; ?>
 
                             <a href="<?php echo get_permalink( $p->ID ); ?>" class="gp-btn" style="text-align: center; padding: 18px; font-size: 13px; border-radius: 18px; background: var(--secondary); color: white !important; font-weight: 800; letter-spacing: 0.5px;">EXPLORE INTEL NODE</a>
                         </div>

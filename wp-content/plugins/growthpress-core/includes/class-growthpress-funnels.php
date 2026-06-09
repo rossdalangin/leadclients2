@@ -170,8 +170,16 @@ class GrowthPress_Funnels {
         // Log the hit autonomously
         $this->track_variation_hit($a['id'], $variation);
 
+        $admin_bar = '';
+        if ( current_user_can('manage_options') ) {
+            $admin_bar = '<div style="background:var(--secondary); color:white; padding:10px 20px; font-size:10px; font-weight:950; text-transform:uppercase; letter-spacing:2px; display:flex; justify-content:space-between; align-items:center;">
+                <span>🎯 A/B Node: Variation '.$variation.' Active</span>
+                <span>CVR: '.round(($variation === 'A' ? $rateA : $rateB)*100, 2).'%</span>
+            </div>';
+        }
+
         $content = get_post_meta($a['id'], "_content_$variation", true);
-        return do_shortcode($content ?: "<!-- Funnel node $variation active -->");
+        return $admin_bar . do_shortcode($content ?: "<!-- Funnel node $variation active -->");
     }
 
     public function render_funnel_step( $atts ) {

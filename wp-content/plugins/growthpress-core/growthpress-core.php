@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	return;
 }
 
-define( 'GROWTHPRESS_CORE_VERSION', '4.5.0' );
+define( 'GROWTHPRESS_CORE_VERSION', '6.3.0' );
 define( 'GROWTHPRESS_CORE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'GROWTHPRESS_CORE_URL', plugin_dir_url( __FILE__ ) );
 
