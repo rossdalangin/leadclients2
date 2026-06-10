@@ -210,6 +210,8 @@ body {
                 0 20px 80px var(--primary-glow),
                 inset 0 2px 2px rgba(255,255,255,1);
     border-color: rgba(var(--surface-rgb), 1);
+    backdrop-filter: blur(calc(var(--blur) * 1.5)) saturate(250%);
+    -webkit-backdrop-filter: blur(calc(var(--blur) * 1.5)) saturate(250%);
     z-index: 10;
 }
 
@@ -353,24 +355,36 @@ body.gp-design-female .text-gradient {
 /* WordPress Block Optimization v6.0 */
 .wp-block-columns {
     display: flex;
-    margin-bottom: 2.5rem;
+    margin-bottom: 3.5rem;
     flex-wrap: wrap;
     gap: 2.5rem;
+    align-items: stretch;
 }
+
+.wp-block-columns.are-vertically-aligned-center { align-items: center; }
+.wp-block-columns.are-vertically-aligned-bottom { align-items: flex-end; }
 
 .wp-block-column {
     flex: 1 0 0%;
     min-width: 0;
     word-break: break-word;
     overflow-wrap: break-word;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Elite Layout Optimization v6.3: High-Fidelity Block Architecture */
 .wp-block-columns:not([class*="has-"]) > .wp-block-column,
 .wp-block-column:only-of-type {
-    flex: 0 0 100% !important;
+    flex: 1 1 100% !important;
     max-width: 100% !important;
     width: 100% !important;
+}
+
+/* Nested Column Refinement: Handle recursive grid scenarios */
+.wp-block-column > .wp-block-columns {
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+    gap: 1.5rem;
 }
 
 /* Fluid Expansion for Solitary Glass Cards */
@@ -381,13 +395,15 @@ body.gp-design-female .text-gradient {
     flex: 1 1 100%;
 }
 
-/* Maintain Geometric Room for Sibling Nodes */
-.wp-block-columns.has-2-columns > .wp-block-column { flex: 0 0 calc(50% - 1.25rem); }
-.wp-block-columns.has-3-columns > .wp-block-column { flex: 0 0 calc(33.33% - 1.66rem); }
+/* High-Precision Grid Calculations with Gap Compensation */
+.wp-block-columns.has-2-columns > .wp-block-column { flex: 1 1 calc(50% - 1.25rem); max-width: calc(50% - 1.25rem); }
+.wp-block-columns.has-3-columns > .wp-block-column { flex: 1 1 calc(33.33% - 1.67rem); max-width: calc(33.33% - 1.67rem); }
+.wp-block-columns.has-4-columns > .wp-block-column { flex: 1 1 calc(25% - 1.88rem); max-width: calc(25% - 1.88rem); }
 
-/* Ensure room for sibling columns when multiple exist */
-.wp-block-columns.has-2-columns > .wp-block-column { flex-basis: calc(50% - 1.25rem); }
-.wp-block-columns.has-3-columns > .wp-block-column { flex-basis: calc(33.33% - 1.66rem); }
+/* Individual Column Vertical Alignment */
+.wp-block-column.is-vertically-aligned-center { align-self: center; }
+.wp-block-column.is-vertically-aligned-bottom { align-self: flex-end; }
+.wp-block-column.is-vertically-aligned-top { align-self: flex-start; }
 
 .wp-block-columns.is-not-stacked-on-mobile > .wp-block-column {
     flex-basis: 0;

@@ -61,21 +61,24 @@ jQuery(document).ready(function($) {
         revealObserver.observe(this);
     });
 
-    // Ultra Magnetic Physics v6.3 (Spring-based Interaction)
-    $(document).on('mousemove', '.gp-btn, #gp-chat-launcher, .staff-avatar', function(e) {
+    // Ultra Magnetic Physics v6.3 (High-Fidelity Spring Interaction)
+    $(document).on('mousemove', '.gp-btn, #gp-chat-launcher, .staff-avatar, .gp-magnetic', function(e) {
         const rect = this.getBoundingClientRect();
-        const x = (e.clientX - rect.left - rect.width / 2) / 3.5;
-        const y = (e.clientY - rect.top - rect.height / 2) / 3.5;
+        const x = (e.clientX - rect.left - rect.width / 2) / 3;
+        const y = (e.clientY - rect.top - rect.height / 2) / 3;
+
         $(this).css({
-            'transform': `translate(${x}px, ${y}px) scale(1.08) rotate(${x/10}deg)`,
-            'box-shadow': '0 40px 80px rgba(0,0,0,0.18)',
-            'transition': 'transform 0.1s cubic-bezier(0.23, 1, 0.32, 1)'
+            'transform': `translate(${x}px, ${y}px) scale(1.06) rotate(${x/12}deg)`,
+            'box-shadow': '0 30px 60px rgba(0,0,0,0.2), 0 0 20px var(--primary-glow)',
+            'transition': 'transform 0.15s cubic-bezier(0.33, 1, 0.68, 1)',
+            'z-index': '50'
         });
-    }).on('mouseleave', '.gp-btn, #gp-chat-launcher, .staff-avatar', function() {
+    }).on('mouseleave', '.gp-btn, #gp-chat-launcher, .staff-avatar, .gp-magnetic', function() {
         $(this).css({
             'transform': '',
             'box-shadow': '',
-            'transition': 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
+            'transition': 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+            'z-index': ''
         });
     });
 
