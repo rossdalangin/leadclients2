@@ -83,6 +83,57 @@
         </div>
     </div>
 
+    <!-- AI Strategic Roadmap & Node Connectivity -->
+    <div class="glass-card gp-reveal" style="margin-bottom:50px; padding:50px; border-radius:45px; background:linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,252,0.95)); border:1px solid rgba(255,255,255,0.8); box-shadow:0 30px 60px -15px rgba(0,0,0,0.05);">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:40px;">
+            <div>
+                <h3 style="margin:0; font-size:24px; font-weight:950; letter-spacing:-0.04em;">Ecosystem Strategic Roadmap</h3>
+                <p style="font-size:14px; opacity:0.6; margin-top:8px; font-weight:500;">Visualizing the interconnected intelligence flow across the 14-node Business OS.</p>
+            </div>
+            <div style="display:flex; gap:12px;">
+                <div style="background:var(--primary-glow); color:var(--primary); padding:8px 16px; border-radius:12px; font-size:10px; font-weight:950; letter-spacing:1px;">NODES: SYNCHRONIZED</div>
+                <div style="background:#F0FDF4; color:#10B981; padding:8px 16px; border-radius:12px; font-size:10px; font-weight:950; letter-spacing:1px;">AI: OPTIMIZED</div>
+            </div>
+        </div>
+
+        <div style="position:relative; height:180px; display:flex; justify-content:space-between; align-items:center; padding:0 40px; margin-top:60px; margin-bottom:20px;">
+            <!-- Connector Lines -->
+            <div style="position:absolute; top:50%; left:80px; right:40px; height:2px; background:linear-gradient(90deg, var(--primary) 0%, #10B981 33%, #F59E0B 66%, #EF4444 100%); opacity:0.1; z-index:1;"></div>
+
+            <div style="position:relative; z-index:2; text-align:center; width:120px;">
+                <div style="width:70px; height:70px; background:var(--primary); border-radius:24px; margin:0 auto 20px; display:flex; align-items:center; justify-content:center; box-shadow:0 15px 35px var(--primary-glow); transition:transform 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                    <span class="dashicons dashicons-id-alt" style="color:white; font-size:32px; width:32px; height:32px;"></span>
+                </div>
+                <div style="font-size:10px; font-weight:950; letter-spacing:1px; color:var(--secondary); opacity:0.4;">01. INTAKE</div>
+                <div style="font-size:13px; font-weight:900; margin-top:5px;">Leads & Triage</div>
+            </div>
+
+            <div style="position:relative; z-index:2; text-align:center; width:120px;">
+                <div style="width:70px; height:70px; background:#10B981; border-radius:24px; margin:0 auto 20px; display:flex; align-items:center; justify-content:center; box-shadow:0 15px 35px rgba(16,185,129,0.25); transition:transform 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                    <span class="dashicons dashicons-calendar-alt" style="color:white; font-size:32px; width:32px; height:32px;"></span>
+                </div>
+                <div style="font-size:10px; font-weight:950; letter-spacing:1px; color:var(--secondary); opacity:0.4;">02. CONVERSION</div>
+                <div style="font-size:13px; font-weight:900; margin-top:5px;">Bookings & Deals</div>
+            </div>
+
+            <div style="position:relative; z-index:2; text-align:center; width:120px;">
+                <div style="width:70px; height:70px; background:#F59E0B; border-radius:24px; margin:0 auto 20px; display:flex; align-items:center; justify-content:center; box-shadow:0 15px 35px rgba(245,158,11,0.25); transition:transform 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                    <span class="dashicons dashicons-portfolio" style="color:white; font-size:32px; width:32px; height:32px;"></span>
+                </div>
+                <div style="font-size:10px; font-weight:950; letter-spacing:1px; color:var(--secondary); opacity:0.4;">03. EXECUTION</div>
+                <div style="font-size:13px; font-weight:900; margin-top:5px;">Projects & Tasks</div>
+            </div>
+
+            <div style="position:relative; z-index:2; text-align:center; width:120px;">
+                <div style="width:70px; height:70px; background:#EF4444; border-radius:24px; margin:0 auto 20px; display:flex; align-items:center; justify-content:center; box-shadow:0 15px 35px rgba(239,68,68,0.25); transition:transform 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                    <span class="dashicons dashicons-money-alt" style="color:white; font-size:32px; width:32px; height:32px;"></span>
+                </div>
+                <div style="font-size:10px; font-weight:950; letter-spacing:1px; color:var(--secondary); opacity:0.4;">04. REALIZATION</div>
+                <div style="font-size:13px; font-weight:900; margin-top:5px;">ROI & Equity</div>
+            </div>
+        </div>
+    </div>
+
     <div class="dashboard-grid">
         <div class="main-col">
             <!-- Strategic Performance Engine Elite -->

@@ -26,6 +26,7 @@ class GrowthPress_Sample_Data {
         self::generate_inventory();
         self::generate_staff($lead_ids);
         self::generate_reviews($project_ids);
+        self::generate_treatments();
 
         // 2. Call niche-specific sample data
         $class_name = 'GrowthPress_' . str_replace(' ', '', ucwords(str_replace('-', ' ', $niche)));
@@ -548,6 +549,28 @@ class GrowthPress_Sample_Data {
                     update_post_meta($id, '_related_project', $project_ids[$i % count($project_ids)]);
                 }
                 $i++;
+            }
+        }
+    }
+
+    private static function generate_treatments() {
+        $treatments = array(
+            'Advanced Neural Triage' => array('15 mins', 'Routine'),
+            'Ecosystem Migration Protocol' => array('45 mins', 'Standard'),
+            'High-Stakes Clinical Audit' => array('90 mins', 'Elite'),
+            'Structural ROI Analysis' => array('60 mins', 'Advanced')
+        );
+        foreach ($treatments as $title => $data) {
+            $id = wp_insert_post(array(
+                'post_title'   => $title,
+                'post_content' => 'Standardized elite protocol for ' . strtolower($title) . '. This procedure ensures maximum system fidelity and operational excellence.',
+                'post_type'    => 'gp_treatment',
+                'post_status'  => 'publish'
+            ));
+            if ($id) {
+                update_post_meta($id, '_gp_is_sample', '1');
+                update_post_meta($id, '_treatment_duration', $data[0]);
+                update_post_meta($id, '_treatment_complexity', $data[1]);
             }
         }
     }

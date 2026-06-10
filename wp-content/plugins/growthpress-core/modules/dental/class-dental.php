@@ -13,14 +13,16 @@ class GrowthPress_Dental {
     }
 
     public function register_cpts() {
-        register_post_type('gp_treatment', array(
-            'labels'      => array('name' => 'Treatments', 'singular_name' => 'Treatment'),
-            'public'      => true,
-            'show_ui'     => true,
-            'menu_icon'   => 'dashicons-heart',
-            'supports'    => array('title', 'editor', 'thumbnail', 'excerpt'),
-            'rewrite'     => array('slug' => 'treatments')
-        ));
+        if ( ! post_type_exists('gp_treatment') ) {
+            register_post_type('gp_treatment', array(
+                'labels'      => array('name' => 'Treatments', 'singular_name' => 'Treatment'),
+                'public'      => true,
+                'show_ui'     => true,
+                'menu_icon'   => 'dashicons-heart',
+                'supports'    => array('title', 'editor', 'thumbnail', 'excerpt'),
+                'rewrite'     => array('slug' => 'treatments')
+            ));
+        }
     }
 
     public function add_dental_meta_boxes() {

@@ -18,6 +18,7 @@ class GrowthPress_Settings {
         add_action( 'wp_ajax_gp_remove_sample_data', array( $this, 'ajax_remove_sample_data' ) );
         add_action( 'wp_ajax_gp_clear_activity_logs', array( $this, 'ajax_clear_activity_logs' ) );
         add_action( 'wp_ajax_gp_system_reset', array( $this, 'ajax_system_reset' ) );
+        add_action( 'wp_ajax_gp_run_diagnostics', array( $this, 'ajax_run_diagnostics' ) );
     }
 
     public function add_settings_menu() {
@@ -123,6 +124,52 @@ class GrowthPress_Settings {
         $res = $ai->call_ai("Ping", "Health Check");
         if ( is_wp_error($res) ) wp_send_json_error( $res->get_error_message() );
         wp_send_json_success( "Connection successful! " . strtoupper(get_option('growthpress_ai_provider', 'openai')) . " engine is online." );
+    }
+
+    public function ajax_run_diagnostics() {
+        if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error('Unauthorized');
+        check_ajax_referer( 'gp_admin_nonce', 'gp_nonce' );
+
+        $results = array();
+        $cpts = array('gp_lead', 'gp_appointment', 'gp_property', 'gp_review', 'gp_proposal', 'gp_transaction', 'gp_funnel', 'gp_location', 'gp_task', 'gp_kb', 'gp_project', 'gp_service', 'gp_treatment', 'gp_staff');
+
+        foreach($cpts as $type) {
+            $results['nodes'][$type] = post_type_exists($type);
+        }
+
+        $shortcodes = array('gp_lead_form', 'gp_booking_form', 'gp_client_portal', 'gp_ecosystem_radar', 'gp_kb_grid', 'gp_service_grid');
+        foreach($shortcodes as $sc) {
+            $results['shortcodes'][$sc] = shortcode_exists($sc);
+        }
+
+        $results['ai_link'] = !is_wp_error(GrowthPress_AI::get_instance()->call_ai("Ping", "Diagnostic"));
+
+        ob_start();
+        ?>
+        <div style="text-align:left; padding:20px;">
+            <h4 style="margin-top:0;">Ecosystem Node Integrity</h4>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:30px;">
+                <?php foreach($results['nodes'] as $node => $status): ?>
+                    <div style="font-size:12px; font-weight:700;">
+                        <?php echo $status ? '✅' : '❌'; ?> <?php echo strtoupper($node); ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <h4>Shortcode Availability</h4>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:30px;">
+                <?php foreach($results['shortcodes'] as $sc => $status): ?>
+                    <div style="font-size:12px; font-weight:700;">
+                        <?php echo $status ? '✅' : '❌'; ?> [<?php echo $sc; ?>]
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <div style="padding:20px; background:<?php echo $results['ai_link'] ? '#F0FDF4' : '#FEF2F2'; ?>; border-radius:15px; text-align:center; font-weight:950; letter-spacing:1px;">
+                NEURAL UPLINK: <?php echo $results['ai_link'] ? 'SYNCHRONIZED' : 'DISCONNECTED'; ?>
+            </div>
+        </div>
+        <?php
+        $html = ob_get_clean();
+        wp_send_json_success($html);
     }
 
     public function render_settings() {
@@ -408,6 +455,11 @@ class GrowthPress_Settings {
                             <p style="font-size:13px; opacity:0.7; margin-bottom:30px;">Purge the system activity log history. This action only affects the log entries, not actual system data or CRM leads.</p>
                             <button type="button" class="gp-btn" onclick="runTool('gp_clear_activity_logs')" style="background:#64748B; color:white; width:100%; height:60px; border-radius:15px;">Clear Activity Log</button>
                         </div>
+                        <div style="padding:40px; background:rgba(16,185,129,0.05); border-radius:30px; border:1px solid rgba(16,185,129,0.1);">
+                            <h4 style="margin-top:0;">Ecosystem Diagnostics</h4>
+                            <p style="font-size:13px; opacity:0.7; margin-bottom:30px;">Verify the integrity of all 14 Custom Post Types and core shortcode registration status across the OS.</p>
+                            <button type="button" class="gp-btn" onclick="runDiagnostics()" style="background:#10B981; color:white; width:100%; height:60px; border-radius:15px;">Run System Audit</button>
+                        </div>
                     </div>
 
                     <div style="margin-top:40px; padding:60px; background:linear-gradient(135deg, rgba(37,99,235,0.1) 0%, rgba(124,58,237,0.1) 100%); border-radius:40px; border:1px solid var(--primary); text-align:center;">
@@ -436,6 +488,16 @@ class GrowthPress_Settings {
                         res.text(response.data).css({'background':'#F0FDF4', 'color':'#10B981'});
                     } else {
                         res.text(response.data || 'Execution failed.').css({'background':'#FEF2F2', 'color':'#EF4444'});
+                    }
+                });
+            }
+            function runDiagnostics() {
+                const res = jQuery('#tool-res').fadeIn().html('RUNNING ECOSYSTEM AUDIT...').css({'background':'#F8FAFC', 'color':'#64748B'});
+                jQuery.post(ajaxurl, { action: 'gp_run_diagnostics', gp_nonce: '<?php echo wp_create_nonce("gp_admin_nonce"); ?>' }, function(response) {
+                    if (response.success) {
+                        res.html(response.data).css({'background':'#FFF', 'color':'#1E293B', 'border':'1px solid #E2E8F0'});
+                    } else {
+                        res.text('Audit Failed.').css({'background':'#FEF2F2', 'color':'#EF4444'});
                     }
                 });
             }

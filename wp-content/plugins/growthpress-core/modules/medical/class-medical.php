@@ -6,6 +6,61 @@ class GrowthPress_Medical {
     public function __construct() {
         add_shortcode('gp_symptom_checker', array($this, 'render_symptom_checker'));
         add_shortcode('gp_medical_intake', array($this, 'render_medical_intake'));
+        add_action('init', array($this, 'register_cpts'));
+        add_action('add_meta_boxes', array($this, 'add_medical_meta_boxes'));
+        add_action('save_post', array($this, 'save_medical_meta'));
+    }
+
+    public function register_cpts() {
+        if ( ! post_type_exists('gp_treatment') ) {
+            register_post_type('gp_treatment', array(
+                'labels'      => array('name' => 'Treatments', 'singular_name' => 'Treatment'),
+                'public'      => true,
+                'show_ui'     => true,
+                'menu_icon'   => 'dashicons-heart',
+                'supports'    => array('title', 'editor', 'thumbnail', 'excerpt'),
+                'rewrite'     => array('slug' => 'treatments')
+            ));
+        }
+    }
+
+    public function add_medical_meta_boxes() {
+        add_meta_box('gp_treatment_details', '🩺 Clinical Treatment Execution Protocol', array($this, 'render_treatment_meta'), 'gp_treatment', 'normal', 'high');
+    }
+
+    public function render_treatment_meta($post) {
+        $duration = get_post_meta($post->ID, '_treatment_duration', true) ?: '60 mins';
+        $complexity = get_post_meta($post->ID, '_treatment_complexity', true) ?: 'Standard';
+        ?>
+        <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #10b981;">
+            <p style="margin: 0; font-size: 13px; color: #166534;"><strong>Clinical Protocol:</strong> Define the operational parameters for this medical treatment. These values inform the 'Health Intelligence Assistant' and set patient expectations during triage.</p>
+        </div>
+        <table class="form-table">
+            <tr>
+                <th><label>Average Duration</label></th>
+                <td><input type="text" name="gp_treatment_duration" value="<?php echo esc_attr($duration); ?>" class="regular-text" placeholder="e.g. 90 mins"></td>
+            </tr>
+            <tr>
+                <th><label>Clinical Complexity</label></th>
+                <td>
+                    <select name="gp_treatment_complexity" style="width:100%;">
+                        <option value="Routine" <?php selected($complexity, 'Routine'); ?>>Routine / Diagnostic</option>
+                        <option value="Standard" <?php selected($complexity, 'Standard'); ?>>Standard Clinical</option>
+                        <option value="Advanced" <?php selected($complexity, 'Advanced'); ?>>Advanced Surgical</option>
+                        <option value="Elite" <?php selected($complexity, 'Elite'); ?>>Elite Specialist Tier</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <?php
+    }
+
+    public function save_medical_meta($post_id) {
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+        if (isset($_POST['gp_treatment_duration'])) {
+            update_post_meta($post_id, '_treatment_duration', sanitize_text_field($_POST['gp_treatment_duration']));
+            update_post_meta($post_id, '_treatment_complexity', sanitize_text_field($_POST['gp_treatment_complexity']));
+        }
     }
 
     public function render_medical_intake() {
