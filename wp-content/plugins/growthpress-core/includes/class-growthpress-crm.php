@@ -168,7 +168,7 @@ class GrowthPress_CRM {
 
     public function handle_lead_submission() {
         if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'gp_lead_nonce' ) ) {
-            wp_send_json_error( 'Security failed.' );
+            wp_send_json_error( 'Calibration Error: Security node failed to handshake.' );
         }
         $name  = isset( $_POST['lead_name'] ) ? sanitize_text_field( $_POST['lead_name'] ) : '';
         $email = isset( $_POST['lead_email'] ) ? sanitize_email( $_POST['lead_email'] ) : '';
@@ -177,11 +177,16 @@ class GrowthPress_CRM {
         $msg   = isset( $_POST['lead_msg'] ) ? sanitize_textarea_field( $_POST['lead_msg'] ) : '';
 
         if ( empty( $name ) || empty( $email ) ) {
-            wp_send_json_error( 'Required fields missing.' );
+            wp_send_json_error( 'Handshake Incomplete: Identity and communication nodes required.' );
+        }
+
+        if ( ! is_email($email) ) {
+            wp_send_json_error( 'Data Protocol Error: Invalid email node detected.' );
         }
 
         $ai = GrowthPress_AI::get_instance();
-        if ( $ai->is_spam($msg, $name, $email) ) wp_send_json_error("Flagged as spam.");
+        if ( $ai->is_spam($msg, $name, $email) ) wp_send_json_error("Triage Notice: Inquiry flagged by anti-spam neural node.");
+
         $lead_id = wp_insert_post(array( 'post_title' => $name, 'post_content' => $msg, 'post_type' => 'gp_lead', 'post_status' => 'publish' ));
         update_post_meta($lead_id, '_lead_email', $email);
         update_post_meta($lead_id, '_lead_phone', $phone);

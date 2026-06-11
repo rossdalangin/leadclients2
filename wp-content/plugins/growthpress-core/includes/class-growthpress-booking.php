@@ -237,7 +237,18 @@ class GrowthPress_Booking {
 
     public function handle_booking_submission() {
         parse_str($_POST['formData'], $data);
-        if ( ! wp_verify_nonce($data['nonce'], 'gp_booking_nonce') ) wp_send_json_error();
+        if ( ! isset($data['nonce']) || ! wp_verify_nonce($data['nonce'], 'gp_booking_nonce') ) {
+            wp_send_json_error('Security Node Calibration Error.');
+        }
+
+        if ( empty($data['client_name']) || empty($data['client_email']) || empty($data['date']) ) {
+            wp_send_json_error('Incomplete data node sequence. Core fields required.');
+        }
+
+        if ( ! is_email($data['client_email']) ) {
+            wp_send_json_error('Invalid email node protocol.');
+        }
+
         $id = wp_insert_post( array( 'post_title' => "Appointment: " . $data['client_name'], 'post_type' => 'gp_appointment', 'post_status' => 'publish' ) );
         if ( $id ) {
             update_post_meta( $id, '_appointment_date', $data['date'] . ' ' . $data['time'] );

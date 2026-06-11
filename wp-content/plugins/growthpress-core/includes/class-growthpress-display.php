@@ -279,43 +279,32 @@ class GrowthPress_Display {
         ob_start(); ?>
         <style>
             .gp-grid-item {
-                transition: transform 0.6s var(--ease-out-expo), box-shadow 0.6s ease, border-color 0.4s ease;
-                backdrop-filter: blur(var(--blur));
-                -webkit-backdrop-filter: blur(var(--blur));
-                border: 1px solid var(--glass-border);
-                background: linear-gradient(135deg, rgba(var(--surface-rgb), 0.7) 0%, rgba(var(--surface-rgb), 0.4) 100%);
+                transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
+                backdrop-filter: blur(15px);
+                -webkit-backdrop-filter: blur(15px);
+                border: 1px solid rgba(255, 255, 255, 0.15);
             }
             .gp-grid-item:hover {
-                transform: translateY(-15px) scale(1.02);
-                box-shadow: var(--shadow-xl), 0 20px 60px var(--primary-glow);
+                transform: translateY(-10px);
+                box-shadow: 0 30px 60px -12px rgba(50, 50, 93, 0.25), 0 18px 36px -18px rgba(0, 0, 0, 0.3);
                 border-color: var(--primary);
-                background: linear-gradient(135deg, rgba(var(--surface-rgb), 0.9) 0%, rgba(var(--surface-rgb), 0.7) 100%);
             }
             .gp-grid-item .gp-intel-badge {
-                transition: all 0.4s var(--ease-out-expo);
+                transition: all 0.3s ease;
             }
             .gp-grid-item:hover .gp-intel-badge {
-                transform: scale(1.1) translateX(-5px);
-                box-shadow: 0 0 20px var(--primary-glow);
-            }
-            .gp-grid-item .gp-btn-mini {
-                opacity: 0;
-                transform: translateY(10px);
-                transition: all 0.4s var(--ease-out-expo);
-            }
-            .gp-grid-item:hover .gp-btn-mini {
-                opacity: 1;
-                transform: translateY(0);
+                transform: scale(1.1);
+                box-shadow: 0 0 15px var(--primary-glow);
             }
         </style>
-        <div class="gp-content-grid-wrapper" style="margin: 120px 0;">
-            <div style="text-align: center; margin-bottom: 80px;">
-                <div style="font-size: 11px; font-weight: 950; color: var(--primary); text-transform: uppercase; letter-spacing: 5px; margin-bottom: 25px;">ECOSYSTEM NODES</div>
-                <h2 class="text-gradient" style="font-size: 4rem; margin: 0; line-height: 1;"><?php echo esc_html( $title ); ?></h2>
+        <div class="gp-content-grid-wrapper" style="margin: 80px 0;">
+            <div style="text-align: center; margin-bottom: 60px;">
+                <div style="font-size: 11px; font-weight: 900; color: var(--primary); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px;">ECOSYSTEM NODES</div>
+                <h2 class="text-gradient" style="font-size: 3.5rem; margin: 0; line-height: 1.1;"><?php echo esc_html( $title ); ?></h2>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 50px;">
-                <?php $i = 0; foreach ( $posts as $p ) : $i++; ?>
-                    <div class="glass-card gp-grid-item gp-reveal" style="padding: 50px; border-radius: 45px; display: flex; flex-direction: column; position: relative; overflow: hidden; animation-delay: <?php echo ($i * 0.1); ?>s;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 40px;">
+                <?php foreach ( $posts as $p ) : ?>
+                    <div class="glass-card gp-grid-item gp-reveal" style="padding: 45px; border-radius: 40px; display: flex; flex-direction: column; position: relative; overflow: hidden; background: rgba(255, 255, 255, 0.65);">
 
                         <?php
                         $badge_text = '';
@@ -329,13 +318,13 @@ class GrowthPress_Display {
                         <?php endif; ?>
 
                         <?php if ( has_post_thumbnail( $p->ID ) ) : ?>
-                            <div style="margin: -50px -50px 40px -50px; height: 280px; overflow: hidden; border-radius: 0; position: relative;">
-                                <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, rgba(var(--surface-rgb), 0.9)); z-index: 1;"></div>
-                                <?php echo get_the_post_thumbnail( $p->ID, 'medium_large', array( 'style' => 'width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--ease-out-expo);' ) ); ?>
+                            <div style="margin: -45px -45px 35px -45px; height: 240px; overflow: hidden; border-radius: 0; position: relative;">
+                                <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 60%, rgba(255,255,255,0.8)); z-index: 1;"></div>
+                                <?php echo get_the_post_thumbnail( $p->ID, 'medium_large', array( 'style' => 'width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;' ) ); ?>
                             </div>
                         <?php elseif ( $type === 'gp_service' ) :
                             $icon = get_post_meta($p->ID, '_gp_service_icon', true) ?: '💎'; ?>
-                            <div style="margin: -50px -50px 40px -50px; height: 280px; background: var(--primary-glow); display: flex; align-items: center; justify-content: center; font-size: 7rem; border-bottom: 1px solid var(--border);"><?php echo $icon; ?></div>
+                            <div style="margin: -45px -45px 35px -45px; height: 240px; background: var(--primary-glow); display: flex; align-items: center; justify-content: center; font-size: 6rem;"><?php echo $icon; ?></div>
                         <?php endif; ?>
 
                         <div style="display: flex; flex-direction: column; flex: 1;">
@@ -381,7 +370,7 @@ class GrowthPress_Display {
                                 </div>
                             <?php endif; ?>
 
-                            <a href="<?php echo get_permalink( $p->ID ); ?>" class="gp-btn gp-btn-mini" style="text-align: center; padding: 15px; font-size: 11px; border-radius: 15px; background: var(--secondary); color: white !important; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;">Analyze Node Intelligence</a>
+                            <a href="<?php echo get_permalink( $p->ID ); ?>" class="gp-btn" style="text-align: center; padding: 18px; font-size: 13px; border-radius: 18px; background: var(--secondary); color: white !important; font-weight: 800; letter-spacing: 0.5px;">EXPLORE INTEL NODE</a>
                         </div>
                     </div>
                 <?php endforeach; ?>

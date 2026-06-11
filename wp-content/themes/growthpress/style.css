@@ -22,17 +22,10 @@ Text Domain: growthpress
     --border: rgba(0,0,0,0.05);
     --glass-border: rgba(255,255,255,0.7);
     --radius: 32px;
-    --blur: 50px;
-    --speed: 0.7s;
+    --blur: 40px;
+    --speed: 0.8s;
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
     --transition: var(--speed) var(--ease-out-expo);
-
-    /* Elite Spacing System */
-    --space-xs: 0.5rem;
-    --space-sm: 1rem;
-    --space-md: 2rem;
-    --space-lg: 4rem;
-    --space-xl: 8rem;
 
     /* Fluid Shadows System */
     --shadow-sm: 0 10px 20px rgba(0,0,0,0.02);
@@ -60,7 +53,7 @@ Text Domain: growthpress
 body.gp-design-male {
     --primary: #0F172A;
     --primary-alt: #020617;
-    --primary-glow: rgba(15, 23, 42, 0.25);
+    --primary-glow: rgba(15, 23, 42, 0.2);
     --secondary: #2563EB;
     --accent: #38BDF8;
     --bg: #0F172A;
@@ -68,18 +61,17 @@ body.gp-design-male {
     --surface-rgb: 30, 41, 59;
     --text: #F1F5F9;
     --text-muted: #94A3B8;
-    --border: rgba(255,255,255,0.1);
-    --glass-border: rgba(255,255,255,0.15);
-    --radius: 12px;
+    --border: rgba(255,255,255,0.08);
+    --glass-border: rgba(255,255,255,0.1);
+    --radius: 8px;
     --font-heading: 'Lexend', 'Inter', sans-serif;
-    --blur: 30px;
 }
 
 /* Personality Node: Female Focus - Soft, Ethereal, High-Luxe */
 body.gp-design-female {
     --primary: #BE185D;
     --primary-alt: #9D174D;
-    --primary-glow: rgba(190, 24, 93, 0.15);
+    --primary-glow: rgba(190, 24, 93, 0.12);
     --secondary: #B45309; /* Deep Gold */
     --accent: #F472B6;
     --bg: #FFF1F2;
@@ -87,11 +79,10 @@ body.gp-design-female {
     --surface-rgb: 255, 255, 255;
     --text: #4C0519;
     --text-muted: #9D174D;
-    --border: rgba(190, 24, 93, 0.1);
-    --glass-border: rgba(255, 255, 255, 0.9);
-    --radius: 80px;
+    --border: rgba(190, 24, 93, 0.05);
+    --glass-border: rgba(255,255,255,1);
+    --radius: 64px;
     --font-heading: 'Inter', sans-serif;
-    --blur: 60px;
 }
 
 body.dark-theme {
@@ -235,22 +226,10 @@ body.gp-design-female .glass-card {
 }
 
 /* Fluid Typography Scaled v6.3 */
-h1 { font-family: var(--font-heading, 'Inter'); font-size: var(--step-5); line-height: 0.85; font-weight: 950; letter-spacing: -0.06em; text-wrap: balance; margin-bottom: var(--space-md); }
-h2 { font-family: var(--font-heading, 'Inter'); font-size: var(--step-4); font-weight: 900; letter-spacing: -0.05em; line-height: 0.95; text-wrap: balance; margin-bottom: var(--space-sm); }
-h3 { font-size: var(--step-2); font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: var(--space-xs); }
-h4, h5, h6 { font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
-p { font-size: var(--step-0); line-height: 1.8; color: var(--text); opacity: 0.8; margin-bottom: 1.75rem; font-weight: 500; }
-
-/* Elite Layout Utilities */
-.section-padding { padding-top: var(--space-xl); padding-bottom: var(--space-xl); }
-.section-header { margin-bottom: var(--space-lg); text-align: center; }
-.v-align-center { display: flex; align-items: center; }
-.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); }
-.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); }
-
-@media (max-width: 1024px) {
-    .grid-2, .grid-3 { grid-template-columns: 1fr; }
-}
+h1 { font-family: var(--font-heading, 'Inter'); font-size: var(--step-5); line-height: 0.82; font-weight: 950; letter-spacing: -0.08em; text-wrap: balance; }
+h2 { font-family: var(--font-heading, 'Inter'); font-size: var(--step-4); font-weight: 900; letter-spacing: -0.06em; line-height: 0.92; text-wrap: balance; }
+h3 { font-size: var(--step-2); font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; }
+h4, h5, h6 { font-weight: 800; letter-spacing: -0.02em; }
 
 body.gp-design-male h1, body.gp-design-male h2 { text-transform: uppercase; letter-spacing: -0.05em; }
 body.gp-design-female h1, body.gp-design-female h2 { letter-spacing: -0.02em; font-weight: 800; }

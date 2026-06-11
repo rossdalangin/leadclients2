@@ -303,6 +303,8 @@ class GrowthPress_Proposals {
 
     public function handle_proposal_acceptance() {
         $proposal_id = intval($_POST['proposal_id']);
+        if ( ! $proposal_id ) wp_send_json_error('Proposal Node Not Found.');
+
         update_post_meta($proposal_id, '_gp_proposal_status', 'Accepted');
 
         // Move Lead to Closed
