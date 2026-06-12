@@ -1,5 +1,7 @@
 # GrowthPress v6.3 Elite User Guide
 
+> **Note:** For a step-by-step walkthrough of the entire system setup and daily operations, please refer to the **[Master Tutorial & Operational Blueprint](master-tutorial.md)**.
+
 ## Introduction: The Business OS Concept
 GrowthPress functions as a **Business Operating System** (BOS). It is designed to replace disconnected CRMs, booking tools, and manual triage with one unified, AI-synchronized architecture.
 

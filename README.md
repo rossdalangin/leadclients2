@@ -47,6 +47,7 @@ A fully synchronized relational database architecture powering your business:
 
 ## 📂 Documentation & Agency Sales Kit
 For technical specs and sales materials, refer to the `/docs` library:
+- **`master-tutorial.md`**: Step-by-step operational blueprint for system dominance.
 - `user-guide.md`: Advanced setup and system maintenance protocols.
 - `marketing/pitch-deck.md`: High-ticket sales slides featuring the Elite v6.3 modules.
 - `master-prompt-library.md`: Documentation of the system's "Instruction Layer."

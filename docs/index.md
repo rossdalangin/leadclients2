@@ -2,6 +2,9 @@
 
 Welcome to the comprehensive documentation library for the GrowthPress Business Operating System Elite.
 
+## 🚀 Getting Started
+- **[Master Tutorial & Operational Blueprint](master-tutorial.md)** - Start here for a step-by-step guide to system dominance.
+
 ## Technical
 - [Api Specification v6.3](api-specification.md)
 - [Architecture Map](architecture-map.md)
