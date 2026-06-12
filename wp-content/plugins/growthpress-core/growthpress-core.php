@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	return;
 }
 
-define( 'GROWTHPRESS_CORE_VERSION', '4.5.0' );
+define( 'GROWTHPRESS_CORE_VERSION', '6.3.0' );
 define( 'GROWTHPRESS_CORE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'GROWTHPRESS_CORE_URL', plugin_dir_url( __FILE__ ) );
 
@@ -35,6 +35,9 @@ function growthpress_core_load_modules() {
         'includes/class-growthpress-funnels.php',
         'includes/class-growthpress-woocommerce.php',
         'includes/class-growthpress-conversion.php',
+        'includes/class-growthpress-social-proof.php',
+        'includes/class-growthpress-sample-data.php',
+        'includes/class-growthpress-display.php',
         'admin/class-growthpress-dashboard.php',
         'admin/class-growthpress-content-studio.php',
         'admin/class-growthpress-settings.php',

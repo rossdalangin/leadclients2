@@ -1,6 +1,6 @@
 <?php
 /**
- * GrowthPress AI Core Class - Omni-Intelligence v4.5
+ * GrowthPress AI Core Class - Omni-Intelligence v6.3
  * Supports OpenAI, Anthropic (Claude), Google (Gemini), Perplexity, and Ollama.
  */
 
@@ -146,12 +146,27 @@ class GrowthPress_AI {
     }
 
     public function generate_proposal( $data ) {
-        $niche = isset($data['niche']) ? $data['niche'] : 'general';
-        return $this->call_ai( "Generate a professional business growth proposal for a {$niche} client.", "Proposal Architect" );
+        $niche = $data['niche'] ?? 'general';
+        $inquiry = $data['inquiry'] ?? 'No inquiry provided';
+        $sentiment = $data['sentiment'] ?? 'Neutral';
+        $prob = $data['prob'] ?? 50;
+
+        $prompt = "Generate a professional business growth proposal for a client in the $niche industry.\n";
+        $prompt .= "Client Inquiry: \"$inquiry\"\n";
+        $prompt .= "Sentiment Analysis: $sentiment\n";
+        $prompt .= "Closing Probability: $prob%\n";
+        $prompt .= "Structure: Executive Summary, Strategic Solution, Implementation Timeline, and ROI Forecast.";
+
+        return $this->call_ai( $prompt, "Proposal Architect Specialist" );
     }
 
     public function generate_missed_call_reply( $caller_number ) {
         return $this->call_ai( "Generate a polite, professional SMS response for a missed business call from {$caller_number}.", "Customer Support AI" );
+    }
+
+    public function generate_behavioral_nudge( $lead_id ) {
+        $lead = get_post($lead_id);
+        return $this->call_ai( "Based on this inquiry: \"{$lead->post_content}\", provide a 1-sentence psychological nudge for the sales rep to use during the first 30 seconds of the call. Focus on loss aversion or reciprocity.", "Psychology Expert" );
     }
 }
 GrowthPress_AI::get_instance();

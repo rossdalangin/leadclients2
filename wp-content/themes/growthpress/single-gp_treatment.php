@@ -1,19 +1,41 @@
-<?php get_header(); ?>
-<main class="site-main container">
-    <?php while ( have_posts() ) : the_post(); ?>
-        <article class="glass-card">
-            <h1><?php the_title(); ?></h1>
-            <div class="treatment-meta">
-                <span class="badge">Professional Care</span>
+<?php
+/**
+ * Single Treatment Template - GrowthPress Elite
+ */
+get_header(); ?>
+
+<main id="primary" class="site-main grainy-bg" style="padding-top:100px; padding-bottom:120px;">
+    <div class="container">
+        <?php while ( have_posts() ) : the_post(); ?>
+            <div class="wp-block-columns" style="gap:80px;">
+                <div class="wp-block-column" style="flex-basis:60%;">
+                    <div style="font-size:12px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:4px; margin-bottom:25px;">CLINICAL PROTOCOL</div>
+                    <h1 class="text-gradient" style="margin-bottom:40px;"><?php the_title(); ?></h1>
+                    <div class="entry-content" style="font-size:1.2rem; line-height:1.9; opacity:0.8;">
+                        <?php the_content(); ?>
+                    </div>
+                </div>
+                <div class="wp-block-column">
+                    <div class="glass-card" style="padding:50px; border-left: 10px solid var(--primary);">
+                        <h3 style="margin-top:0;">Protocol Intel</h3>
+                        <div style="margin:30px 0;">
+                            <div style="margin-bottom:25px;">
+                                <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:1px; margin-bottom:8px;">AVG DURATION</div>
+                                <div style="font-size:22px; font-weight:900; color:var(--secondary);"><?php echo get_post_meta(get_the_ID(), '_treatment_duration', true) ?: '60 Mins'; ?></div>
+                            </div>
+                            <div style="margin-bottom:25px;">
+                                <div style="font-size:10px; font-weight:950; opacity:0.4; letter-spacing:1px; margin-bottom:8px;">COMPLEXITY</div>
+                                <div style="font-size:22px; font-weight:900; color:var(--primary);"><?php echo strtoupper(get_post_meta(get_the_ID(), '_treatment_complexity', true) ?: 'STANDARD'); ?></div>
+                            </div>
+                        </div>
+                        <hr style="opacity:0.05; margin:40px 0;">
+                        <h4 style="margin-bottom:25px;">Ready for Triage?</h4>
+                        <?php echo do_shortcode('[gp_lead_form]'); ?>
+                    </div>
+                </div>
             </div>
-            <div class="treatment-content">
-                <?php the_content(); ?>
-            </div>
-            <div class="cta-box" style="margin-top: 30px;">
-                <h3>Interested in this treatment?</h3>
-                <?php echo do_shortcode('[gp_lead_form]'); ?>
-            </div>
-        </article>
-    <?php endwhile; ?>
+        <?php endwhile; ?>
+    </div>
 </main>
+
 <?php get_footer(); ?>

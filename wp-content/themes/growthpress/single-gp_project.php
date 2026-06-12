@@ -40,15 +40,15 @@ get_header(); ?>
                             <h3 style="color:white; margin-bottom:30px;">Strategic ROI</h3>
                             <div style="margin-bottom:30px;">
                                 <div style="font-size:11px; opacity:0.5; text-transform:uppercase; letter-spacing:1px;">GROWTH INCREASE</div>
-                                <div style="font-size:2.5rem; font-weight:900; color:var(--accent);">+320%</div>
+                                <div style="font-size:2.5rem; font-weight:900; color:var(--accent);"><?php echo get_post_meta(get_the_ID(), '_gp_growth_roi', true) ?: '+320%'; ?></div>
                             </div>
                             <div style="margin-bottom:30px;">
                                 <div style="font-size:11px; opacity:0.5; text-transform:uppercase; letter-spacing:1px;">EFFICIENCY GAIN</div>
-                                <div style="font-size:2.5rem; font-weight:900; color:var(--accent);">40 HRS/WK</div>
+                                <div style="font-size:2.5rem; font-weight:900; color:var(--accent);"><?php echo get_post_meta(get_the_ID(), '_gp_efficiency_gain', true) ?: '40 HRS/WK'; ?></div>
                             </div>
                             <div style="margin-bottom:30px;">
                                 <div style="font-size:11px; opacity:0.5; text-transform:uppercase; letter-spacing:1px;">PIPELINE VALUE</div>
-                                <div style="font-size:2.5rem; font-weight:900; color:var(--accent);">$1.2M+</div>
+                                <div style="font-size:2.5rem; font-weight:900; color:var(--accent);"><?php echo get_post_meta(get_the_ID(), '_gp_pipeline_value', true) ?: '$1.2M+'; ?></div>
                             </div>
                             <hr style="opacity:0.1; margin:30px 0;">
                             <p style="font-size:14px; opacity:0.7;">This results profile was verified by the GrowthPress AI Analytics engine on <?php echo get_the_date(); ?>.</p>

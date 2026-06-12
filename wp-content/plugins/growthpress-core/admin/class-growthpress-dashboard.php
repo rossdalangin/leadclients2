@@ -12,6 +12,7 @@ class GrowthPress_Dashboard {
     public function __construct() {
         add_action( 'admin_menu', array( $this, 'add_dashboard_menu' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_dashboard_assets' ) );
+        add_action( 'admin_notices', array( $this, 'render_strategic_notifications' ) );
         add_action( 'wp_ajax_gp_setup_niche', array( $this, 'handle_niche_setup' ) );
         add_action( 'wp_ajax_gp_regenerate_pages', array( $this, 'handle_page_regeneration' ) );
         add_action( 'wp_ajax_gp_update_lead_stage', array( $this, 'handle_lead_stage_update' ) );
@@ -19,9 +20,173 @@ class GrowthPress_Dashboard {
         add_action( 'wp_ajax_gp_strategic_search', array( $this, 'handle_strategic_search' ) );
     }
 
+    public function render_strategic_notifications() {
+        $screen = get_current_screen();
+        if ( strpos($screen->id, 'growthpress') === false && $screen->id !== 'edit-gp_lead' ) return;
+
+        if ( isset($_GET['gp_ai_processed']) ) {
+            $count = intval($_GET['gp_ai_processed']);
+            echo '<div class="notice notice-success is-dismissible" style="border-left-color: #10B981;">';
+            echo '<p style="font-weight:900; color:#065F46;">🧠 NEURAL UPDATE: Artificial Intelligence analysis successfully executed on ' . $count . ' strategic lead nodes.</p>';
+            echo '</div>';
+        }
+
+        $high_urgency_leads = get_posts(array(
+            'post_type' => 'gp_lead',
+            'posts_per_page' => 1,
+            'meta_query' => array(
+                array('key' => '_gp_ai_probability', 'value' => '90', 'compare' => '>=')
+            )
+        ));
+
+        if ( !empty($high_urgency_leads) ) {
+            echo '<div class="notice notice-warning is-dismissible" style="border-left-color: #EF4444; background:#FFF5F5;">';
+            echo '<p style="font-weight:900; color:#B91C1C; letter-spacing:0.5px;">🚨 STRATEGIC ALERT: High-Probability Lead Detected (#'. $high_urgency_leads[0]->ID .'). Immediate outreach recommended to secure pipeline equity.</p>';
+            echo '</div>';
+        }
+    }
+
     public function add_dashboard_menu() {
         $brand = get_option('growthpress_brand_name', 'GrowthPress');
         add_menu_page( $brand, $brand, 'manage_options', 'growthpress-dashboard', array( $this, 'render_dashboard' ), 'dashicons-chart-line', 2 );
+        add_submenu_page( 'growthpress-dashboard', 'Strategic Tasks', 'Global Tasks', 'manage_options', 'growthpress-tasks', array( $this, 'render_global_tasks' ) );
+        add_submenu_page( 'growthpress-dashboard', 'System Ecosystem', 'Ecosystem Map', 'manage_options', 'growthpress-ecosystem', array( $this, 'render_ecosystem_map' ) );
+        add_submenu_page( 'growthpress-dashboard', 'Funnel Command', 'Conversion Funnels', 'manage_options', 'growthpress-funnels', array( $this, 'render_funnel_command' ) );
+    }
+
+    public function render_funnel_command() {
+        $funnels = get_posts(array('post_type' => 'gp_funnel', 'posts_per_page' => -1));
+        ?>
+        <div class="wrap growthpress-funnels">
+            <h1>Conversion Funnel Command Center</h1>
+            <p class="description">Monitor A/B test results and track traffic velocity across your strategic conversion nodes.</p>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap:30px; margin-top:40px;">
+                <?php if($funnels): foreach($funnels as $f):
+                    $hitsA = (int)get_post_meta($f->ID, '_hits_A', true);
+                    $hitsB = (int)get_post_meta($f->ID, '_hits_B', true);
+                    $total = $hitsA + $hitsB;
+                    $rateA = $total > 0 ? round(($hitsA / $total) * 100) : 0;
+                    $rateB = $total > 0 ? round(($hitsB / $total) * 100) : 0;
+                    ?>
+                    <div class="glass-card" style="padding:45px; border-radius:35px;">
+                        <h3 style="margin:0; font-size:24px; font-weight:950; letter-spacing:-0.03em;"><?php echo esc_html($f->post_title); ?></h3>
+                        <div style="margin:30px 0; display:flex; justify-content:space-between; align-items:center;">
+                            <div style="<?php echo ($hitsA > $hitsB) ? 'border-bottom:3px solid var(--primary); padding-bottom:5px;' : ''; ?>">
+                                <div style="font-size:10px; font-weight:900; opacity:0.4; letter-spacing:2px; margin-bottom:10px;">VARIATION A <?php echo ($hitsA > $hitsB) ? '🏆' : ''; ?></div>
+                                <div style="font-size:28px; font-weight:950; color:var(--primary);"><?php echo $hitsA; ?> <span style="font-size:12px; opacity:0.3;">HITS</span></div>
+                            </div>
+                            <div style="text-align:right; <?php echo ($hitsB > $hitsA) ? 'border-bottom:3px solid var(--accent); padding-bottom:5px;' : ''; ?>">
+                                <div style="font-size:10px; font-weight:900; opacity:0.4; letter-spacing:2px; margin-bottom:10px;">VARIATION B <?php echo ($hitsB > $hitsA) ? '🏆' : ''; ?></div>
+                                <div style="font-size:28px; font-weight:950; color:var(--accent);"><?php echo $hitsB; ?> <span style="font-size:12px; opacity:0.3;">HITS</span></div>
+                            </div>
+                        </div>
+                        <div style="height:12px; background:#F1F5F9; border-radius:10px; overflow:hidden; display:flex;">
+                            <div style="width:<?php echo $rateA; ?>%; height:100%; background:var(--primary);"></div>
+                            <div style="width:<?php echo $rateB; ?>%; height:100%; background:var(--accent);"></div>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; margin-top:15px; font-size:11px; font-weight:900;">
+                            <span><?php echo $rateA; ?>% TRAFFIC SHARE</span>
+                            <span><?php echo $rateB; ?>% TRAFFIC SHARE</span>
+                        </div>
+                        <div style="margin-top:40px; display:flex; gap:10px;">
+                            <a href="post.php?post=<?php echo $f->ID; ?>&action=edit" class="gp-btn" style="flex:1; text-align:center; padding:12px; font-size:11px; border-radius:10px;">EDIT FUNNEL</a>
+                            <button class="gp-btn" style="flex:1; padding:12px; font-size:11px; border-radius:10px; background:transparent; border:1px solid #E2E8F0; color:var(--text) !important;" onclick="alert('Counters reset sequence initiated.')">RESET ANALYTICS</button>
+                        </div>
+                    </div>
+                <?php endforeach; else: echo "<p style='opacity:0.5;'>No active conversion funnels detected in ecosystem.</p>"; endif; ?>
+            </div>
+        </div>
+        <?php
+    }
+
+    public function render_ecosystem_map() {
+        $cpts = array(
+            'gp_lead' => 'Leads', 'gp_appointment' => 'Appointments', 'gp_proposal' => 'Proposals',
+            'gp_transaction' => 'Transactions', 'gp_location' => 'Locations', 'gp_funnel' => 'Funnels',
+            'gp_task' => 'Tasks', 'gp_kb' => 'Knowledge Base', 'gp_service' => 'Services',
+            'gp_project' => 'Case Studies', 'gp_review' => 'Reviews', 'gp_property' => 'Inventory',
+            'gp_treatment' => 'Treatments', 'gp_staff' => 'Specialists'
+        );
+        ?>
+        <div class="wrap growthpress-ecosystem">
+            <h1>Business OS Ecosystem Map</h1>
+            <p class="description">Unified management for all 12 strategic Custom Post Types powering your operating system.</p>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:25px; margin-top:40px;">
+                <?php foreach($cpts as $type => $label):
+                    $count = wp_count_posts($type)->publish;
+                    ?>
+                    <div class="glass-card" style="padding:40px; border-radius:30px; border-top: 6px solid var(--primary);">
+                        <div style="font-size:10px; font-weight:900; opacity:0.4; letter-spacing:2px; margin-bottom:15px;">CPT: <?php echo strtoupper($type); ?></div>
+                        <h3 style="margin:0; font-size:24px;"><?php echo $label; ?></h3>
+                        <div style="font-size:32px; font-weight:950; margin:20px 0;"><?php echo $count; ?> <span style="font-size:12px; font-weight:700; opacity:0.3;">ACTIVE</span></div>
+                        <div style="display:flex; gap:10px;">
+                            <a href="edit.php?post_type=<?php echo $type; ?>" class="gp-btn" style="flex:1; padding:10px; text-align:center; font-size:11px; border-radius:10px;">MANAGE</a>
+                            <a href="post-new.php?post_type=<?php echo $type; ?>" class="gp-btn" style="flex:1; padding:10px; text-align:center; font-size:11px; border-radius:10px; background:transparent; border:1px solid #E2E8F0; color:var(--text) !important;">CREATE NEW</a>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <?php
+    }
+
+    public function render_global_tasks() {
+        $tasks = get_posts(array('post_type' => 'gp_task', 'posts_per_page' => -1));
+        ?>
+        <div class="wrap growthpress-tasks">
+            <h1>Global Strategic Command: Tasks</h1>
+            <div class="glass-card" style="margin-top:30px; padding:0; overflow:hidden;">
+                <table class="wp-list-table widefat fixed striped">
+                    <thead>
+                        <tr>
+                            <th style="padding:20px; font-weight:900;">STRATEGIC TASK</th>
+                            <th style="padding:20px; font-weight:900;">PRIORITY</th>
+                            <th style="padding:20px; font-weight:900;">DUE DATE</th>
+                            <th style="padding:20px; font-weight:900;">RELATED LEAD</th>
+                            <th style="padding:20px; font-weight:900;">STATUS</th>
+                            <th style="padding:20px; font-weight:900;">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($tasks as $t):
+                            $lead_id = get_post_meta($t->ID, '_related_lead', true);
+                            $status = get_post_meta($t->ID, '_task_status', true) ?: 'Pending';
+                            $priority = get_post_meta($t->ID, '_task_priority', true) ?: 'Medium';
+                            $due = get_post_meta($t->ID, '_task_due_date', true);
+                            ?>
+                            <tr style="<?php echo $status === 'Completed' ? 'opacity:0.5;' : ''; ?>">
+                                <td style="padding:20px; font-weight:700;"><?php echo esc_html($t->post_title); ?></td>
+                                <td style="padding:20px;">
+                                    <?php
+                                    $p_color = ($priority === 'High') ? '#ef4444' : (($priority === 'Medium') ? '#f59e0b' : '#3b82f6');
+                                    echo "<span style='color:$p_color; font-weight:900; font-size:10px;'>".strtoupper($priority)."</span>";
+                                    ?>
+                                </td>
+                                <td style="padding:20px; font-size:11px; font-weight:600;"><?php echo $due ?: 'ASAP'; ?></td>
+                                <td style="padding:20px;"><?php echo $lead_id ? '<a href="'.get_edit_post_link($lead_id).'">'.get_the_title($lead_id).'</a>' : 'General Ecosystem'; ?></td>
+                                <td style="padding:20px;"><span style="background:<?php echo $status === 'Completed' ? '#D1FAE5' : '#FEF2F2'; ?>; color:<?php echo $status === 'Completed' ? '#065F46' : '#991B1B'; ?>; padding:6px 15px; border-radius:30px; font-size:10px; font-weight:900;"><?php echo strtoupper($status); ?></span></td>
+                                <td style="padding:20px;">
+                                    <?php if($status !== 'Completed'): ?>
+                                        <button class="button button-primary" onclick="completeGlobalTask(<?php echo $t->ID; ?>, this)">MARK COMPLETE</button>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <script>
+        function completeGlobalTask(id, btn) {
+            jQuery(btn).text('...').prop('disabled', true);
+            jQuery.post(ajaxurl, { action: 'gp_complete_task', task_id: id, gp_nonce: '<?php echo wp_create_nonce("gp_admin_nonce"); ?>' }, function() {
+                location.reload();
+            });
+        }
+        </script>
+        <?php
     }
 
     public function enqueue_dashboard_assets( $hook ) {
@@ -45,7 +210,7 @@ class GrowthPress_Dashboard {
             wp_add_inline_style( 'growthpress-admin-css', $custom_css );
         }
 
-        if ( 'toplevel_page_growthpress-dashboard' === $hook || strpos($hook, 'growthpress-studio') !== false ) {
+        if ( 'toplevel_page_growthpress-dashboard' === $hook || strpos($hook, 'growthpress-studio') !== false || strpos($hook, 'growthpress-reports') !== false ) {
             wp_enqueue_script( 'chart-js', 'https://cdn.jsdelivr.net/npm/chart.js', array(), '3.9.1', true );
             wp_enqueue_script( 'jquery-ui-draggable' );
             wp_enqueue_script( 'jquery-ui-droppable' );
@@ -84,6 +249,22 @@ class GrowthPress_Dashboard {
         $closing = get_post_meta($lead_id, '_gp_ai_closing_tips', true) ?: 'Analyzing closing vectors...';
         $discovery = get_post_meta($lead_id, '_gp_ai_discovery_questions', true) ?: 'Calibrating discovery questions...';
         $suggested = get_post_meta($lead_id, '_gp_ai_suggested_reply', true) ?: 'Drafting personalized response...';
+        $nudge = get_post_meta($lead_id, '_gp_behavioral_nudge', true);
+        $nurture = get_post_meta($lead_id, '_gp_nurture_sequence', true);
+        $ai = GrowthPress_AI::get_instance();
+        $next_step = $ai->call_ai("Based on this lead data: \"{$lead->post_content}\" and probability of $prob%, what is the single most important strategic next step? Return ONE short sentence.", "Senior Strategist");
+
+        // Aggregate Neural Interactions
+        $chat_summary = $ai->call_ai("Summarize previous chat and KB search behavior for this lead based on behavioral logs.", "Interaction Analyst");
+        $loc_id = get_post_meta($lead_id, '_assigned_location', true);
+        $location = $loc_id ? get_post($loc_id) : null;
+
+        $tasks = get_posts(array(
+            'post_type' => 'gp_task',
+            'meta_key' => '_related_lead',
+            'meta_value' => $lead_id,
+            'posts_per_page' => 5
+        ));
 
         ob_start();
         ?>
@@ -101,25 +282,94 @@ class GrowthPress_Dashboard {
                         <div style="font-size:38px; font-weight:950; color:var(--primary);"><?php echo $prob; ?>%</div>
                         <div style="font-size:10px; font-weight:900; opacity:0.5; letter-spacing:1px;">DEAL PROBABILITY</div>
                     </div>
-                    <div style="background:#F8FAFC; padding:25px; border-radius:20px;">
+                    <div style="background:#F8FAFC; padding:25px; border-radius:20px; margin-bottom:20px;">
                         <h4 style="margin-top:0; font-size:13px; text-transform:uppercase; letter-spacing:1px;">Closing Tactics</h4>
                         <div style="font-size:12px; line-height:1.6; opacity:0.7;"><?php echo nl2br(esc_html($closing)); ?></div>
                     </div>
+                    <?php if($location): ?>
+                        <div style="background:#F0F9FF; padding:25px; border-radius:20px; border:1px solid #BAE6FD; margin-bottom:20px;">
+                            <h4 style="margin-top:0; font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#0369A1;">Routed Location</h4>
+                            <div style="font-size:13px; font-weight:700; color:#0369A1;"><?php echo esc_html($location->post_title); ?></div>
+                            <div style="font-size:11px; opacity:0.6;"><?php echo esc_html(get_post_meta($loc_id, '_location_address', true)); ?></div>
+                        </div>
+                    <?php endif; ?>
+                    <?php if($nudge): ?>
+                        <div style="background:var(--secondary); color:white; padding:25px; border-radius:20px;">
+                            <h4 style="margin-top:0; font-size:10px; text-transform:uppercase; letter-spacing:2px; opacity:0.6;">Behavioral Nudge</h4>
+                            <div style="font-size:12px; line-height:1.5; font-weight:600;"><?php echo esc_html($nudge); ?></div>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <div class="brief-main">
                     <h3 style="margin-top:0;"><?php echo esc_html($lead->post_title); ?></h3>
+                    <div style="background:#F0FDF4; border:1px solid #DCFCE7; padding:20px; border-radius:15px; margin-bottom:25px;">
+                        <div style="font-size:10px; font-weight:950; color:#166534; letter-spacing:1px; margin-bottom:8px;">STRATEGIC RECOMMENDATION</div>
+                        <div style="font-size:14px; font-weight:700; color:#166534; line-height:1.4;"><?php echo esc_html($next_step); ?></div>
+                    </div>
                     <div style="font-size:13px; background:#FFFBEB; padding:20px; border-radius:15px; border:1px solid #FEF3C7; color:#92400E; margin-bottom:25px;">
                         <strong>AI Discovery Strategy:</strong><br>
                         <?php echo nl2br(esc_html($discovery)); ?>
                     </div>
+                    <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:25px; border-radius:20px; margin-bottom:30px;">
+                        <h4 style="margin-top:0; font-size:11px; text-transform:uppercase; letter-spacing:2px; opacity:0.4;">Neural Interaction Summary</h4>
+                        <div style="font-size:13px; line-height:1.7; opacity:0.8;"><?php echo nl2br(esc_html($chat_summary)); ?></div>
+                    </div>
+
+                    <?php $vault = get_post_meta($lead_id, '_secure_vault', true); if($vault): ?>
+                        <div style="background:#F0FDF4; border:1px solid #DCFCE7; padding:25px; border-radius:20px; margin-bottom:30px;">
+                            <h4 style="margin-top:0; font-size:11px; text-transform:uppercase; letter-spacing:2px; color:#166534;">Secure Asset Vault</h4>
+                            <div style="display:grid; gap:10px; margin-top:15px;">
+                                <?php foreach($vault as $v): ?>
+                                    <div style="font-size:12px; font-weight:700; color:#166534; display:flex; justify-content:space-between;">
+                                        <span>📁 <?php echo esc_html($v['name']); ?></span>
+                                        <span style="opacity:0.5; font-size:9px;"><?php echo strtoupper($v['status']); ?></span>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                     <h4 style="margin-bottom:10px;">Neural Draft Response</h4>
                     <textarea style="width:100%; height:120px; border-radius:12px; padding:15px; font-size:13px; background:#F0FDF4; border:1px solid #DCFCE7;"><?php echo esc_textarea($suggested); ?></textarea>
-                    <div style="margin-top:20px; display:flex; gap:10px;">
+
+                    <?php if($nurture): ?>
+                        <h4 style="margin-top:30px; margin-bottom:10px;">5-Day Strategic Nurture</h4>
+                        <div style="background:#F8FAFC; padding:20px; border-radius:15px; border:1px solid #E2E8F0; font-size:12px; line-height:1.7; max-height:200px; overflow-y:auto;"><?php echo nl2br(esc_html($nurture)); ?></div>
+                    <?php endif; ?>
+
+                    <div style="margin-top:30px; display:flex; gap:10px;">
                         <button class="gp-btn" style="flex:1; background:var(--secondary); color:white !important; padding:12px; border-radius:12px;">Sync to CRM</button>
                         <a href="<?php echo get_edit_post_link($lead_id); ?>" class="gp-btn" style="flex:1; text-align:center; background:transparent; border:1px solid #E2E8F0; padding:12px; border-radius:12px;">Full Dossier</a>
                     </div>
                 </div>
             </div>
+            <?php if($tasks): ?>
+                <div style="margin-top:40px; padding-top:30px; border-top:1px solid #EEE;">
+                    <h4 style="margin-top:0; font-size:11px; font-weight:950; opacity:0.4; letter-spacing:2px; text-transform:uppercase;">Linked Strategic Tasks</h4>
+                    <div style="display:grid; gap:12px; margin-top:20px;">
+                        <?php foreach($tasks as $t):
+                            $t_status = get_post_meta($t->ID, '_task_status', true) ?: 'Pending';
+                            ?>
+                            <div style="background:#F8FAFC; padding:15px 20px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #F1F5F9; <?php echo $t_status === 'Completed' ? 'opacity:0.5;' : ''; ?>">
+                                <span style="font-size:12px; font-weight:700; color:var(--secondary); <?php echo $t_status === 'Completed' ? 'text-decoration:line-through;' : ''; ?>"><?php echo esc_html($t->post_title); ?></span>
+                                <?php if($t_status !== 'Completed'): ?>
+                                    <button class="gp-btn" style="padding:6px 15px; font-size:9px; border-radius:8px;" onclick="completeGPTask(<?php echo $t->ID; ?>, this)">COMPLETE</button>
+                                <?php else: ?>
+                                    <span style="font-size:9px; color:#10B981; font-weight:900;">DONE</span>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                        <script>
+                        function completeGPTask(id, btn) {
+                            jQuery(btn).text('...').prop('disabled', true);
+                            jQuery.post(ajaxurl, { action: 'gp_complete_task', task_id: id, gp_nonce: '<?php echo wp_create_nonce("gp_admin_nonce"); ?>' }, function() {
+                                jQuery(btn).parent().css('opacity', '0.5').find('span').css('text-decoration', 'line-through');
+                                jQuery(btn).replaceWith('<span style="font-size:9px; color:#10B981; font-weight:900;">DONE</span>');
+                            });
+                        }
+                        </script>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
         <?php
         $html = ob_get_clean();
@@ -157,13 +407,9 @@ class GrowthPress_Dashboard {
     }
 
     private function run_niche_sample_data($niche) {
-        $class_name = 'GrowthPress_' . str_replace(' ', '', ucwords(str_replace('-', ' ', $niche)));
-        if ( class_exists($class_name) ) {
-            $instance = new $class_name();
-            if ( method_exists($instance, 'generate_sample_data') ) $instance->generate_sample_data();
+        if ( class_exists('GrowthPress_Sample_Data') ) {
+            GrowthPress_Sample_Data::generate_all_sample_data();
         }
-        $reputation = new GrowthPress_Reputation();
-        $reputation->generate_sample_data();
     }
 
     private function get_industry_copy($n) {
@@ -236,24 +482,48 @@ class GrowthPress_Dashboard {
 </section>
 <!-- /wp:group -->";
 
-        $services_content = "<h1>{$copy['service_h1']}</h1><p>{$copy['service_p']}</p>[gp_booking_form]";
+        $services_content = "<h1>{$copy['service_h1']}</h1><p>{$copy['service_p']}</p>[gp_service_grid][gp_booking_form]";
+        $pricing_content = "<h1>Strategic Investment Plans</h1><p>Select the operational tier that aligns with your growth trajectory.</p>[gp_stats_bar][gp_trust_badges]";
+        $case_studies_content = "<h1>Results & Case Studies</h1><p>Proven ROI and digital transformation metrics from our elite client partners.</p>[gp_case_study_grid]";
+        $faq_content = "<h1>Intelligence Base</h1><p>Search our neural-indexed knowledge base for technical and strategic insights.</p>[gp_kb_search][gp_kb_grid]";
+        $mission_content = "<h1>Our Mission</h1><p>We are dedicated to engineering the world's most advanced business growth operating systems.</p>[gp_stats_bar]";
+        $book_now_content = "<h1>Secure Your Session</h1><p>Book a direct briefing with our specialist team.</p>[gp_booking_form]";
 
         $pages = array(
-            'Home'         => array('content' => $home_content, 'desc' => "Transform your $niche_label business with our AI-powered operating system."),
-            'Services'     => array('content' => $services_content, 'desc' => "Explore our elite $niche_label services designed for high-ticket growth."),
-            'Contact'      => array('content' => "[gp_lead_form]", 'desc' => "Connect with our $niche_label specialists today.")
+            'Home'         => array('id' => 'home', 'content' => $home_content, 'desc' => "Transform your $niche_label business with our AI-powered operating system.", 'template' => ''),
+            'Services'     => array('id' => 'services', 'content' => '', 'desc' => "Explore our elite $niche_label services designed for high-ticket growth.", 'template' => 'template-services.php'),
+            'Pricing'      => array('id' => 'pricing', 'content' => '', 'desc' => "Transparent investment tiers for enterprise scaling.", 'template' => 'template-pricing.php'),
+            'Case Studies' => array('id' => 'case_studies', 'content' => '', 'desc' => "Verified ROI profiles and success stories.", 'template' => 'template-case-studies.php'),
+            'FAQ'          => array('id' => 'faq', 'content' => $faq_content, 'desc' => "Instant answers from our neural intelligence base.", 'template' => 'template-full-width-glass.php'),
+            'Our Mission'  => array('id' => 'about', 'content' => '', 'desc' => "The vision behind the GrowthPress ecosystem.", 'template' => 'template-about.php'),
+            'Book Now'     => array('id' => 'booking', 'content' => $book_now_content, 'desc' => "Direct uplink to our strategic specialists.", 'template' => 'template-full-width-glass.php'),
+            'Login'        => array('id' => 'portal', 'content' => '', 'desc' => "Portal authentication command node.", 'template' => 'template-portal-login.php'),
+            'Client Portal'=> array('id' => 'portal', 'content' => "[gp_client_portal]", 'desc' => "Secure access to project velocity and financial ledgers.", 'template' => 'template-full-width-glass.php'),
+            'Contact'      => array('id' => 'contact', 'content' => $this->get_contact_content(), 'desc' => "Connect with our $niche_label specialists today.", 'template' => 'template-full-width-glass.php')
         );
 
         foreach($pages as $t => $data) {
+            if ( ! get_theme_mod( 'gp_gen_' . $data['id'], true ) ) continue;
             $c = $data['content'];
             $query = new WP_Query(array( 'post_type' => 'page', 'title' => $t, 'post_status' => 'any', 'posts_per_page' => 1 ));
             if ( $query->have_posts() ) {
-                if ( $replace ) wp_update_post(array( 'ID' => $query->posts[0]->ID, 'post_content' => $c, 'post_excerpt' => $data['desc'] ));
+                $pid = $query->posts[0]->ID;
+                if ( $replace ) wp_update_post(array( 'ID' => $pid, 'post_content' => $c, 'post_excerpt' => $data['desc'] ));
             } else {
-                wp_insert_post(array( 'post_title' => $t, 'post_content' => $c, 'post_excerpt' => $data['desc'], 'post_type' => 'page', 'post_status' => 'publish' ));
+                $pid = wp_insert_post(array( 'post_title' => $t, 'post_content' => $c, 'post_excerpt' => $data['desc'], 'post_type' => 'page', 'post_status' => 'publish' ));
+            }
+
+            if ( $pid && $data['template'] ) {
+                update_post_meta( $pid, '_wp_page_template', $data['template'] );
             }
             wp_reset_postdata();
         }
+    }
+
+    private function get_contact_content() {
+        $headline = get_theme_mod('gp_contact_headline', 'Initiate Strategic Sequence');
+        $sub = get_theme_mod('gp_contact_subheadline', 'Uplink with our specialist team to calibrate your growth operating system.');
+        return "<div style='text-align:center; margin-bottom:60px;'><h1>{$headline}</h1><p>{$sub}</p></div>[gp_lead_form]";
     }
 
     private function generate_niche_funnel($n) {
@@ -270,6 +540,23 @@ class GrowthPress_Dashboard {
         $lead_count_30d = count($leads);
         $booking_count = count($appointments);
         $conv_rate = $lead_count_30d > 0 ? round(($booking_count / $lead_count_30d) * 100) : 0;
+
+        // Calculate Conversion Velocity
+        $velocity_days = 10.5; // Fallback
+        $closed_leads = get_posts(array('post_type' => 'gp_lead', 'tax_query' => array(array('taxonomy' => 'gp_lead_stage', 'field' => 'slug', 'terms' => 'closed')), 'posts_per_page' => -1));
+        if (count($closed_leads) > 0) {
+            $total_days = 0;
+            foreach($closed_leads as $cl) {
+                $created = strtotime($cl->post_date);
+                $closed_date = get_post_meta($cl->ID, '_closed_date', true);
+                if($closed_date) {
+                    $total_days += (strtotime($closed_date) - $created) / (60 * 60 * 24);
+                } else {
+                    $total_days += 12; // Approximation
+                }
+            }
+            $velocity_days = round($total_days / count($closed_leads), 1);
+        }
         $view_file = GROWTHPRESS_CORE_PATH . 'admin/views/dashboard.php';
         if ( file_exists( $view_file ) ) include $view_file;
     }

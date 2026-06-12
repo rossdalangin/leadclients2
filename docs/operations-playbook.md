@@ -1,4 +1,4 @@
-# GrowthPress OS: The Comprehensive Operations Playbook v5.2
+# GrowthPress OS: The Comprehensive Operations Playbook v6.3 Definitive
 
 This manual provides granular instructions on **how, when, and where** to manage every asset within the GrowthPress ecosystem. Treat this as your "Business OS Flight Manual."
 

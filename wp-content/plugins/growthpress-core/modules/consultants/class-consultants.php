@@ -1,6 +1,6 @@
 <?php
 /**
- * Consultants Niche specialized Closer Tools - Ultra Elite v4.5
+ * Consultants Niche specialized Closer Tools - Ultra Elite v6.3
  */
 class GrowthPress_Consultants {
     public function __construct() {
@@ -10,7 +10,7 @@ class GrowthPress_Consultants {
     public function render_audit() {
         return '<div class="gp-consulting-audit glass-card gp-reveal" style="padding:100px 80px; border-top: 20px solid var(--primary); background: linear-gradient(135deg, var(--surface), #F8FAFC);">
             <div style="text-align:center; margin-bottom:70px;">
-                <div style="font-size:12px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:4px; margin-bottom:25px;">OPERATIONAL INTELLIGENCE AUDIT v4.5</div>
+                <div style="font-size:12px; font-weight:950; color:var(--primary); text-transform:uppercase; letter-spacing:4px; margin-bottom:25px;">OPERATIONAL INTELLIGENCE AUDIT v6.3</div>
                 <h3 class="text-gradient" style="font-size:3.5rem; line-height:1.0;">Strategic Efficiency Engine</h3>
                 <p style="font-size:1.25rem; opacity:0.7; max-width:750px; margin:25px auto 0;">Our neural-calibrated engine analyzes your current business model to identify high-impact automation and scaling opportunities across all departments.</p>
             </div>
@@ -38,7 +38,28 @@ class GrowthPress_Consultants {
     }
 
     public function generate_sample_data() {
-        wp_insert_post(array('post_title' => 'Global SaaS Expansion', 'post_content' => 'High-authority consulting for a Series B technology entity moving into the North American market.', 'post_type' => 'gp_project', 'post_status' => 'publish'));
+        $id = wp_insert_post(array(
+            'post_title'   => 'Global SaaS Expansion',
+            'post_content' => 'High-authority consulting for a Series B technology entity moving into the North American market. Optimized the entire lead-to-revenue lifecycle across 5 international hubs.',
+            'post_type'    => 'gp_project',
+            'post_status'  => 'publish'
+        ));
+        if ($id) {
+            update_post_meta($id, '_gp_is_sample', '1');
+            update_post_meta($id, '_gp_growth_roi', '+420%');
+            update_post_meta($id, '_gp_pipeline_value', '$15.2M');
+        }
+
+        $sid = wp_insert_post(array(
+            'post_title'   => 'Neural Lifecycle Optimization',
+            'post_content' => 'Full architectural audit of your digital ecosystem to eliminate operational latency and maximize conversion velocity.',
+            'post_type'    => 'gp_service',
+            'post_status'  => 'publish'
+        ));
+        if ($sid) {
+            update_post_meta($sid, '_gp_is_sample', '1');
+            update_post_meta($sid, '_gp_service_icon', '🧬');
+        }
     }
 }
 new GrowthPress_Consultants();
