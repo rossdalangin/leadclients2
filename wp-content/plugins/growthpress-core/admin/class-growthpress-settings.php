@@ -201,6 +201,9 @@ class GrowthPress_Settings {
                 </h2>
             </div>
 
+            <form method="post" action="options.php" id="gp-unified-settings-form">
+            <?php settings_fields( 'growthpress_settings_group' ); ?>
+
             <div id="tab-config" class="tab-content">
                 <div class="glass-card" style="max-width:1100px; background:#f0f7ff; border-left:5px solid #2563eb; margin-bottom:30px;">
                     <p style="margin:0; font-size:14px; color:#1e40af;"><strong>Configuration Guide:</strong> Set your primary brand identity and industry niche here. This recalibrates the entire system's terminology, AI prompts, and conversion calculators to match your specific business sector.</p>
@@ -220,8 +223,7 @@ class GrowthPress_Settings {
                     </div>
                 </div>
 
-                <form method="post" action="options.php" class="glass-card" style="max-width:1100px;">
-                    <?php settings_fields( 'growthpress_settings_group' ); ?>
+                <div class="glass-card" style="max-width:1100px;">
                     <table class="form-table">
                         <tr class="section-header"><th colspan="2"><h3>Active Intelligence Routing</h3></th></tr>
                         <tr>
@@ -247,12 +249,11 @@ class GrowthPress_Settings {
                         </tr>
                     </table>
                     <?php submit_button('Update OS Core'); ?>
-                </form>
+                </div>
             </div>
 
             <div id="tab-integrations" class="tab-content" style="display:none;">
-                <form method="post" action="options.php" class="glass-card" style="max-width:1100px;">
-                    <?php settings_fields( 'growthpress_settings_group' ); ?>
+                <div class="glass-card" style="max-width:1100px;">
                     <table class="form-table">
                         <tr class="section-header"><th colspan="2"><h3>Payment Gateways</h3></th></tr>
                         <tr>
@@ -283,7 +284,7 @@ class GrowthPress_Settings {
                         </tr>
                     </table>
                     <?php submit_button('Update Integrations Cluster'); ?>
-                </form>
+                </div>
             </div>
 
             <div id="tab-ai" class="tab-content" style="display:none;">
@@ -293,8 +294,7 @@ class GrowthPress_Settings {
                 <div class="glass-card" style="max-width:1100px; background:#f0fdf4; border-left:5px solid #16a34a; margin-bottom:30px;">
                     <p style="margin:0; font-size:14px; color:#166534;"><strong>External Node Connectivity:</strong> Link Stripe for financial ledger synchronization, Google Maps for location-based routing, and WhatsApp for priority lead notifications.</p>
                 </div>
-                <form method="post" action="options.php" class="glass-card" style="max-width:1100px;">
-                    <?php settings_fields( 'growthpress_settings_group' ); ?>
+                <div class="glass-card" style="max-width:1100px;">
                     <table class="form-table">
                         <tr class="section-header"><th colspan="2"><h3>Cloud Intelligence API Keys</h3></th></tr>
                         <tr>
@@ -345,7 +345,7 @@ class GrowthPress_Settings {
                     }
                     </script>
                     <?php submit_button('Save AI Intelligence Cluster'); ?>
-                </form>
+                </div>
             </div>
 
             <div id="tab-automations" class="tab-content" style="display:none;">
@@ -448,7 +448,7 @@ class GrowthPress_Settings {
                         <div style="padding:40px; background:rgba(239,68,68,0.05); border-radius:30px; border:1px solid rgba(239,68,68,0.1);">
                             <h4 style="margin-top:0;">Purge Sample Intelligence</h4>
                             <p style="font-size:13px; opacity:0.7; margin-bottom:30px;">Safely remove all system-generated sample data across all custom post types while preserving your real production data.</p>
-                            <button type="button" class="gp-btn" onclick="runTool('gp_remove_sample_data')" style="background:#EF4444; color:white; width:100%; height:60px; border-radius:15px;">Remove Sample Data</button>
+                            <button type="button" class="gp-btn" onclick="confirmPurge()" style="background:#EF4444; color:white; width:100%; height:60px; border-radius:15px;">Remove Sample Data</button>
                         </div>
                         <div style="padding:40px; background:rgba(100,116,139,0.05); border-radius:30px; border:1px solid rgba(100,116,139,0.1);">
                             <h4 style="margin-top:0;">Clear Activity Logs</h4>
@@ -481,6 +481,11 @@ class GrowthPress_Settings {
             </div>
 
             <script>
+            function confirmPurge() {
+                if (confirm('⚠️ WARNING: PURGE SAMPLE DATA PROTOCOL\n\nThis will permanently remove all sample records labeled with the system sample flag. Real production data will be preserved.\n\nContinue with ecosystem purge?')) {
+                    runTool('gp_remove_sample_data');
+                }
+            }
             function runTool(action) {
                 const res = jQuery('#tool-res').fadeIn().text('EXECUTING PROTOCOL...').css({'background':'#F8FAFC', 'color':'#64748B'});
                 jQuery.post(ajaxurl, { action: action, gp_nonce: '<?php echo wp_create_nonce("gp_admin_nonce"); ?>' }, function(response) {
@@ -524,8 +529,7 @@ class GrowthPress_Settings {
                 <div class="glass-card" style="max-width:1100px; background:#f8fafc; border-left:5px solid #64748b; margin-bottom:30px;">
                     <p style="margin:0; font-size:14px; color:#334155;"><strong>Agency Customization:</strong> Rebrand the operating system interface for your clients. Upload custom logos and inject CSS to match their enterprise brand guidelines.</p>
                 </div>
-                <form method="post" action="options.php" class="glass-card" style="max-width:1100px;">
-                    <?php settings_fields( 'growthpress_settings_group' ); ?>
+                <div class="glass-card" style="max-width:1100px;">
                     <table class="form-table">
                         <tr class="section-header"><th colspan="2"><h3>Agency Branding</h3></th></tr>
                         <tr>
@@ -583,8 +587,10 @@ class GrowthPress_Settings {
                         </tr>
                     </table>
                     <?php submit_button('Update Agency Cluster'); ?>
-                </form>
+                </div>
             </div>
+
+            </form>
 
             <div id="tab-docs" class="tab-content" style="display:none;">
                 <div class="glass-card" style="max-width:1100px; margin-bottom:40px;">

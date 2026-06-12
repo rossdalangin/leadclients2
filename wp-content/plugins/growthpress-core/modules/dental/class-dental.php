@@ -10,6 +10,8 @@ class GrowthPress_Dental {
         add_action('gp_niche_lead_analysis', array($this, 'analyze_dental_lead'));
         add_action('add_meta_boxes', array($this, 'add_dental_meta_boxes'));
         add_action('save_post', array($this, 'save_dental_meta'));
+        add_filter('manage_gp_treatment_posts_columns', array($this, 'treatment_columns'));
+        add_action('manage_gp_treatment_posts_custom_column', array($this, 'treatment_column_content'), 10, 2);
     }
 
     public function register_cpts() {
@@ -30,6 +32,7 @@ class GrowthPress_Dental {
     }
 
     public function render_treatment_meta($post) {
+        wp_nonce_field( 'gp_treatment_meta_nonce', 'gp_treatment_meta_nonce_field' );
         $duration = get_post_meta($post->ID, '_treatment_duration', true) ?: '60 mins';
         $complexity = get_post_meta($post->ID, '_treatment_complexity', true) ?: 'Standard';
         ?>
@@ -57,11 +60,25 @@ class GrowthPress_Dental {
     }
 
     public function save_dental_meta($post_id) {
-        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+        if ( ! isset( $_POST['gp_treatment_meta_nonce_field'] ) || ! wp_verify_nonce( $_POST['gp_treatment_meta_nonce_field'], 'gp_treatment_meta_nonce' ) ) return;
+        if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) return;
+        if ( ! current_user_can( 'edit_post', $post_id ) ) return;
+
         if (isset($_POST['gp_treatment_duration'])) {
             update_post_meta($post_id, '_treatment_duration', sanitize_text_field($_POST['gp_treatment_duration']));
             update_post_meta($post_id, '_treatment_complexity', sanitize_text_field($_POST['gp_treatment_complexity']));
         }
+    }
+
+    public function treatment_columns($cols) {
+        $cols['_duration'] = 'Duration';
+        $cols['_complexity'] = 'Complexity';
+        return $cols;
+    }
+
+    public function treatment_column_content($col, $post_id) {
+        if ($col === '_duration') echo get_post_meta($post_id, '_treatment_duration', true) ?: '-';
+        if ($col === '_complexity') echo get_post_meta($post_id, '_treatment_complexity', true) ?: '-';
     }
 
     public function analyze_dental_lead($lead_id) {

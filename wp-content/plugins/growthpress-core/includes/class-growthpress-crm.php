@@ -26,6 +26,7 @@ class GrowthPress_CRM {
         add_action( 'gp_cron_followup', array( $this, 'handle_abandoned_inquiry_followup' ) );
         add_action( 'add_meta_boxes', array( $this, 'add_crm_meta_boxes' ) );
         add_action( 'save_post', array( $this, 'save_crm_meta' ) );
+        add_action( 'wp_ajax_gp_run_single_ai', array( $this, 'handle_single_ai_analysis' ) );
         add_action( 'wp_ajax_gp_log_behavior', array( $this, 'handle_behavior_logging' ) );
         add_action( 'wp_ajax_nopriv_gp_log_behavior', array( $this, 'handle_behavior_logging' ) );
         add_action( 'wp_ajax_gp_export_leads', array( $this, 'handle_lead_export' ) );
@@ -113,6 +114,10 @@ class GrowthPress_CRM {
 
         add_filter( 'manage_gp_service_posts_columns', array( $this, 'service_columns' ) );
         add_action( 'manage_gp_service_posts_custom_column', array( $this, 'service_column_content' ), 10, 2 );
+
+        add_filter( 'manage_gp_staff_posts_columns', array( $this, 'staff_columns' ) );
+        add_action( 'manage_gp_staff_posts_custom_column', array( $this, 'staff_column_content' ), 10, 2 );
+
         add_action( 'wp_ajax_gp_submit_lead', array( $this, 'handle_lead_submission' ) );
         add_action( 'wp_ajax_nopriv_gp_submit_lead', array( $this, 'handle_lead_submission' ) );
         add_action( 'gp_async_lead_analysis', array( $this, 'process_async_analysis' ) );
@@ -168,7 +173,7 @@ class GrowthPress_CRM {
 
     public function handle_lead_submission() {
         if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'gp_lead_nonce' ) ) {
-            wp_send_json_error( 'Calibration Error: Security node failed to handshake.' );
+            wp_send_json_error( 'Security failed.' );
         }
         $name  = isset( $_POST['lead_name'] ) ? sanitize_text_field( $_POST['lead_name'] ) : '';
         $email = isset( $_POST['lead_email'] ) ? sanitize_email( $_POST['lead_email'] ) : '';
@@ -177,16 +182,11 @@ class GrowthPress_CRM {
         $msg   = isset( $_POST['lead_msg'] ) ? sanitize_textarea_field( $_POST['lead_msg'] ) : '';
 
         if ( empty( $name ) || empty( $email ) ) {
-            wp_send_json_error( 'Handshake Incomplete: Identity and communication nodes required.' );
-        }
-
-        if ( ! is_email($email) ) {
-            wp_send_json_error( 'Data Protocol Error: Invalid email node detected.' );
+            wp_send_json_error( 'Required fields missing.' );
         }
 
         $ai = GrowthPress_AI::get_instance();
-        if ( $ai->is_spam($msg, $name, $email) ) wp_send_json_error("Triage Notice: Inquiry flagged by anti-spam neural node.");
-
+        if ( $ai->is_spam($msg, $name, $email) ) wp_send_json_error("Flagged as spam.");
         $lead_id = wp_insert_post(array( 'post_title' => $name, 'post_content' => $msg, 'post_type' => 'gp_lead', 'post_status' => 'publish' ));
         update_post_meta($lead_id, '_lead_email', $email);
         update_post_meta($lead_id, '_lead_phone', $phone);
@@ -795,6 +795,14 @@ class GrowthPress_CRM {
         wp_send_json_success();
     }
 
+    public function handle_single_ai_analysis() {
+        if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error();
+        check_ajax_referer( 'gp_admin_nonce', 'gp_nonce' );
+        $lead_id = intval( $_POST['lead_id'] );
+        $this->process_async_analysis( $lead_id );
+        wp_send_json_success();
+    }
+
     public function handle_behavior_logging() {
         if ( ! isset( $_POST['email'] ) || ! isset( $_POST['page'] ) ) {
             wp_send_json_error( 'Missing parameters' );
@@ -856,6 +864,7 @@ class GrowthPress_CRM {
         $cols['_source'] = 'Source';
         $cols['_prob'] = 'AI Score';
         $cols['_staff'] = 'Assigned To';
+        $cols['_actions'] = 'Neural Actions';
         return $cols;
     }
 
@@ -871,6 +880,22 @@ class GrowthPress_CRM {
         if ( $col === '_staff' ) {
             $sid = get_post_meta($post_id, '_assigned_staff', true);
             echo $sid ? get_userdata($sid)->display_name : 'Unassigned';
+        }
+        if ( $col === '_actions' ) {
+            echo '<button type="button" class="button button-small" onclick="gpTriggerLeadAI('.$post_id.')" title="Execute Neural Triage">🧠 Analyze</button>';
+            ?>
+            <script>
+                if (typeof gpTriggerLeadAI !== 'function') {
+                    window.gpTriggerLeadAI = function(id) {
+                        var btn = jQuery(event.target);
+                        btn.prop('disabled', true).text('...');
+                        jQuery.post(ajaxurl, {action:'gp_run_single_ai', lead_id:id, gp_nonce:'<?php echo wp_create_nonce("gp_admin_nonce"); ?>'}, function(r){
+                            location.reload();
+                        });
+                    }
+                }
+            </script>
+            <?php
         }
     }
 
@@ -888,7 +913,22 @@ class GrowthPress_CRM {
             $color = ($p === 'High') ? '#ef4444' : (($p === 'Medium') ? '#f59e0b' : '#3b82f6');
             echo "<span style='color:$color; font-weight:bold;'>$p</span>";
         }
-        if ( $col === '_status' ) echo get_post_meta( $post_id, '_task_status', true ) ?: 'Pending';
+        if ( $col === '_status' ) {
+            $s = get_post_meta( $post_id, '_task_status', true ) ?: 'Pending';
+            echo $s;
+            if ($s !== 'Completed') {
+                echo ' <button type="button" class="button button-small" onclick="gpCompleteTask('.$post_id.')" style="margin-left:5px;">✓</button>';
+                ?>
+                <script>
+                    if (typeof gpCompleteTask !== 'function') {
+                        window.gpCompleteTask = function(id) {
+                            jQuery.post(ajaxurl, {action:'gp_complete_task', task_id:id, gp_nonce:'<?php echo wp_create_nonce("gp_admin_nonce"); ?>'}, function(){ location.reload(); });
+                        }
+                    }
+                </script>
+                <?php
+            }
+        }
         if ( $col === '_lead' ) {
             $lid = get_post_meta($post_id, '_related_lead', true);
             echo $lid ? get_the_title($lid) : '-';
@@ -924,6 +964,17 @@ class GrowthPress_CRM {
 
     public function service_column_content( $col, $post_id ) {
         if ( $col === '_icon' ) echo get_post_meta( $post_id, '_gp_service_icon', true ) ?: '💎';
+    }
+
+    public function staff_columns( $cols ) {
+        $cols['_expertise'] = 'Expertise';
+        $cols['_seniority'] = 'Seniority';
+        return $cols;
+    }
+
+    public function staff_column_content( $col, $post_id ) {
+        if ( $col === '_expertise' ) echo get_post_meta( $post_id, '_staff_expertise', true ) ?: '-';
+        if ( $col === '_seniority' ) echo get_post_meta( $post_id, '_staff_seniority', true ) ?: '-';
     }
 
     public function handle_abandoned_inquiry_followup() {
